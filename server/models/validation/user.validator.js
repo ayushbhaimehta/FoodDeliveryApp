@@ -60,6 +60,14 @@ const validateUpdateAddressSchemaModel = Joi.object({
     })
 })
 
+const validateGetByPhoneNoSchemaModel = Joi.object({
+    phoneNo: Joi.string().required()
+})
+
+const validateGetByPhoneNoSchema = (loginInfo) => {
+    return validateGetByPhoneNoSchemaModel.validate(loginInfo);
+}
+
 const validateUpdateNameSchema = (loginInfo) => {
     return validateUpdateNameSchemaModel.validate(loginInfo);
 }
@@ -86,4 +94,5 @@ module.exports = {
     validateUpdateNameSchema,
     validateAddAddressSchema,
     validateUpdateAddressSchema,
+    validateGetByPhoneNoSchema,
 }

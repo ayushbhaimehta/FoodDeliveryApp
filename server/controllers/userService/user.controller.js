@@ -45,6 +45,15 @@ async function updateNameController(req, res) {
     return result;
 }
 
+async function getByPhoneController(req, res) {
+    let loginInfo = req.params;
+    let { error } = userValidator.validateGetByPhoneNoSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const result = await userDao.getByPhoneDao(loginInfo, res);
+    return result;
+}
+
 async function sendOtpController(req, res) {
     const OtpInfo = req.body;
     let { error } = userValidator.validateSendOtpSchema(OtpInfo);
@@ -160,5 +169,6 @@ module.exports = {
     verifyOtpController,
     updateNameController,
     addAddressController,
-    updateAddressController
+    updateAddressController,
+    getByPhoneController
 };

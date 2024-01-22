@@ -26,6 +26,15 @@ module.exports = (req, res, next) => {
         })
     }
 
+
+    if (req.method === 'GET') {
+        const phoneNo = req.params.phoneNo;
+        if (phoneNo !== decodedToken.phoneNo)
+            return res.status(403).send({
+                message: 'JWt not matching with given details '
+            })
+    }
+
     req.phoneNo = decodedToken.phoneNo;
     next();
 };

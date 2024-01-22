@@ -4,12 +4,15 @@ const {
     verifyOtpController,
     updateNameController,
     addAddressController,
-    updateAddressController
+    updateAddressController,
+    getByPhoneController
 } = require('../controllers/userService/user.controller');
 const userAuth = require('../middlewares/userAuth');
 
 
 const userRouter = express.Router();
+
+userRouter.get('/getbyphone/:phoneNo', userAuth, getByPhoneController);
 
 userRouter.post('/sendotp', sendOtpController);
 userRouter.post('/verifyOtp', verifyOtpController);

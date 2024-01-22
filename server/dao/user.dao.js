@@ -3,6 +3,24 @@ const log = new Logger('User_Dao');
 const { UserModel } = require('../models/userSchema/user.schemaModel');
 // const axios = require('axios');
 
+async function getByPhoneDao(loginInfo, res) {
+    const phoneNo = loginInfo.phoneNo;
+    try {
+        const response = await UserModel.findOne({ phoneNo: phoneNo, });
+        log.success('details ffound by phone no!');
+        return res.status(200).send({
+            message: 'details ffound by phone no!',
+            result: response
+        })
+
+    } catch (error) {
+        log.error(`Error in finding an user with specified details ${error}`);
+        res.status(404).send({
+            message: 'Error in finding an user with specified details'
+        });
+    }
+}
+
 async function addAddressDao(loginInfo, res) {
     const phoneNo = loginInfo.phoneNo;
     const requestAddress = loginInfo.address;
@@ -121,5 +139,6 @@ async function updateNameDao(loginInfo, res) {
 module.exports = {
     updateNameDao,
     addAddressDao,
-    updateAddressDao
+    updateAddressDao,
+    getByPhoneDao
 }
