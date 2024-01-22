@@ -55,6 +55,38 @@ async function addAddressDao(loginInfo, res) {
     }
 }
 
+async function updateAddressDao(loginInfo, res) {
+    const phoneNo = loginInfo.phoneNo;
+    const newAddress = loginInfo.newAddress;
+    const oldAddress = loginInfo.oldAddress;
+
+    try {
+        await UserModel.findOneAndUpdate({
+            phoneNo: phoneNo,
+            'address': {
+                $elemMatch: {
+                    'myself': oldAddress.myself,
+                    'saveAs': oldAddress.saveAs,
+                    'houseNo': oldAddress.houseNo,
+                    'area': oldAddress.area,
+                    'directions': oldAddress.directions
+                }
+            }
+        }, { 'address.$': newAddress });
+        log.success('updated address scuccessfully!');
+        return res.status(200).send({
+            message: 'Updated address successfully!'
+        })
+
+    } catch (error) {
+        log.error(`Error in finding an address with specified details ${error}`);
+        res.status(404).send({
+            message: 'Error in finding an address with specified details'
+        });
+    }
+
+}
+
 async function updateNameDao(loginInfo, res) {
     const name = loginInfo.name;
     const email = loginInfo.email;
@@ -88,5 +120,6 @@ async function updateNameDao(loginInfo, res) {
 
 module.exports = {
     updateNameDao,
-    addAddressDao
+    addAddressDao,
+    updateAddressDao
 }

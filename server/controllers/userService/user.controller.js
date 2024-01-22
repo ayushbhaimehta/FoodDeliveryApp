@@ -25,6 +25,16 @@ async function addAddressController(req, res) {
     return result;
 }
 
+async function updateAddressController(req, res) {
+    let loginInfo = req.body;
+    let { error } = userValidator.validateUpdateAddressSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    loginInfo.phoneNo = req.phoneNo;
+    const result = await userDao.updateAddressDao(loginInfo, res);
+    return result;
+}
+
 async function updateNameController(req, res) {
     let loginInfo = req.body;
     let { error } = userValidator.validateUpdateNameSchema(loginInfo);
@@ -149,5 +159,6 @@ module.exports = {
     sendOtpController,
     verifyOtpController,
     updateNameController,
-    addAddressController
+    addAddressController,
+    updateAddressController
 };

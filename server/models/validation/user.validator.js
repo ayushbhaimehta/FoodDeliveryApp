@@ -16,6 +16,8 @@ const validateUpdateNameSchemaModel = Joi.object({
     email: Joi.string().email()
 })
 
+
+
 const validateAddAddressSchemaModel = Joi.object({
     address: Joi.object({
         name: Joi.string(),
@@ -31,8 +33,39 @@ const validateAddAddressSchemaModel = Joi.object({
     })
 });
 
+const validateUpdateAddressSchemaModel = Joi.object({
+    oldAddress: Joi.object({
+        name: Joi.string(),
+        phoneNo: Joi.string(),
+        myself: Joi.boolean().required(),
+        saveAs: Joi.string().required(),
+        houseNo: Joi.string().required(),
+        area: Joi.string().required(),
+        directions: Joi.string().required(),
+        location: Joi.object({
+            coordinates: Joi.array().required().items(Joi.string())
+        })
+    }),
+    newAddress: Joi.object({
+        name: Joi.string(),
+        phoneNo: Joi.string(),
+        myself: Joi.boolean().required(),
+        saveAs: Joi.string().required(),
+        houseNo: Joi.string().required(),
+        area: Joi.string().required(),
+        directions: Joi.string().required(),
+        location: Joi.object({
+            coordinates: Joi.array().required().items(Joi.string())
+        })
+    })
+})
+
 const validateUpdateNameSchema = (loginInfo) => {
     return validateUpdateNameSchemaModel.validate(loginInfo);
+}
+
+const validateUpdateAddressSchema = (loginInfo) => {
+    return validateUpdateAddressSchemaModel.validate(loginInfo);
 }
 
 const validateAddAddressSchema = (loginInfo) => {
@@ -52,5 +85,5 @@ module.exports = {
     validateVerifyOtpSchema,
     validateUpdateNameSchema,
     validateAddAddressSchema,
-
+    validateUpdateAddressSchema,
 }
