@@ -4,18 +4,15 @@ const morgan = require('morgan');
 var cors = require('cors')
 const mongoose = require('mongoose');
 
-require('dotenv').config()
+require('dotenv').config();
 
-
-// console.log(app.get('env'));
-// set env
 const dbUrl = process.env.dbURL;
 // Whitelisdty
 const whitelist = [
     '*'
 ];
 
-app.use(cors())
+app.use(cors());
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
@@ -38,9 +35,11 @@ app.use(function (req, res, next) {
 });
 
 // -----------------> Routes <-----------------------------------//
+const userservicerouter = require('./routes/user.router');
 
 
 // -----------------> Routes Setup <---------------------------------//
+app.use('/user', userservicerouter);
 
 
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -49,22 +48,17 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 // ------------------------> Logger (Morgan) <---------------------------- //
 app.use(morgan('combined'));
 
-
-
 // --------------------------> Checking for Deployment purposes <----------------------- // 
 app.get('/', (req, res) => {
     res.send('App is running');
 });
-
-
-
 
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Application running listening to port ${port}....`);
     try {
-        mongoose.connect(dbUrl, { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: true, useUnifiedTopology: true })
+        mongoose.connect(dbUrl)
             .then(console.log('connected to mongo database....'));
     } catch (error) {
         console.error('unable to connect, please check your connection....' + error)
