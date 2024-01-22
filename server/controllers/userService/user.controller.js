@@ -16,7 +16,13 @@ const jwt = require('jsonwebtoken');
 const secretKey = "112233";
 
 async function addAddressController(req, res) {
-
+    let loginInfo = req.body;
+    let { error } = userValidator.validateAddAddressSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    loginInfo.phoneNo = req.phoneNo;
+    const result = await userDao.addAddressDao(loginInfo, res);
+    return result;
 }
 
 async function updateNameController(req, res) {
