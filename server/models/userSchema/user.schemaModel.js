@@ -25,7 +25,6 @@ const mongoUserSchema = new mongoose.Schema({
             area: String,
             directions: String,
             location: {
-                type: String,
                 coordinates: [String]
             }
         }

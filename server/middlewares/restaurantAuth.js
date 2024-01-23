@@ -8,10 +8,7 @@ module.exports = (req, res, next) => {
             message: 'Token validation error'
         })
     }
-
-    // const token = authorization.split(" ")[1];
     let decodedToken;
-
     try {
         decodedToken = jwt.verify(authorization, secretKey);
     } catch (err) {
@@ -25,8 +22,6 @@ module.exports = (req, res, next) => {
             message: 'Validaion error in token verification '
         })
     }
-
-
     if (req.method === 'GET') {
         const phoneNo = req.params.phoneNo;
         if (phoneNo !== decodedToken.phoneNo)
