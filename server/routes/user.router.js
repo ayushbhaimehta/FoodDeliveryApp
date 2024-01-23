@@ -9,7 +9,6 @@ const {
 } = require('../controllers/userService/user.controller');
 const userAuth = require('../middlewares/userAuth');
 
-
 const userRouter = express.Router();
 
 userRouter.get('/getbyphone/:phoneNo', userAuth, getByPhoneController);

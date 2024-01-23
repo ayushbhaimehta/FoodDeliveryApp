@@ -1,62 +1,62 @@
-const userValidator = require('../../models/validation/user.validator.js');
+const restaurantValidator = require('../../models/validation/restaurant.validator.js');
 const {
-    UserModel,
-} = require('../../models/userSchema/user.schemaModel.js');
-const userDao = require('../../dao/user.dao.js');
+    RestaurantModel,
+} = require('../../models/restaurantSchema/restaurant.schemaModel.js');
+const restaurantDao = require('../../dao/restaurant.dao.js');
 const Logger = require('../../logger/logger.js');
-const log = new Logger('userController');
+const log = new Logger('restaurantController');
 require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 const verifySid = process.env.verifySID;
 const { isNotValidSchema } = require('../../utils/notValid.js');
-const { userExistsByPhone } = require('../../utils/userHelp.js');
+const { userExistsByPhone, restaurantExistsByPhone } = require('../../utils/userHelp.js');
 const jwt = require('jsonwebtoken');
 const secretKey = "112233";
 
-async function addAddressController(req, res) {
-    let loginInfo = req.body;
-    let { error } = userValidator.validateAddAddressSchema(loginInfo);
-    if (isNotValidSchema(error, res)) return;
-    log.success('Schema Validation done');
-    loginInfo.phoneNo = req.phoneNo;
-    const result = await userDao.addAddressDao(loginInfo, res);
-    return result;
-}
-
-async function updateAddressController(req, res) {
-    let loginInfo = req.body;
-    let { error } = userValidator.validateUpdateAddressSchema(loginInfo);
-    if (isNotValidSchema(error, res)) return;
-    log.success('Schema Validation done');
-    loginInfo.phoneNo = req.phoneNo;
-    const result = await userDao.updateAddressDao(loginInfo, res);
-    return result;
-}
-
 async function updateNameController(req, res) {
     let loginInfo = req.body;
-    let { error } = userValidator.validateUpdateNameSchema(loginInfo);
+    let { error } = restaurantValidator.validateUpdateNameSchema(loginInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     loginInfo.phoneNo = req.phoneNo;
-    const result = await userDao.updateNameDao(loginInfo, res);
+    const result = await restaurantDao.updateNameDao(loginInfo, res);
     return result;
 }
 
 async function getByPhoneController(req, res) {
     let loginInfo = req.params;
-    let { error } = userValidator.validateGetByPhoneNoSchema(loginInfo);
+    let { error } = restaurantValidator.validateGetByPhoneNoSchema(loginInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
-    const result = await userDao.getByPhoneDao(loginInfo, res);
+    const result = await restaurantDao.getByPhoneDao(loginInfo, res);
+    return result;
+}
+
+async function updateAddressController(req, res) {
+    let loginInfo = req.body;
+    let { error } = restaurantValidator.validateUpdateAddressSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    loginInfo.phoneNo = req.phoneNo;
+    const result = await restaurantDao.updateAddressDao(loginInfo, res);
+    return result;
+}
+
+async function addMenuController(req, res) {
+    let loginInfo = req.body;
+    let { error } = restaurantValidator.validateAddMenuSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    loginInfo.phoneNo = req.phoneNo;
+    const result = await restaurantDao.addMenuDao(loginInfo, res);
     return result;
 }
 
 async function sendOtpController(req, res) {
     const OtpInfo = req.body;
-    let { error } = userValidator.validateSendOtpSchema(OtpInfo);
+    let { error } = restaurantValidator.validateSendOtpSchema(OtpInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     try {
@@ -86,7 +86,7 @@ async function sendOtpController(req, res) {
 async function verifyOtpController(req, res) {
     const OtpInfo = req.body;
     const otp = OtpInfo.otp;
-    let { error } = userValidator.validateVerifyOtpSchema(OtpInfo);
+    let { error } = restaurantValidator.validateVerifyOtpSchema(OtpInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     try {
@@ -98,14 +98,15 @@ async function verifyOtpController(req, res) {
             log.info(`Successfully verified`);
             const jwtToken = jwt.sign(
                 {
-                    "phoneNo": OtpInfo.phoneNo
+                    "phoneNo": OtpInfo.phoneNo,
+                    // "role": 'restaurant'
                 },
                 secretKey,
                 { expiresIn: "1d" }
             );
             res.header('auth', jwtToken);
 
-            const existingUser = await userExistsByPhone(OtpInfo.phoneNo);
+            const existingUser = await restaurantExistsByPhone(OtpInfo.phoneNo);
             log.info(existingUser);
             if (existingUser) {
                 // already exists login page redirect
@@ -125,13 +126,13 @@ async function verifyOtpController(req, res) {
             else {
                 // new user 
                 try {
-                    let newUser = new UserModel({
-                        name: '',
+                    let newUser = new RestaurantModel({
+                        restaurantName: '',
                         email: '',
                         phoneNo: OtpInfo.phoneNo,
-                        address: []
+                        address: {},
+                        menu: []
                     });
-
                     await newUser.save();
 
                     log.info(`Successfully saved the phoneNo into the db`);
@@ -167,8 +168,8 @@ async function verifyOtpController(req, res) {
 module.exports = {
     sendOtpController,
     verifyOtpController,
+    getByPhoneController,
     updateNameController,
-    addAddressController,
     updateAddressController,
-    getByPhoneController
+    addMenuController
 };
