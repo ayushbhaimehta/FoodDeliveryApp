@@ -9,8 +9,24 @@ import DeliveryScreen from './screens/DeliveryScreen';
 
 import { store } from './store'
 import { Provider } from 'react-redux'
+import SignUpScreen from './screens/SignUpScreen';
 
 const HomeStack = createNativeStackNavigator();
+const SignUpStack = createNativeStackNavigator();
+export const SignUpNavigation = () => {
+    return (
+        <NavigationContainer>
+            <Provider store={store}>
+                <SignUpStack.Navigator>
+                    <SignUpStack.Screen name="SignUp" component={SignUpScreen}
+                        options={{ headerShown: false }} />
+                    <SignUpStack.Screen name="Login" component={SignUpScreen}
+                        options={{ headerShown: false }} />
+                </SignUpStack.Navigator>
+            </Provider>
+        </NavigationContainer>
+    );
+}
 
 export const HomeNavigation = () => {
     return (
