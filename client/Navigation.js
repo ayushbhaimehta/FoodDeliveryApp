@@ -10,6 +10,7 @@ import DeliveryScreen from './screens/DeliveryScreen';
 import { store } from './store'
 import { Provider } from 'react-redux'
 import SignUpScreen from './screens/SignUpScreen';
+import OTPScreen from './screens/OTPScreen';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -17,10 +18,10 @@ export const SignUpNavigation = () => {
     return (
         <NavigationContainer>
             <Provider store={store}>
-                <SignUpStack.Navigator>
-                    <SignUpStack.Screen name="SignUp" component={SignUpScreen}
-                        options={{ headerShown: false }} />
+                <SignUpStack.Navigator initialRouteName='OTP'>
                     <SignUpStack.Screen name="Login" component={SignUpScreen}
+                        options={{ headerShown: false }} />
+                    <SignUpStack.Screen name="OTP" component={OTPScreen}
                         options={{ headerShown: false }} />
                 </SignUpStack.Navigator>
             </Provider>
