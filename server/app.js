@@ -37,10 +37,12 @@ app.use(function (req, res, next) {
 // -----------------> Routes <-----------------------------------//
 const userservicerouter = require('./routes/user.router');
 const restaurantservicerouter = require('./routes/restaurant.router');
+const orderservicerouter = require('./routes/order.router');
 
 // -----------------> Routes Setup <---------------------------------//
 app.use('/user', userservicerouter);
 app.use('/restaurant', restaurantservicerouter);
+app.use('/order', orderservicerouter);
 
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));

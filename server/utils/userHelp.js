@@ -8,7 +8,7 @@ async function userExistsByPhone(phoneNo) {
         return result;
     } catch (error) {
         // Handle any errors that occurred during the query
-        console.error("Error in userExistsByPhone:", err);
+        console.error("Error in userExistsByPhone:", error);
         throw error; // Rethrow the error if needed
     }
 }
@@ -20,12 +20,23 @@ async function restaurantExistsByPhone(phoneNo) {
         return result;
     } catch (error) {
         // Handle any errors that occurred during the query
-        console.error("Error in userExistsByPhone:", err);
+        console.error("Error in restaurantExistsByPhone:", error);
+        throw error; // Rethrow the error if needed
+    }
+}
+async function getRestaurantById(restaurantId) {
+    try {
+        const result = await RestaurantModel.findById(restaurantId);
+        return result;
+    } catch (error) {
+        // Handle any errors that occurred during the query
+        console.error("Error in getRestaurantById: ", error);
         throw error; // Rethrow the error if needed
     }
 }
 
 module.exports = {
     userExistsByPhone,
-    restaurantExistsByPhone
+    restaurantExistsByPhone,
+    getRestaurantById
 };

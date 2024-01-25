@@ -19,14 +19,11 @@ module.exports = (req, res, next) => {
             message: 'Error in token validation'
         })
     }
-
     if (!decodedToken) {
         return res.status(403).send({
             message: 'Validaion error in token verification '
         })
     }
-
-
     if (req.method === 'GET') {
         const phoneNo = req.params.phoneNo;
         if (phoneNo !== decodedToken.phoneNo)

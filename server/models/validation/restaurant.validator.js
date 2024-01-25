@@ -29,7 +29,7 @@ const validateUpdateAddressSchemaModel = Joi.object({
             coordinates: Joi.array().required().items(Joi.string())
         },
         gstinNo: Joi.string().required()
-    })
+    }).required()
 });
 
 const validateUpdateNameSchemaModel = Joi.object({
@@ -47,7 +47,7 @@ const validateAddMenuSchemaModel = Joi.object({
         price: Joi.string().required(),
         description: Joi.string().required(),
         rating: Joi.string().required()
-    })
+    }).required()
 })
 
 const validateAddMenuSchema = (loginInfo) => {
