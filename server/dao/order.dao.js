@@ -142,11 +142,40 @@ async function addOrderDao(orderInfo, res) {
             message: 'Error in finding user details'
         })
     }
+}
 
+async function assignOrderDao(orderInfo, res) {
+    const _id = orderInfo._id;
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
+    console.log({ dateTime });
+    try {
+        const response = await OrderModel.findByIdAndUpdate(_id,
+            {
+                assignedTo: orderInfo.assignedTo,
+                assignedTime: dateTime.toString(),
+                status: orderInfo.status,
+                expectedTime: orderInfo.expectedTime,
+                deliveredTime: orderInfo.deliveredTime
+            }, { new: true, useFindAndModify: false });
+        log.success(`Successfully updated orderInfo`);
+        return res.status(200).send({
+            message: 'orderinfo Updated!',
+            result: response
+        })
+    } catch (error) {
+        log.error(`Error in finding an user with specified details ${error}`);
+        res.status(404).send({
+            message: 'Error in finding an user with specified details'
+        });
+    }
 }
 
 module.exports = {
     addOrderDao,
     deleteOrderDao,
-    getOrderDao
+    getOrderDao,
+    assignOrderDao
 }
