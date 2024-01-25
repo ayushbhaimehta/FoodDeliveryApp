@@ -1,13 +1,13 @@
 const express = require('express');
 const {
+    registerDriverController
+} = require('../controllers/driverService/driver.controller');
+// const userAuth = require('../middlewares/userAuth');
 
-} = require('../controllers/');
-const userAuth = require('../middlewares/userAuth');
+const driverRouter = express.Router();
 
-const orderRouter = express.Router();
+// driverRouter.get('/getbyuserid/:phoneNo', getByUserIdController);
+driverRouter.post('/registerDriver', registerDriverController);
+// driverRouter.delete('/deleteorder', userAuth, deleteOrderController);
 
-// orderRouter.get('/getbyuserid/:phoneNo', getByUserIdController);
-orderRouter.post('/addorder', userAuth, addOrderController);
-// orderRouter.delete('/deleteorder', userAuth, deleteOrderController);
-
-module.exports = orderRouter;
+module.exports = driverRouter;
