@@ -1,16 +1,17 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import HomeScreen from './screens/HomeScreen';
-import RestaurantScreen from './screens/RestaurantScreen';
-import BasketScreen from './screens/BasketScreen';
-import OrderPlacingScreen from './screens/OrderPlacingScreen';
-import DeliveryScreen from './screens/DeliveryScreen';
+import HomeScreen from './screens/Home/HomeScreen';
+import RestaurantScreen from './screens/Home/RestaurantScreen';
+import BasketScreen from './screens/Home/BasketScreen';
+import OrderPlacingScreen from './screens/Home/OrderPlacingScreen';
+import DeliveryScreen from './screens/Home/DeliveryScreen';
 
 import { store } from './store'
 import { Provider } from 'react-redux'
-import SignUpScreen from './screens/SignUpScreen';
-import OTPScreen from './screens/OTPScreen';
+import SignUpScreen from './screens/SignUp/SignUpScreen';
+import OTPScreen from './screens/SignUp/OTPScreen';
+import InputScreen from './screens/SignUp/NameEmailScreen';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -18,10 +19,12 @@ export const SignUpNavigation = () => {
     return (
         <NavigationContainer>
             <Provider store={store}>
-                <SignUpStack.Navigator initialRouteName='OTP'>
+                <SignUpStack.Navigator initialRouteName='Input'>
                     <SignUpStack.Screen name="Login" component={SignUpScreen}
                         options={{ headerShown: false }} />
                     <SignUpStack.Screen name="OTP" component={OTPScreen}
+                        options={{ headerShown: false }} />
+                    <SignUpStack.Screen name="Input" component={InputScreen}
                         options={{ headerShown: false }} />
                 </SignUpStack.Navigator>
             </Provider>

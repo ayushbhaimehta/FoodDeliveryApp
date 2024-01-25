@@ -9,8 +9,8 @@ import Icon2 from 'react-native-vector-icons/MaterialIcons'
 import Icon3 from 'react-native-vector-icons/AntDesign'
 import { TouchableOpacity } from 'react-native';
 
-import Menu from '../components/ResturentMenu/Menu';
-import BasketCart from '../components/ResturentMenu/BasketCart';
+import Menu from '../../components/ResturentMenu/Menu';
+import BasketCart from '../../components/ResturentMenu/BasketCart';
 
 
 const RestaurantScreen = () => {
@@ -22,7 +22,7 @@ const RestaurantScreen = () => {
     <>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* entire screen inside scroll view */}
-        
+
         {/* Clicked Food details */}
         <View className='relative bg-white'>
           {/* Food image with back button */}
@@ -33,7 +33,7 @@ const RestaurantScreen = () => {
             }} >
             <Icon name='md-arrow-back-sharp' size={25} color='#00CCBB' />
           </TouchableOpacity>
-          
+
           {/* Food description */}
           <View className="py-5 px-4">
             <Text className="font-bold text-3xl text-gray-800">{route.params.name}</Text>
