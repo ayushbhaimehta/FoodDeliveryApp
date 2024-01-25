@@ -13,13 +13,12 @@ async function registerDriverController(req, res) {
     return result;
 }
 
-async function assignOrdersController(req, res) {
-    const orderInfo = req.body;
-    let { error } = orderValidator.validateAssignOrderSchema(orderInfo);
+async function loginDriverController(req, res) {
+    const driverInfo = req.body;
+    let { error } = driverValidator.validateLoginDriverSchema(driverInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
-    orderInfo.phoneNo = req.phoneNo;
-    const result = await orderDao.assignOrderDao(orderInfo, res);
+    const result = await orderDao.loginDriverDao(driverInfo, res);
     return result;
 }
 
@@ -47,5 +46,6 @@ async function deleteOrderController(req, res) {
 }
 
 module.exports = {
-    registerDriverController
+    registerDriverController,
+    loginDriverController
 };

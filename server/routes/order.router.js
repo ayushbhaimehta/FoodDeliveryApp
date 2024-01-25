@@ -13,6 +13,8 @@ orderRouter.get('/getbyuserid/:phoneNo', getByUserIdController);
 orderRouter.post('/addorder', userAuth, addOrderController);
 orderRouter.delete('/deleteorder', userAuth, deleteOrderController);
 
+// payment gateway
+
 // admin allocation
 orderRouter.post('/assignOrders', assignOrdersController)
 

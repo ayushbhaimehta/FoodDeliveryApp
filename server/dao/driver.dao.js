@@ -4,6 +4,8 @@ const { DriverModel } = require('../models/driverSchema/driver.schemaModel');
 const bcrypt = require('bcrypt');
 const { userExistsByPhone, getRestaurantById, driverExistsByPhone } = require('../utils/userHelp');
 const saltRounds = 12;
+const jwt = require('jsonwebtoken');
+const secretKey = "112233";
 
 async function registerDriverDao(driverInfo, res) {
     const phoneNo = driverInfo.phoneNo;
@@ -50,6 +52,41 @@ async function registerDriverDao(driverInfo, res) {
     }
 }
 
+async function loginDriverDao(driverInfo, res) {
+    const phoneNo = driverInfo.phoneNo;
+    let password = driverInfo.password;
+    try {
+        const response = await DriverModel.findOne({
+            phoneNo: phoneNo
+        });
+        let flag = bcrypt.compare(password, response.password);
+        if (!flag) {
+            return res.status(400).send({
+                message: 'Wrong password entered'
+            })
+        }
+        else {
+            const jwtToken = jwt.sign(
+                {
+                    "phoneNo": phoneNo
+                },
+                secretKey,
+                { expiresIn: "1d" }
+            );
+            res.header('auth', jwtToken);
+            return res.status(200).send({
+                message: 'Successfully logged In!'
+            })
+        }
+    } catch (error) {
+        log.error(`Error in finding drivers with specified details ${error}`);
+        return res.status(404).send({
+            message: 'error in finding drivers with specified details'
+        })
+    }
+}
+
 module.exports = {
-    registerDriverDao
+    registerDriverDao,
+    loginDriverDao
 }

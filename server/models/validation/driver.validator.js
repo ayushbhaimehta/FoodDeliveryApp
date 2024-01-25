@@ -7,10 +7,20 @@ const validateRegisterDriverSchemaModel = Joi.object({
     password: Joi.string().required(),
 });
 
+const validateLoginDriverSchemaModel = Joi.object({
+    phoneNo: Joi.string().required(),
+    password: Joi.string().required()
+});
+
 const validateRegisterDriverSchema = (driverInfo) => {
     return validateRegisterDriverSchemaModel.validate(driverInfo);
 };
 
+const validateLoginDriverSchema = (driverInfo) => {
+    return validateLoginDriverSchemaModel.validate(driverInfo);
+};
+
 module.exports = {
-    validateRegisterDriverSchema
+    validateRegisterDriverSchema,
+    validateLoginDriverSchema
 }
