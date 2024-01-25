@@ -4,6 +4,42 @@ const { OrderModel } = require('../models/orderSchema/order.schemaModel');
 // const axios = require('axios');
 const { userExistsByPhone, getRestaurantById } = require('../utils/userHelp');
 
+async function getOrderDao(orderInfo, res) {
+    // const phoneNo = orderInfo.phoneNo;
+    const userId = orderInfo.userId
+    try {
+        const response = await OrderModel.find({ userId: userId, });
+        log.success('details ffound by userId!');
+        return res.status(200).send({
+            message: 'details ffound by userId!',
+            result: response
+        })
+
+    } catch (error) {
+        log.error(`Error in finding an user with specified details ${error}`);
+        res.status(404).send({
+            message: 'Error in finding an user with specified details'
+        });
+    }
+}
+
+async function deleteOrderDao(orderInfo, res) {
+    const phoneNo = orderInfo.phoneNo;
+    const orderId = orderInfo.orderId;
+    try {
+        await OrderModel.findByIdAndDelete(orderId);
+        log.success('Successfully deleted the order');
+        return res.status(200).send({
+            message: 'Successfully ordered!'
+        })
+    } catch (error) {
+        log.error('error in deleting order from the db! ' + error);
+        return res.status(400).send({
+            message: 'error in deleting order'
+        })
+    }
+}
+
 async function addOrderDao(orderInfo, res) {
     const phoneNo = orderInfo.phoneNo;
     const address = orderInfo.address;
@@ -57,14 +93,15 @@ async function addOrderDao(orderInfo, res) {
                         log.info('Cannot find the desired dish in this restaurant');
                         return res.status(400).send({
                             message: 'Cannot find this dish in this restaurant'
-                        })
+                        });
+                    } else {
+                        log.info('dish verification done');
+                        let a = parseInt(orderDetails.cart[j].item.quantity);
+                        let b = parseInt(Cost);
+                        console.log({ a }, { b });
+                        orderDetails.cart[j].item.itemCost = (a * b).toString();
+                        finalCost += (a * b);
                     }
-                    log.info('dish verification done');
-                    let a = parseInt(orderDetails.cart[j].item.quantity);
-                    let b = parseInt(Cost);
-                    console.log({ a }, { b });
-                    orderDetails.cart[j].item.itemCost = (a * b).toString();
-                    finalCost += (a * b);
                 }
                 orderDetails.totalCost = (finalCost).toString();
                 log.info(orderDetails);
@@ -93,14 +130,14 @@ async function addOrderDao(orderInfo, res) {
                     })
                 }
             } catch (error) {
-                log.error(`Error in fetching details of given restaurant`);
+                log.error(`Error in fetching details of given restaurant ${error}`);
                 return res.status(400).send({
                     message: 'Error in finding restaurant'
                 })
             }
         }
     } catch (error) {
-        log.error(`Error in fetching info with phone No ${phoneNo}`);
+        log.error(`Error in fetching info with phone No ${phoneNo} ${error}`);
         res.status(404).send({
             message: 'Error in finding user details'
         })
@@ -109,5 +146,7 @@ async function addOrderDao(orderInfo, res) {
 }
 
 module.exports = {
-    addOrderDao
+    addOrderDao,
+    deleteOrderDao,
+    getOrderDao
 }

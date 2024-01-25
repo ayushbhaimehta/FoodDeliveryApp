@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
 const secretKey = "112233";
+const { UserModel } = require('../models/userSchema/user.schemaModel');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     const authorization = req.get("auth");
     if (!authorization) {
         return res.status(403).send({
@@ -25,13 +26,14 @@ module.exports = (req, res, next) => {
         })
     }
     if (req.method === 'GET') {
-        const phoneNo = req.params.phoneNo;
-        if (phoneNo !== decodedToken.phoneNo)
-            return res.status(403).send({
-                message: 'JWt not matching with given details '
-            })
+        if (req.params.phoneNo) {
+            const phoneNo = req.params.phoneNo;
+            if (phoneNo !== decodedToken.phoneNo)
+                return res.status(403).send({
+                    message: 'JWt not matching with given details '
+                })
+        }
     }
-
     req.phoneNo = decodedToken.phoneNo;
     next();
 };

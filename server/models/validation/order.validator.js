@@ -22,12 +22,30 @@ const validateAddOrderSchemaModel = Joi.object({
             }).required(),
         })),
     }).required()
-})
+});
+
+const validateDeleteOrderSchemaModel = Joi.object({
+    orderId: Joi.string().required()
+});
+
+const validateGetOrderSchemaModel = Joi.object({
+    phoneNo: Joi.string().required()
+});
 
 const validateAddOrderSchema = (orderInfo) => {
     return validateAddOrderSchemaModel.validate(orderInfo);
-}
+};
+
+const validateDeleteOrderSchema = (orderInfo) => {
+    return validateDeleteOrderSchemaModel.validate(orderInfo);
+};
+
+const validateGetOrderSchema = (orderInfo) => {
+    return validateGetOrderSchemaModel.validate(orderInfo);
+};
 
 module.exports = {
-    validateAddOrderSchema
+    validateAddOrderSchema,
+    validateDeleteOrderSchema,
+    validateGetOrderSchema
 }
