@@ -3,28 +3,51 @@ import React, { useState, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TouchableOpacity } from 'react-native'
 import { Divider } from 'react-native-elements'
+import axios from 'axios'
+
+
+import { useAuth } from '../../features/context/AuthContext'
+import Loader from '../../components/Global/Loader'
+import { useLoader } from '../../features/context/loaderContext'
 
 const SignUpScreen = ({ navigation }) => {
-    const handleBackPress = () => {
+    const { setPhoneNumber } = useAuth();
+    const { setLoader } = useLoader()
+    const countrycode = '+91'
 
+    const handleSubmit = async () => {
+
+        setLoader(true)
+        try {
+            const response = await axios.post('http://192.168.1.9:3000/user/sendotp', {
+                phoneNo: phone,
+                countryCode: countrycode,
+            });
+
+            console.log(response.status);
+
+            if (response.status === 200) {
+                setPhoneNumber(phone)
+                navigation.navigate('OTP');
+            } else {
+                console.log('API request failed:', response.statusText);
+            }
+
+        } catch (err) {
+            console.error('Network error:', err);
+        }
+        setLoader(false)
     }
-    const handleSubmit = () => {
 
-        //TODO: OTP send API
-
-        console.log("SUbmit is presses");
-        navigation.navigate('OTP')
-
-    }
 
 
     const [slideAnim] = useState(new Animated.Value(0)); // Initial value for translateY
     const [expanded, setExpanded] = useState(false)
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phone, setPhone] = useState('');
     const [submitEnable, setSubmitEnable] = useState(false)
 
     const handleInputChange = (text) => {
-        setPhoneNumber(text);
+        setPhone(text);
         if (text.length == 10) {
             setSubmitEnable(true)
         } else {
@@ -35,7 +58,7 @@ const SignUpScreen = ({ navigation }) => {
         return (a || b) && !(a && b);
     }
 
-    const countrycode = '+91';
+
     const slideUp = () => {
         Animated.timing(slideAnim, {
             toValue: 0, // Adjust this value to determine how much the component should move up
@@ -55,6 +78,7 @@ const SignUpScreen = ({ navigation }) => {
     };
     return (
         <SafeAreaView className="bg-[#f3f4fc] flex-1">
+            <Loader />
             <View className="h-[50%] mx-2">
                 <View className="h-[10%]">
                     <TouchableOpacity onPress={slideDown}>
@@ -141,7 +165,7 @@ const SignUpScreen = ({ navigation }) => {
                                 style={styles.phoneNumberInput}
                                 keyboardType="phone-pad"
                                 autoFocus={true}
-                                value={phoneNumber}
+                                value={phone}
                                 onChangeText={handleInputChange}
                                 maxLength={10}
                             />
