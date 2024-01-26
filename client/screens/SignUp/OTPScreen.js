@@ -1,13 +1,45 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native'
 import React, { useState, useRef, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useAuth } from '../../AuthContext'
+import { useAuth } from '../../features/context/AuthContext'
+import { useLoader } from '../../features/context/loaderContext'
+import axios from 'axios'
 
 const OTPScreen = ({ navigation }) => {
-    const { phoneNumber } = useAuth()
+    const { phoneNumber, setAuth, setUser } = useAuth()
+    const { setLoader } = useLoader();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([...Array(6)].map(() => useRef(null)));
     const [focused, setFocused] = useState(0);
+    const handleSubmit = async () => {
+        setLoader(true)
+        try {
+            console.log(phoneNumber);
+            const response = await axios.post('http://192.168.1.9:3000/user/verifyotp', {
+                phoneNo: phoneNumber,
+                countryCode: "+91",
+                otp: otp.join('')
+            });
+
+            console.log(response.data);
+
+            if (response.status === 200) {
+                setAuth(response.headers['auth'])
+
+                if (response.data["exist"]) {
+                    console.log("user exists");
+                    setUser(true)
+                } else {
+                    navigation.navigate('Input');
+                }
+            } else {
+                console.log('API request failed:', response.statusText);
+            }
+        } catch (err) {
+            console.error('Network error:', err);
+        }
+        setLoader(false)
+    }
     const handleOTPChange = useCallback((index, value) => {
 
         const newOtp = [...otp];
@@ -28,7 +60,7 @@ const OTPScreen = ({ navigation }) => {
         inputRefs.current[index].current.focus();
     };
 
-    const navigateToHome = () => {
+    const navigateBack = () => {
         console.log("back presses");
         navigation.navigate('Login')
     }
@@ -45,7 +77,7 @@ const OTPScreen = ({ navigation }) => {
                                     marginTop: 10,
                                     marginLeft: 1
                                 }}
-                                onTouchEnd={navigateToHome}
+                                onTouchEnd={navigateBack}
                             />
                         </TouchableOpacity>
                         <View className="mx-2">
@@ -69,7 +101,7 @@ const OTPScreen = ({ navigation }) => {
                     </View>
                 </View>
                 <View>
-                    <Text className="text-gray-500 mt-4">Enter the 4-digit code sent to you at {phoneNumber}</Text>
+                    <Text className="text-gray-500 mt-4">Enter the 6-digit code sent to you at {phoneNumber}</Text>
                     <View className="flex-row justify-between mt-4">
                         {otp.map((digit, index) => (
                             <TextInput
@@ -80,6 +112,7 @@ const OTPScreen = ({ navigation }) => {
                                 maxLength={1}
                                 keyboardType="numeric"
                                 cursorColor={"transparent"}
+                                autoFocus={index === 0}
                                 onFocus={() => setFocused(index)}
                                 style={
                                     {
@@ -98,7 +131,7 @@ const OTPScreen = ({ navigation }) => {
                         <Text className="text-gray-500 text-center "> Resend</Text>
                     </View>
                     <View className="flex-row justify-center mt-4">
-                        <TouchableOpacity className="bg-[#e46c47] w-[350] h-12 rounded-md justify-center">
+                        <TouchableOpacity className="bg-[#e46c47] w-[350] h-12 rounded-md justify-center" onPress={handleSubmit}>
                             <Text className="text-white text-center">VERIFY</Text>
                         </TouchableOpacity>
                     </View>
