@@ -14,6 +14,7 @@ const { isNotValidSchema } = require('../../utils/notValid.js');
 const { userExistsByPhone } = require('../../utils/userHelp.js');
 const jwt = require('jsonwebtoken');
 const secretKey = "112233";
+const axios = require('axios');
 
 async function addAddressController(req, res) {
     let loginInfo = req.body;
@@ -23,6 +24,19 @@ async function addAddressController(req, res) {
     loginInfo.phoneNo = req.phoneNo;
     const result = await userDao.addAddressDao(loginInfo, res);
     return result;
+}
+
+async function getUserLocationController(req, res) {
+    const lat = req.body.lat;
+    const lon = req.body.lon;
+    const API_KEY = process.env.API_KEY;
+    const response = await axios({
+        method: 'get',
+        url: `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&format=json&apiKey=${API_KEY}`,
+    });
+    return res.status(200).send({
+        result: response.data.results
+    })
 }
 
 async function updateAddressController(req, res) {
@@ -100,8 +114,8 @@ async function verifyOtpController(req, res) {
                 {
                     "phoneNo": OtpInfo.phoneNo
                 },
-                secretKey,
-                { expiresIn: "1d" }
+                secretKey
+                // { expiresIn: "1d" }
             );
             res.header('auth', jwtToken);
 
@@ -170,5 +184,6 @@ module.exports = {
     updateNameController,
     addAddressController,
     updateAddressController,
-    getByPhoneController
+    getByPhoneController,
+    getUserLocationController
 };

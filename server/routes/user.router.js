@@ -5,7 +5,8 @@ const {
     updateNameController,
     addAddressController,
     updateAddressController,
-    getByPhoneController
+    getByPhoneController,
+    getUserLocationController
 } = require('../controllers/userService/user.controller');
 const userAuth = require('../middlewares/userAuth');
 
@@ -18,5 +19,8 @@ userRouter.post('/verifyOtp', verifyOtpController);
 userRouter.post('/updateName', userAuth, updateNameController);
 userRouter.post('/addaddress', userAuth, addAddressController);
 userRouter.post('/updateAddress', userAuth, updateAddressController);
+
+// map
+userRouter.post('/getUserLocation', getUserLocationController);
 
 module.exports = userRouter;

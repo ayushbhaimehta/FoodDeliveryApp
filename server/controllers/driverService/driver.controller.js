@@ -22,6 +22,16 @@ async function loginDriverController(req, res) {
     return result;
 }
 
+async function addAssignOrderController(req, res) {
+    let driverInfo = req.body;
+    let { error } = driverValidator.validateAddAssignOrderSchema(driverInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    driverInfo.phoneNo = req.phoneNo;
+    const result = await driverDao.updateDriverInfoDao(driverInfo, res);
+    return result;
+}
+
 async function updateDriverInfoController(req, res) {
     let driverInfo = req.body;
     let { error } = driverValidator.validateupdateDriverInfoSchema(driverInfo);
@@ -54,5 +64,6 @@ module.exports = {
     loginDriverController,
     updateOrderStatusController,
     getAllOrdersController,
-    updateDriverInfoController
+    updateDriverInfoController,
+    addAssignOrderController
 };
