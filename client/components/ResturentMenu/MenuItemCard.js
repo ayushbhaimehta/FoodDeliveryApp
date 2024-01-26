@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react'
 import { Image, Text, TouchableOpacity, View, SafeAreaView } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux';
-import { addToBasket, removeFromBasket, selectBasketItemsWithId } from '../../features/basketSlice';
+import { addToBasket, removeFromBasket, selectBasketItemsWithId } from '../../features/context/basketSlice';
 
 const MenuItemCard = (props) => {
 
@@ -26,7 +26,7 @@ const MenuItemCard = (props) => {
 
 
     // ***** Operation to get data from global store in app, items array in basketSlice.js ***** //
-    
+
     // using UseSelector hook to get the items from the items array of basketSlice.js , and then we are passing the id of the card in which we are clicking the + button
     // and then inside the selectBasketItemsWithId function we are filtering the items array and then we are getting the items which have the same id as the id of the card which we are clicking
     const items = useSelector((state) => selectBasketItemsWithId(state, props.id));
@@ -44,8 +44,8 @@ const MenuItemCard = (props) => {
             </TouchableOpacity>
             {isPressed && <View className='flex-row mt-4 space-x-3 items-center'>
                 <TouchableOpacity onPress={removeItemsFromBasket} >
-                    <Icon name='minuscircle' size={30} color={items.length > 0 ?'#00CCBB':'#808080'} />
-               </TouchableOpacity>
+                    <Icon name='minuscircle' size={30} color={items.length > 0 ? '#00CCBB' : '#808080'} />
+                </TouchableOpacity>
 
                 <Text className='text-lg'>{items.length}</Text>
 
