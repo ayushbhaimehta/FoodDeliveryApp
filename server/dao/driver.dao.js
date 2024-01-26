@@ -117,7 +117,39 @@ async function getAllOrdersDao(driverInfo, res) {
 }
 
 async function updateDriverInfoDao(driverInfo, res) {
-
+    const phoneNo = driverInfo.phoneNo;
+    let email, name, password;
+    if (driverInfo.email) {
+        email = driverInfo.email;
+    }
+    if (driverInfo.name) {
+        name = driverInfo.name;
+    }
+    if (driverInfo.password) {
+        password = driverInfo.password;
+    }
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    console.log({ phoneNo }, { email }, { name }, { password });
+    try {
+        const response = await DriverModel.findOneAndUpdate(
+            { phoneNo: phoneNo },
+            {
+                email: email,
+                name: name,
+                password: hashedPassword
+            },
+            { new: true, useFindAndModify: false });
+        log.success(`Successfully updated driver information`);
+        return res.status(200).send({
+            message: 'Successfully updated driver information',
+            result: response
+        });
+    } catch (error) {
+        log.error(`Error in finding and updating driver details ${error}`);
+        return res.status(500).send({
+            message: 'Error in updating driver details'
+        })
+    }
 }
 
 async function updateOrderStatusDao(driverInfo, res) {
