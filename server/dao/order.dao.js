@@ -3,6 +3,7 @@ const log = new Logger('Order_Dao');
 const { OrderModel } = require('../models/orderSchema/order.schemaModel');
 // const axios = require('axios');
 const { userExistsByPhone, getRestaurantById } = require('../utils/userHelp');
+const axios = require('axios');
 
 async function getOrderDao(orderInfo, res) {
     // const phoneNo = orderInfo.phoneNo;
@@ -160,7 +161,28 @@ async function assignOrderDao(orderInfo, res) {
                 expectedTime: orderInfo.expectedTime,
                 deliveredTime: orderInfo.deliveredTime
             }, { new: true, useFindAndModify: false });
+        console.log({ response });
         log.success(`Successfully updated orderInfo`);
+        const address = response.address;
+        const orderDetails = response.orderDetails
+        const assignedTo = response.assignedTo
+        const assignedTime = response.assignedTime
+        const status = response.status
+        const expectedTime = response.expectedTime
+
+        // call add assign in driver array
+        await axios({
+            method: 'post',
+            url: 'http://localhost:3000/driver/addAssignorder',
+            data: {
+                address,
+                orderDetails,
+                assignedTo,
+                assignedTime,
+                status,
+                expectedTime
+            }
+        })
         return res.status(200).send({
             message: 'orderinfo Updated!',
             result: response
@@ -175,7 +197,7 @@ async function assignOrderDao(orderInfo, res) {
 
 module.exports = {
     addOrderDao,
-    deleteOrderDao,
     getOrderDao,
+    deleteOrderDao,
     assignOrderDao
 }

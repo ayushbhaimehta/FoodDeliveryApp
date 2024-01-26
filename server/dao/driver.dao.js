@@ -116,6 +116,44 @@ async function getAllOrdersDao(driverInfo, res) {
     }
 }
 
+async function addAssignOrderDao(driverInfo, res) {
+    const driverId = driverInfo.assignedTo;
+    const address = driverInfo.address;
+    const orderDetails = driverInfo.orderDetails;
+    const assignedTime = driverInfo.assignedTime;
+    const status = driverInfo.status;
+    const expectedTime = driverInfo.expectedTime;
+
+    try {
+        const response = await DriverModel.findById(driverId);
+        console.log("aaa");
+        if (!response) {
+            log.error(`No drivers found with this driver id`);
+            return res();
+        }
+        else {
+            console.log({ response });
+            const item = { address, orderDetails, assignedTime, status, expectedTime };
+            console.log(item, "enddddd");
+            response.assignedOrders.push(item);
+            console.log(response.assignedOrders);
+            try {
+                await DriverModel.findOneAndUpdate({ _id: driverId },
+                    {
+                        assignedOrders: response.assignedOrders
+                    });
+                return res.send();
+            } catch (error) {
+                log.error(`Error in updated assigned order array ${error}`);
+                return res();
+            }
+        }
+    } catch (error) {
+        log.error(`Error in finding any drivers ${error}`);
+        return res();
+    }
+}
+
 async function updateDriverInfoDao(driverInfo, res) {
     const phoneNo = driverInfo.phoneNo;
     let email, name, password;
@@ -221,5 +259,6 @@ module.exports = {
     loginDriverDao,
     updateOrderStatusDao,
     getAllOrdersDao,
-    updateDriverInfoDao
+    updateDriverInfoDao,
+    addAssignOrderDao
 }

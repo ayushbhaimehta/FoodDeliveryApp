@@ -17,16 +17,6 @@ const validateUpdateOrderStatusSchemaModel = Joi.object({
     newStatus: Joi.string().required()
 });
 
-const validateAddAssignOrderSchemaModel = Joi.object({
-    driverId: Joi.string().required(),
-    orderDetails: Joi.object({
-        orderId: Joi.string().required(),
-        userId: Joi.string().required(),
-        address: Joi.string().required(),
-        // orderDetails:
-    })
-});
-
 const validateupdateDriverInfoSchemaModel = Joi.object({
     name: Joi.string(),
     email: Joi.string(),
@@ -49,14 +39,9 @@ const validateupdateDriverInfoSchema = (driverInfo) => {
     return validateupdateDriverInfoSchemaModel.validate(driverInfo);
 };
 
-const validateAddAssignOrderSchema = (driverInfo) => {
-    return validateAddAssignOrderSchemaModel.validate(driverInfo);
-};
-
 module.exports = {
     validateRegisterDriverSchema,
     validateLoginDriverSchema,
     validateUpdateOrderStatusSchema,
-    validateupdateDriverInfoSchema,
-    validateAddAssignOrderSchema
+    validateupdateDriverInfoSchema
 }
