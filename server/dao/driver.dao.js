@@ -91,6 +91,35 @@ async function loginDriverDao(driverInfo, res) {
     }
 }
 
+async function getAllOrdersDao(driverInfo, res) {
+    const phoneNo = driverInfo;
+    try {
+        const driverDetails = await DriverModel.findOne({ phoneNo: phoneNo });
+        if (!driverDetails) {
+            log.info(`No drivers found with this phoneNo`);
+            return res.status(404).send({
+                message: 'No drivers found with this phoneNo'
+            })
+        }
+        else {
+            log.success(`Driver details found successfully`);
+            return res.status(200).send({
+                message: 'Driver details found!',
+                result: driverDetails
+            })
+        }
+    } catch (error) {
+        log.error(`Cannot find any driver with phoneNo-${phoneNo} ${error}`);
+        return res.status(500).send({
+            message: 'error in finding driver'
+        })
+    }
+}
+
+async function updateDriverInfoDao(driverInfo, res) {
+
+}
+
 async function updateOrderStatusDao(driverInfo, res) {
     const phoneNo = driverInfo.phoneNo;
     const orderId = driverInfo.orderId;
@@ -158,6 +187,7 @@ async function updateOrderStatusDao(driverInfo, res) {
 module.exports = {
     registerDriverDao,
     loginDriverDao,
-    updateOrderStatusDao
-    // getAllOrdersDao
+    updateOrderStatusDao,
+    getAllOrdersDao,
+    updateDriverInfoDao
 }

@@ -17,8 +17,10 @@ const validateUpdateOrderStatusSchemaModel = Joi.object({
     newStatus: Joi.string().required()
 });
 
-const validateGetAllOrderSchemaModel = Joi.object({
-    phoneNo: Joi.string().required()
+const validateupdateDriverInfoSchemaModel = Joi.object({
+    name: Joi.string(),
+    email: Joi.string(),
+    password: Joi.string()
 });
 
 const validateRegisterDriverSchema = (driverInfo) => {
@@ -33,13 +35,13 @@ const validateUpdateOrderStatusSchema = (driverInfo) => {
     return validateUpdateOrderStatusSchemaModel.validate(driverInfo);
 };
 
-const validateGetAllOrderSchema = (driverInfo) => {
-    return validateGetAllOrderSchemaModel.validate(driverInfo);
+const validateupdateDriverInfoSchema = (driverInfo) => {
+    return validateupdateDriverInfoSchemaModel.validate(driverInfo);
 };
 
 module.exports = {
     validateRegisterDriverSchema,
     validateLoginDriverSchema,
     validateUpdateOrderStatusSchema,
-    validateGetAllOrderSchema
+    validateupdateDriverInfoSchema
 }
