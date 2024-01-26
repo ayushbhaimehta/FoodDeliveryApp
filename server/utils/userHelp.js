@@ -24,6 +24,17 @@ async function driverExistsByPhone(phoneNo, email) {
         throw error; // Rethrow the error if needed
     }
 }
+async function driverExistsOnlyByPhone(phoneNo) {
+    try {
+        // const result = await UserModel.findOne({ phoneNo: phoneNo }).exec();
+        const result = await DriverModel.findOne({ phoneNo: phoneNo });
+        return result;
+    } catch (error) {
+        // Handle any errors that occurred during the query
+        console.error("Error in userExistsByPhone:", error);
+        throw error; // Rethrow the error if needed
+    }
+}
 async function restaurantExistsByPhone(phoneNo) {
     try {
         // const result = await UserModel.findOne({ phoneNo: phoneNo }).exec();
@@ -50,5 +61,6 @@ module.exports = {
     userExistsByPhone,
     restaurantExistsByPhone,
     getRestaurantById,
-    driverExistsByPhone
+    driverExistsByPhone,
+    driverExistsOnlyByPhone
 };

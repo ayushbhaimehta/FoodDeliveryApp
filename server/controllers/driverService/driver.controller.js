@@ -18,34 +18,32 @@ async function loginDriverController(req, res) {
     let { error } = driverValidator.validateLoginDriverSchema(driverInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
-    const result = await orderDao.loginDriverDao(driverInfo, res);
+    const result = await driverDao.loginDriverDao(driverInfo, res);
     return result;
 }
 
-async function getByUserIdController(req, res) {
-    let orderInfo = req.params;
-    let { error } = orderValidator.validateGetOrderSchema(orderInfo);
+async function updateOrderStatusController(req, res) {
+    let driverInfo = req.body;
+    let { error } = driverValidator.validateUpdateOrderStatusSchema(driverInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
-    const response = await UserModel.findOne({
-        phoneNo: orderInfo.phoneNo
-    })
-    orderInfo.userId = response._id;
-    const result = await orderDao.getOrderDao(orderInfo, res);
+    driverInfo.phoneNo = req.phoneNo;
+    const result = await driverDao.updateOrderStatusDao(driverInfo, res);
     return result;
 }
 
-async function deleteOrderController(req, res) {
-    let orderInfo = req.body;
-    let { error } = orderValidator.validateDeleteOrderSchema(orderInfo);
+async function getAllOrdersController(req, res) {
+    let driverInfo = req.params;
+    let { error } = driverValidator.validateGetAllOrderSchema(driverInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
-    orderInfo.phoneNo = req.phoneNo;
-    const result = await orderDao.deleteOrderDao(orderInfo, res);
+    const result = await driverDao.getAllOrdersDao(driverInfo, res);
     return result;
 }
 
 module.exports = {
     registerDriverController,
-    loginDriverController
+    loginDriverController,
+    updateOrderStatusController,
+    getAllOrdersController
 };

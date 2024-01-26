@@ -1,8 +1,12 @@
 const Logger = require('../logger/logger');
 const log = new Logger('DriverDao');
 const { DriverModel } = require('../models/driverSchema/driver.schemaModel');
+const { OrderModel } = require('../models/orderSchema/order.schemaModel');
 const bcrypt = require('bcrypt');
-const { userExistsByPhone, getRestaurantById, driverExistsByPhone } = require('../utils/userHelp');
+const {
+    driverExistsByPhone,
+    driverExistsOnlyByPhone
+} = require('../utils/userHelp');
 const saltRounds = 12;
 const jwt = require('jsonwebtoken');
 const secretKey = "112233";
@@ -68,7 +72,8 @@ async function loginDriverDao(driverInfo, res) {
         else {
             const jwtToken = jwt.sign(
                 {
-                    "phoneNo": phoneNo
+                    "phoneNo": phoneNo,
+                    "role": "Driver"
                 },
                 secretKey,
                 { expiresIn: "1d" }
@@ -86,7 +91,73 @@ async function loginDriverDao(driverInfo, res) {
     }
 }
 
+async function updateOrderStatusDao(driverInfo, res) {
+    const phoneNo = driverInfo.phoneNo;
+    const orderId = driverInfo.orderId;
+    const newStatus = driverInfo.newStatus;
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date + ' ' + time;
+    const newDelieveredTime = dateTime;
+
+    try {
+        const driverDetails = await driverExistsOnlyByPhone(phoneNo);
+        const driverId = driverDetails._id;
+        // if it is then lets see if it exists in orderDetails
+        try {
+            const orderInfo = await OrderModel.findById(orderId);
+            // console.log({ orderInfo });
+            if (!orderInfo) {
+                log.error(`Cannot find an order with specified orderId`);
+                return res.status(404).send({
+                    message: 'Cannot find an order with this order ID'
+                })
+            }
+            else {
+                if (orderInfo.assignedTo == driverId) {
+                    try {
+                        await OrderModel.findOneAndUpdate(
+                            { _id: orderId },
+                            {
+                                status: newStatus,
+                                deliveredTime: newDelieveredTime
+                            });
+                        log.success(`Successfully updated order details`);
+                        return res.status(200).send({
+                            message: 'Successfully updated order status'
+                        })
+                    } catch (error) {
+                        log.error(`Error in updating order details ${error}`);
+                        return res.status(500).send({
+                            message: 'Error in updating order detaisl'
+                        })
+                    }
+                }
+                else {
+                    log.info('You are not authorized to update this order');
+                    return res.status(403).send({
+                        message: 'YOu are not authorized to update order whom you are not assigned to'
+                    })
+                }
+            }
+        } catch (error) {
+            log.error(`Error in finding an order with ${orderId} ${error}`);
+            return res.status(500).send({
+                message: 'Error in finding order'
+            })
+        }
+    } catch (error) {
+        log.error(`Error in finding driver ${error}`);
+        return res.status(500).send({
+            message: 'Error in finding driver'
+        })
+    }
+}
+
 module.exports = {
     registerDriverDao,
-    loginDriverDao
+    loginDriverDao,
+    updateOrderStatusDao
+    // getAllOrdersDao
 }
