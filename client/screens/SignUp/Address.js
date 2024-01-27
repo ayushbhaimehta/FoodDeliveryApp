@@ -1,44 +1,160 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
+//hooks
 import { useGetLocation } from '../../features/hook/useGetLocation';
+import { useLoader } from '../../features/context/loaderContext';
+import { useAuth } from '../../features/context/AuthContext';
+//Components
+import Loader from '../../components/Global/Loader';
+import BackButton from '../../components/Global/BackButton';
+import Map from '../../components/Address/Map';
+import InformationTab from '../../components/Address/InformationTab';
+import AddressForm from '../../components/Address/AddressForm';
+import { PaperProvider } from 'react-native-paper';
+import * as Animatable from 'react-native-animatable';
 
-const Address = () => {
+const Address = ({ navigation }) => {
+    const { setLoader } = useLoader();
+    const { setUser } = useAuth();
     const [currentLocation, setCurrentLocation] = useState({
         "lon": 76.7688417,
         "lat": 30.7285578
     });
+    const [isFormVisible, setIsFormVisible] = useState(true);
+    const [fullAddress, setFullAddress] = useState("");
+    const [location, setLocation] = useState("")
+
     const [lat, lon, error] = useGetLocation();
+
+    const handleAddressSubmit = (completeAddress) => {
+        console.log('Submitted Address:', completeAddress);
+        // Handle the complete address as needed (e.g., send to server)
+    };
+
+    const toggleFormVisibility = () => {
+        setIsFormVisible(!isFormVisible);
+    };
+
+
+    const getAddress = async (lat, lon) => {
+        setLoader(true)
+        try {
+            const res = await axios.post(`http://192.168.1.5:3000/user/getUserLocation`, {
+                lat: currentLocation.lat,
+                lon: currentLocation.lon
+            });
+            if (res.status === 200) {
+                setFullAddress(res.data.result[0]["address_line2"])
+                setLocation(res.data.result[0]['suburb'])
+            }
+        }
+        catch (err) {
+            console.log(" New error", err);
+        } finally {
+            setLoader(false)
+        }
+    }
     useEffect(() => {
-        setCurrentLocation({
-            lat: lat,
-            lon: lon
-        })
+        if (lat && lon) {
+            setCurrentLocation({
+                lat: lat,
+                lon: lon
+            })
+        }
     }, [lat, lon])
-    console.log(currentLocation);
 
+    useEffect(() => {
+        getAddress(currentLocation.lat, currentLocation.lon)
+    }
+        , [currentLocation])
 
+    const navigateBack = () => {
+        if (isFormVisible) {
+            setIsFormVisible(false)
+        }
+        else {
+            navigation.navigate('Input')
+        }
+    }
+    const handleSubmit = () => {
+
+        setUser(true)
+    }
     return (
-        <View style={styles.container}>
+
+        <SafeAreaView style={styles.container}>
+            <Loader />
+            <BackButton navigateBack={navigateBack} />
+
             {currentLocation && (
-                <MapView
-                    style={styles.map}
-                    initialRegion={{
-                        latitude: currentLocation.lat,
-                        longitude: currentLocation.lon,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                    }}
-                >
-                    <Marker
-                        coordinate={{
-                            latitude: currentLocation.lat,
-                            longitude: currentLocation.lon,
+                <Map currentLocation={currentLocation}
+                    setCurrentLocation={setCurrentLocation}
+                />
+            )}
+            <View style={[isFormVisible ? {
+                height: '80%',
+                width: '100%',
+                backgroundColor: 'white',
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
+
+            } : {}]}>
+                {!isFormVisible &&
+                    <Text style={{ fontSize: 16, margin: 10 }} className="text-gray-500">SELECT DELIEVERY LOCATION </Text>
+                }
+                <View className="flex-row mt-4">
+                    <Image
+                        source={{
+                            uri: 'https://img.icons8.com/color/96/e46c47/marker--v1.png'
+                        }}
+                        style={{
+                            width: 20,
+                            height: 20,
+                            top: 18,
+                            left: 10,
                         }}
                     />
-                </MapView>
-            )}
-        </View>
+                    <Text style={{ fontSize: 25, fontWeight: '800', margin: 10, left: 10 }}>{location}</Text>
+                    {!isFormVisible && <TouchableOpacity className="justify-center items-end flex-1 right-2">
+                        <Text style={{ fontSize: 16, margin: 10, color: '#e46c47', fontWeight: 'bold' }}>CHANGE</Text>
+                    </TouchableOpacity>}
+                </View>
+                <Text style={{ fontSize: 16, marginHorizontal: 10, fontWeight: '600' }}>{fullAddress}</Text>
+                {isFormVisible &&
+                    <PaperProvider >
+                        <View style={styles.sliderContainer}>
+                            <Animatable.View
+                                style={styles.formContainer}
+                                animation={isFormVisible ? 'slideInUp' : 'slideOutDown'}
+                            >
+                                <AddressForm
+                                    onSubmit={handleAddressSubmit}
+                                    isVisible={isFormVisible}
+                                    onClose={toggleFormVisibility}
+                                />
+                            </Animatable.View>
+                        </View>
+                    </PaperProvider>}
+                {!isFormVisible && <TouchableOpacity
+                    style={{
+                        backgroundColor: '#e46c47',
+                        padding: 10,
+                        borderRadius: 10,
+                        marginHorizontal: 10,
+                        marginVertical: 20,
+                        alignItems: 'center'
+                    }}
+                    onPress={() => setIsFormVisible(true)}
+                >
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Confirm Location</Text>
+                </TouchableOpacity>}
+            </View>
+
+
+
+        </SafeAreaView>
     );
 };
 
@@ -46,8 +162,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    map: {
+    sliderContainer: {
         flex: 1,
+        justifyContent: 'center',
+        padding: 16,
+    },
+    formContainer: {
+        flex: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 999
     },
 });
 
