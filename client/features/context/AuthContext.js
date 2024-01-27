@@ -5,7 +5,7 @@ const AuthContext = createContext({
     setPhoneNumber: null,
     auth: null,
     setAuth: null,
-    user: null,
+    user: false,
     setUser: null
 })
 
