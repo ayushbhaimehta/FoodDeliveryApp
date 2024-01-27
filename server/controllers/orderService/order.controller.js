@@ -4,6 +4,7 @@ const Logger = require('../../logger/logger.js');
 const log = new Logger('orderController');
 const { isNotValidSchema } = require('../../utils/notValid.js');
 const { UserModel } = require('../../models/userSchema/user.schemaModel.js');
+const Razorpay = require('razorpay');
 
 async function addOrderController(req, res) {
     let orderInfo = req.body;
@@ -23,6 +24,25 @@ async function assignOrdersController(req, res) {
     orderInfo.phoneNo = req.phoneNo;
     const result = await orderDao.assignOrderDao(orderInfo, res);
     return result;
+}
+
+async function paymentController(req, res) {
+    let orderInfo = req.body;
+    let { error } = orderValidator.validateAddOrderSchema(orderInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const phoneNo = req.phoneNo;
+    var instance = new Razorpay({ key_id: 'YOUR_KEY_ID', key_secret: 'YOUR_SECRET' })
+
+    instance.orders.create({
+        amount: 50000,
+        currency: "INR",
+        receipt: "receipt#1",
+        notes: {
+            key1: "value3",
+            key2: "value2"
+        }
+    })
 }
 
 async function getByUserIdController(req, res) {
@@ -52,5 +72,6 @@ module.exports = {
     addOrderController,
     deleteOrderController,
     getByUserIdController,
-    assignOrdersController
+    assignOrdersController,
+    paymentController
 };
