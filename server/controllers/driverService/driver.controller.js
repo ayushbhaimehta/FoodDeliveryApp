@@ -23,12 +23,8 @@ async function loginDriverController(req, res) {
 }
 
 async function addAssignOrderController(req, res) {
-    let driverInfo = req.body;
-    let { error } = driverValidator.validateAddAssignOrderSchema(driverInfo);
-    if (isNotValidSchema(error, res)) return;
-    log.success('Schema Validation done');
-    driverInfo.phoneNo = req.phoneNo;
-    const result = await driverDao.updateDriverInfoDao(driverInfo, res);
+    const driverInfo = req.body;
+    const result = await driverDao.addAssignOrderDao(driverInfo, res);
     return result;
 }
 
