@@ -9,6 +9,7 @@ import axios from 'axios'
 import { useAuth } from '../../features/context/AuthContext'
 import Loader from '../../components/Global/Loader'
 import { useLoader } from '../../features/context/loaderContext'
+import BackButton from '../../components/Global/BackButton'
 
 const SignUpScreen = ({ navigation }) => {
     const { setPhoneNumber } = useAuth();
@@ -19,12 +20,10 @@ const SignUpScreen = ({ navigation }) => {
 
         setLoader(true)
         try {
-            const response = await axios.post('http://192.168.1.9:3000/user/sendotp', {
+            const response = await axios.post('http://192.168.1.5:3000/user/sendotp', {
                 phoneNo: phone,
                 countryCode: countrycode,
             });
-
-            console.log(response.status);
 
             if (response.status === 200) {
                 setPhoneNumber(phone)
@@ -81,15 +80,7 @@ const SignUpScreen = ({ navigation }) => {
             <Loader />
             <View className="h-[50%] mx-2">
                 <View className="h-[10%]">
-                    <TouchableOpacity onPress={slideDown}>
-                        <Image source={{ uri: "https://img.icons8.com/windows/96/long-arrow-left.png" }}
-                            style={{
-                                width: 32,
-                                height: 32,
-                                marginTop: 10
-                            }}
-                        />
-                    </TouchableOpacity>
+                    <BackButton navigateBack={slideDown} />
                 </View>
                 <View onTouchEnd={slideDown} className="flex-1 justify-end align-bottom">
                     <View className="h-[35%] absolute top-[260]">

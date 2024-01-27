@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '../../features/context/AuthContext'
 import { useLoader } from '../../features/context/loaderContext'
 import axios from 'axios'
+import BackButton from '../../components/Global/BackButton'
 
 const OTPScreen = ({ navigation }) => {
     const { phoneNumber, setAuth, setUser } = useAuth()
@@ -14,20 +15,17 @@ const OTPScreen = ({ navigation }) => {
     const handleSubmit = async () => {
         setLoader(true)
         try {
-            console.log(phoneNumber);
-            const response = await axios.post('http://192.168.1.9:3000/user/verifyotp', {
+            const response = await axios.post('http://192.168.1.5:3000/user/verifyotp', {
                 phoneNo: phoneNumber,
                 countryCode: "+91",
                 otp: otp.join('')
             });
 
-            console.log(response.data);
 
             if (response.status === 200) {
                 setAuth(response.headers['auth'])
 
                 if (response.data["exist"]) {
-                    console.log("user exists");
                     setUser(true)
                 } else {
                     navigation.navigate('Input');
@@ -69,17 +67,7 @@ const OTPScreen = ({ navigation }) => {
             <View className="mx-2 ">
                 <View className="bg-[#f3f4fc] flex-row h-[150]">
                     <View>
-                        <TouchableOpacity >
-                            <Image source={{ uri: "https://img.icons8.com/windows/96/long-arrow-left.png" }}
-                                style={{
-                                    width: 32,
-                                    height: 32,
-                                    marginTop: 10,
-                                    marginLeft: 1
-                                }}
-                                onTouchEnd={navigateBack}
-                            />
-                        </TouchableOpacity>
+                        <BackButton navigateBack={navigateBack} />
                         <View className="mx-2">
                             <Text className="text-xl font-black mt-4">VERIFY DETAILS</Text>
                             <Text className="text-gray-500 mt-1">OTP sent to {phoneNumber}</Text>
