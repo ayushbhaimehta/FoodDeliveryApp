@@ -1,10 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { useLoader } from './LoaderContext';
+import { useAuth } from './AuthContext';
 
 // Save token to AsyncStorage
-const saveToken = async (token) => {
+const saveToken = async (token, phone) => {
     try {
         await AsyncStorage.setItem('authToken', token);
+        await AsyncStorage.setItem('phone', phone);
     } catch (e) {
         console.log('Error saving token:', e);
     }
@@ -13,8 +17,9 @@ const saveToken = async (token) => {
 // Retrieve token from AsyncStorage
 const getToken = async () => {
     try {
-        const token = await AsyncStorage.getItem('authToken');
-        return token;
+        const auth = await AsyncStorage.getItem('authToken');
+        const phone = await AsyncStorage.getItem('phone');
+        return [auth, phone];
     } catch (e) {
         console.log('Error getting token:', e);
     }
@@ -24,32 +29,61 @@ const SessionContext = createContext();
 
 const SessionProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const { setLoader } = useLoader();
 
-    // Check for stored token on app start
+    //Fetch user
+    const getUser = async (phoneNumber, auth) => {
+        setLoader(true);
+        try {
+            const res = await axios.get(`http://192.168.1.5:3000/user/getbyphone/${phoneNumber}`, {
+                headers: {
+                    auth: auth,
+                    "Content-Type": 'application/json'
+                }
+            });
+            console.log(res.data.result);
+            if (res.status === 200) {
+                setUser(res.data.result);
+            } else {
+                console.log("Non-200 status code:", res.status);
+            }
+        } catch (err) {
+            console.log("Error:", err);
+        }
+        finally {
+            setLoader(false);
+        }
+    }
+
+    const { setAuth, setPhoneNumber, setUserAdd } = useAuth()
+
+    //Fetch user on Load
     useEffect(() => {
         const checkToken = async () => {
-            const token = await getToken();
-            if (token) {
-                // Fetch user data using the token and set the user state
-                // For example, make an API request to get user details
-                // setUser(api.getUserDetails(token));
+            setLoader(true)
+            const [auth, phone] = await getToken();
+            if (auth) {
+                setAuth(auth);
+                setPhoneNumber(phone);
+                setUserAdd(true)
+                await getUser(phone, auth);
             }
+            setLoader(false)
         };
 
         checkToken();
     }, []);
-
-    const login = async (token) => {
-        // Save token to storage
-        await saveToken(token);
-
-        // Fetch user data using the token and set the user state
-        // setUser(api.getUserDetails(token));
+    const login = async (auth, phone) => {
+        setLoader(true)
+        await saveToken(auth, phone);
+        await getUser(phone);
+        setLoader(false)
     };
 
     const logout = async () => {
         // Remove token from storage
         await AsyncStorage.removeItem('authToken');
+        await AsyncStorage.removeItem('phone');
         setUser(null);
     };
 
