@@ -4,7 +4,8 @@ const {
     deleteOrderController,
     getByUserIdController,
     assignOrdersController,
-    paymentController
+    paymentController,
+    paymentVerifyController
 } = require('../controllers/orderService/order.controller');
 const userAuth = require('../middlewares/userAuth');
 
@@ -15,7 +16,9 @@ orderRouter.post('/addorder', userAuth, addOrderController);
 orderRouter.delete('/deleteorder', userAuth, deleteOrderController);
 
 // payment gateway
-orderRouter.post('/payment', userAuth, paymentController);
+orderRouter.post('/paymentCreateOrder', userAuth, paymentController);
+orderRouter.post('/paymentVerify', userAuth, paymentVerifyController);
+
 // admin allocation
 orderRouter.post('/assignOrders', assignOrdersController)
 
