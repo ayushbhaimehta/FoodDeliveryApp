@@ -9,7 +9,8 @@ require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
-const verifySid = process.env.verifySID;
+const sendOTPSID = process.env.sendOTPSID;
+const verifyOTPSID = process.env.verifyOTPSID;
 const { isNotValidSchema } = require('../../utils/notValid.js');
 const { userExistsByPhone } = require('../../utils/userHelp.js');
 const jwt = require('jsonwebtoken');
@@ -77,7 +78,7 @@ async function sendOtpController(req, res) {
         // send otp service
         log.info(client)
         const otpResponse = await client.verify.v2
-            .services(verifySid)
+            .services(sendOTPSID)
             .verifications.create({
                 to: `+${OtpInfo.countryCode}${OtpInfo.phoneNo}`,
                 channel: 'sms',
@@ -104,7 +105,7 @@ async function verifyOtpController(req, res) {
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     try {
-        const verifiedResponse = await client.verify.v2.services(verifySid)
+        const verifiedResponse = await client.verify.v2.services(sendOTPSID)
             .verificationChecks
             .create({ to: `${OtpInfo.countryCode}${OtpInfo.phoneNo}`, code: otp });
 
