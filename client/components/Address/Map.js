@@ -3,7 +3,6 @@ import React from 'react'
 import MapView, { Marker } from 'react-native-maps';
 
 const Map = ({ currentLocation, setCurrentLocation }) => {
-    console.log(currentLocation);
     return (
         <MapView
             style={styles.map}
