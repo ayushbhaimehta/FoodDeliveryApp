@@ -2,12 +2,14 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'reac
 import React, { useState, useRef, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '../../features/context/AuthContext'
-import { useLoader } from '../../features/context/loaderContext'
+import { useLoader } from '../../features/context/LoaderContext'
 import axios from 'axios'
 import BackButton from '../../components/Global/BackButton'
+import { useSession } from '../../features/context/SessionContext'
 
 const OTPScreen = ({ navigation }) => {
-    const { phoneNumber, setAuth, setUser } = useAuth()
+    const { login } = useSession()
+    const { phoneNumber, setAuth, setUserAdd } = useAuth()
     const { setLoader } = useLoader();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([...Array(6)].map(() => useRef(null)));
@@ -24,9 +26,9 @@ const OTPScreen = ({ navigation }) => {
 
             if (response.status === 200) {
                 setAuth(response.headers['auth'])
-
+                await login(response.headers['auth'], phoneNumber)
                 if (response.data["exist"]) {
-                    setUser(true)
+                    setUserAdd(true)
                 } else {
                     navigation.navigate('Input');
                 }
