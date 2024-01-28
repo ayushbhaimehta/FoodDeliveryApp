@@ -8,7 +8,7 @@ import axios from 'axios'
 
 import { useAuth } from '../../features/context/AuthContext'
 import Loader from '../../components/Global/Loader'
-import { useLoader } from '../../features/context/loaderContext'
+import { useLoader } from '../../features/context/LoaderContext'
 import BackButton from '../../components/Global/BackButton'
 
 const SignUpScreen = ({ navigation }) => {
