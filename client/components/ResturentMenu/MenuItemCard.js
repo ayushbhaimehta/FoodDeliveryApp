@@ -38,19 +38,19 @@ const MenuItemCard = (props) => {
                 <View className='flex-1 pr-8 space-y-1'>
                     <Text className='text-2xl'>{props.name}</Text>
                     <Text className='text-gray-500'>{props.desc}</Text>
-                    <Text className='text-gray-500'>$ {props.price}</Text>
+                    <Text className='text-gray-500'>Rs. {props.price}</Text>
                 </View>
                 <Image source={{ uri: props.img }} className=" h-20 w-20" />
             </TouchableOpacity>
             {isPressed && <View className='flex-row mt-4 space-x-3 items-center'>
                 <TouchableOpacity onPress={removeItemsFromBasket} >
-                    <Icon name='minuscircle' size={30} color={items.length > 0 ? '#00CCBB' : '#808080'} />
+                    <Icon name='minuscircle' size={30} color={items.length > 0 ? '#e46c47' : '#808080'} />
                 </TouchableOpacity>
 
                 <Text className='text-lg'>{items.length}</Text>
 
                 <TouchableOpacity onPress={addItemsToBasket} >
-                    <Icon name='pluscircle' size={30} color='#00CCBB' />
+                    <Icon name='pluscircle' size={30} color='#e46c47' />
                 </TouchableOpacity>
             </View>}
         </View>

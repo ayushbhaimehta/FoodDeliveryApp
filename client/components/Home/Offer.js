@@ -11,7 +11,7 @@ const Offer = () => {
             <View className='px-3 pt-3 pb-2'>
                 <View className='flex-row justify-between align-center'>
                     <Text className="font-bold text-2xl text-gray-800">Offers near you!</Text>
-                    <Icon name='md-arrow-forward-sharp' size={25} color='#00CCBB' />
+                    <Icon name='md-arrow-forward-sharp' size={25} color='#e46c47' />
                 </View>
                 <Text className='text-gray-600'>Why not support your local resturant tonight</Text>
             </View>

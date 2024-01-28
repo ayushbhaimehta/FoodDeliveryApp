@@ -31,7 +31,7 @@ const RestaurantScreen = () => {
             onPress={() => {
               navigation.goBack()
             }} >
-            <Icon name='md-arrow-back-sharp' size={25} color='#00CCBB' />
+            <Icon name='md-arrow-back-sharp' size={25} color='#e46c47' />
           </TouchableOpacity>
 
           {/* Food description */}
@@ -39,12 +39,12 @@ const RestaurantScreen = () => {
             <Text className="font-bold text-3xl text-gray-800">{route.params.name}</Text>
             <View className='flex-row space-x-4 mt-1'>
               <View className='text-md flex-row space-x-2 items-center'>
-                <Icon2 name='star-rate' size={20} color='#00CCBB' />
-                <Text className="text-[#00CCBB] text-lg">{route.params.price}</Text>
+                <Icon2 name='star-rate' size={20} color='#e46c47' />
+                <Text className="text-[#e46c47] text-lg">{route.params.price}</Text>
                 <Text className="text-gray-500 text-lg">{route.params.cat}</Text>
               </View>
               <View className='text-md flex-row space-x-2 items-center'>
-                <Icon2 name='location-on' size={20} color='#00CCBB' />
+                <Icon2 name='location-on' size={20} color='#e46c47' />
                 <Text className="text-gray-500 text-lg">nearby</Text>
                 <Text className="text-gray-500 text-lg">{route.params.location}</Text>
               </View>
@@ -53,10 +53,10 @@ const RestaurantScreen = () => {
           </View>
           <TouchableOpacity className='mt-1 px-4 py-4 flex-row items-center justify-between border-t border-gray-300'>
             <View className='flex-row items-center space-x-4'>
-              <Icon3 name='questioncircleo' size={18} color='#00CCBB' />
+              <Icon3 name='questioncircleo' size={18} color='#e46c47' />
               <Text className='font-bold text-xl text-gray-700'>Have a food allergy ?</Text>
             </View>
-            <Icon3 name='right' size={20} color='#00CCBB' />
+            <Icon3 name='right' size={20} color='#e46c47' />
           </TouchableOpacity>
         </View>
 
