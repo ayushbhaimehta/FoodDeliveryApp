@@ -10,28 +10,24 @@ import { useAuth } from '../../features/context/AuthContext';
 import Loader from '../../components/Global/Loader';
 import BackButton from '../../components/Global/BackButton';
 import Map from '../../components/Address/Map';
-import InformationTab from '../../components/Address/InformationTab';
 import AddressForm from '../../components/Address/AddressForm';
 import { PaperProvider } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 
 const Address = ({ navigation }) => {
     const { setLoader } = useLoader();
-    const { setUser } = useAuth();
+    const { setUser, auth } = useAuth();
     const [currentLocation, setCurrentLocation] = useState({
         "lon": 76.7688417,
         "lat": 30.7285578
     });
+    const [apiData, setApiData] = useState({})
+
     const [isFormVisible, setIsFormVisible] = useState(true);
     const [fullAddress, setFullAddress] = useState("");
     const [location, setLocation] = useState("")
 
     const [lat, lon, error] = useGetLocation();
-
-    const handleAddressSubmit = (completeAddress) => {
-        console.log('Submitted Address:', completeAddress);
-        // Handle the complete address as needed (e.g., send to server)
-    };
 
     const toggleFormVisibility = () => {
         setIsFormVisible(!isFormVisible);
@@ -78,9 +74,30 @@ const Address = ({ navigation }) => {
             navigation.navigate('Input')
         }
     }
-    const handleSubmit = () => {
+    const addAddress = async (apiData) => {
+        setLoader(true)
+        try {
+            const res = await axios.post(`http://192.168.1.5:3000/user/addaddress`, {
+                address: apiData.address
+            }, {
+                headers: {
+                    auth: auth,
+                    "Content-Type": 'application/json'
+                }
+            });
+            if (res.status === 200) {
+                console.log("Address added successfully");
+                setUser(true)
+            }
+        }
+        catch (err) {
+            console.log("ERROR: ", err);
+        }
 
-        setUser(true)
+    }
+
+    const handleSubmit = () => {
+        addAddress(apiData);
     }
     return (
 
@@ -94,7 +111,7 @@ const Address = ({ navigation }) => {
                 />
             )}
             <View style={[isFormVisible ? {
-                height: '80%',
+                height: '90%',
                 width: '100%',
                 backgroundColor: 'white',
                 borderTopLeftRadius: 20,
@@ -130,9 +147,12 @@ const Address = ({ navigation }) => {
                                 animation={isFormVisible ? 'slideInUp' : 'slideOutDown'}
                             >
                                 <AddressForm
-                                    onSubmit={handleAddressSubmit}
+                                    onSubmit={handleSubmit}
                                     isVisible={isFormVisible}
                                     onClose={toggleFormVisibility}
+                                    setApiData={setApiData}
+                                    currentLocation={currentLocation}
+                                    fullAddress={fullAddress}
                                 />
                             </Animatable.View>
                         </View>
@@ -151,9 +171,6 @@ const Address = ({ navigation }) => {
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>Confirm Location</Text>
                 </TouchableOpacity>}
             </View>
-
-
-
         </SafeAreaView>
     );
 };
