@@ -14,7 +14,6 @@ const BasketScreen = () => {
     const items = useSelector(selectBasketItems);
     const subtotal = useSelector(BasketTotal);
     const [groupedItems, setGroupedItems] = useState([]);
-
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -22,7 +21,7 @@ const BasketScreen = () => {
     useMemo(() => {
         const basketItems = items.reduce((result, item) => {
             // this code takes an array of objects and groups them by their 'name' property into a new object, where each property is the 'name' and the value is an array of objects with that 'name'.
-            (result[item.name] = result[item.name] || []).push(item);
+            (result[item.id] = result[item.id] || []).push(item);
             // key(item name)    value of previously created key (array)
             // assigning or updating a value of key of object, object[key] = value ... and while fetching the value, const val = object.key
             // we are saying, result[key] = value || []   next, item will be pushed into result[key], which is an array (empty or non-empty)
@@ -34,17 +33,21 @@ const BasketScreen = () => {
 
     console.log(groupedItems);
 
+    const handleOrder = () => {
+        navigation.navigate("OrderPlacing")
+    }
+
 
     return (
         <>
             <SafeAreaView>
 
                 {/* Header area */}
-                <View className='flex-row justify-between p-5 items-center bg-white rounded-t-3xl border-b border-[#00CCBB]'>
-                    <Icon2 name='basket-loaded' size={25} color='#00CCBB'></Icon2>
+                <View className='flex-row justify-between p-5 items-center bg-white rounded-t-3xl border-b border-[#e46c47]'>
+                    <Icon2 name='basket-loaded' size={25} color='#e46c47'></Icon2>
                     <Text className='text-2xl font-bold'>Basket</Text>
                     <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                        <Icon name='closecircle' size={25} color='#00CCBB'></Icon>
+                        <Icon name='closecircle' size={25} color='#e46c47'></Icon>
                     </TouchableOpacity>
                 </View>
                 <View className='bg-white my-5 flex-row items-center justify-between px-4 py-4'>
@@ -53,7 +56,7 @@ const BasketScreen = () => {
                             className=" h-9 w-9 rounded-full" />
                         <Text className='text-lg'>Deliver in 50-70 min</Text>
                     </View>
-                    <Text className='text-lg text-[#00CCBB]'>Change</Text>
+                    <Text className='text-lg text-[#e46c47]'>Change</Text>
                 </View>
 
                 {/* Basket items */}
@@ -64,14 +67,14 @@ const BasketScreen = () => {
                                 return (
                                     <View className='flex-row justify-between items-center px-4 py-4 border-b border-gray-200 bg-white' key={key}>
                                         <View className='flex-row justify-between items-center space-x-3'>
-                                            <Text className='text-[#00CCBB] font-bold'>{value.length} x </Text>
+                                            <Text className='text-[#e46c47] font-bold'>{value.length} x </Text>
                                             <Image source={{ uri: value[0].img }} className='h-12 w-12 rounded-full' />
                                             <Text className=''>{value[0].name}</Text>
                                         </View>
                                         <View className='flex-row justify-between items-center space-x-3'>
-                                            <Text className=''>$ {(value[0].price * value.length).toFixed(2)}</Text>
+                                            <Text className=''>Rs.{(value[0].price * value.length).toFixed(2)}</Text>
                                             <TouchableOpacity onPress={() => { dispatch(removeFromBasket({ id: value[0].id })) }}>
-                                                <Text className='text-[#00CCBB] font-semibold'>Remove</Text>
+                                                <Text className='text-[#e46c47] font-semibold'>Remove</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -88,19 +91,19 @@ const BasketScreen = () => {
                 <View>
                     <View className='flex-row justify-between px-5 pt-6'>
                         <Text className='text-gray-500'>Subtotal</Text>
-                        <Text className='text-gray-500'>$ {subtotal.toFixed(2)}</Text>
+                        <Text className='text-gray-500'>Rs.{subtotal.toFixed(2)}</Text>
                     </View>
                     <View className='flex-row justify-between px-5 pt-4'>
                         <Text className='text-gray-500'>Delivery fees</Text>
                         {/* { JSON.stringify(groupedItems) !== '{}' && setDeliverycost(5.99) } */}
-                        <Text className='text-gray-500'>$ {JSON.stringify(groupedItems) === '{}' ? '0.00' : 5.99}</Text>
+                        <Text className='text-gray-500'>Rs.{JSON.stringify(groupedItems) === '{}' ? '0.00' : 30}</Text>
                     </View>
                     <View className='flex-row justify-between px-5 pt-4'>
                         <Text className='font-bold'>order Total</Text>
-                        <Text className='font-bold'>$ {(subtotal + (JSON.stringify(groupedItems) === '{}' ? 0 : 5.99)).toFixed(2)}</Text>
+                        <Text className='font-bold'>Rs.{(subtotal + (JSON.stringify(groupedItems) === '{}' ? 0 : 30)).toFixed(2)}</Text>
                     </View>
                 </View>
-                <TouchableOpacity className='mx-4 my-5 p-3 rounded-lg bg-[#00CCBB]' onPress={() => { navigation.navigate("OrderPlacing") }} >
+                <TouchableOpacity className='mx-4 my-5 p-3 rounded-lg bg-[#e46c47]' onPress={handleOrder} >
                     <Text className='text-center text-lg text-white font-semibold'>Place Order</Text>
                 </TouchableOpacity>
             </View>
