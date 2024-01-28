@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, Animated, TextInput } from 'react-native'
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TouchableOpacity } from 'react-native'
 import { Divider } from 'react-native-elements'
@@ -17,10 +17,9 @@ const SignUpScreen = ({ navigation }) => {
     const countrycode = '+91'
 
     const handleSubmit = async () => {
-
         setLoader(true)
         try {
-            const response = await axios.post('http://192.168.1.5:3000/user/sendotp', {
+            const response = await axios.post(`http://192.168.1.5:3000/user/sendotp`, {
                 phoneNo: phone,
                 countryCode: countrycode,
             });
