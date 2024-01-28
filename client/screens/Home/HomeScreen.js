@@ -1,4 +1,4 @@
-import React, { Component, useLayoutEffect } from "react";
+import React, { Component, useLayoutEffect, useState } from "react";
 import { Image, Text, TextInput, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,9 +12,12 @@ import Category from "../../components/Home/Category";
 import Offer from "../../components/Home/Offer";
 import Feature from "../../components/Home/Feature";
 import Discount from "../../components/Home/Discount";
+import { useAuth } from "../../features/context/AuthContext";
+import { useSession } from "../../features/context/SessionContext";
 
 const HomeScreen = () => {
-
+    const { user } = useSession()
+    const [fullAddressVisible, setFullAddressVisible] = useState(false);
     return (
         <SafeAreaView className=" bg-white">
 
@@ -25,13 +28,22 @@ const HomeScreen = () => {
                         src="https://images.unsplash.com/photo-1619454016518-697bc231e7cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
                         className=" h-9 w-9 rounded-full"
                     />
-                    <View>
-                        <Text className=" text-sm text-gray-500">Deliver Now</Text>
-                        <Text className=" font-bold text-xl">Current Location <Icon name="down" size={20} color="#00CCBB" /></Text>
+                    <View className=" overflow-hidden" onTouchEnd={() => setFullAddressVisible(!fullAddressVisible)}>
+                        <Text className=" text-sm text-gray-500">Deliver to</Text>
+                        <Text className=" font-bold text-xl">{user?.address[0]['name']} <Icon name="down" size={20} color="#e47c46" /></Text>
                     </View>
                 </View>
-                <Icon2 name="user-circle-o" size={33} color="#00CCBB" />
+                <Icon2 name="user-circle-o" size={33} color="#e46c47" />
             </View>
+            {fullAddressVisible &&
+                <View className="mx-3">
+                    <Text className="text-lg font-bold">Your full address</Text>
+                    <Text className="text-gray-500 text-sm">{user?.address[0]['houseNo'] + " " + user?.address[0]['area']}</Text>
+                    <Text className="text-lg font-bold">Directions to your place</Text>
+                    <Text className="text-gray-500 text-sm">{user?.address[0]['directions']}</Text>
+                </View>
+
+            }
 
             {/* Search */}
             <View className="flex-row items-center mx-3 pb-4 space-x-2">
@@ -39,7 +51,7 @@ const HomeScreen = () => {
                     <Icon name="search1" size={18} />
                     <TextInput placeholder="Resturents and cuisines" keyboardType="default" className=" text-sm" />
                 </View>
-                <Icon3 name="sound-mix" size={28} color="#00CCBB" />
+                <Icon3 name="sound-mix" size={28} color="#e46c47" />
             </View>
 
             {/* Body */}
