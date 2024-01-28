@@ -18,11 +18,11 @@ import { useAuth } from './features/context/AuthContext';
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
 export const Navigation = () => {
-    const { user } = useAuth();
+    const { userAdd } = useAuth();
     return (
         <NavigationContainer>
-            <Provider store={store}>{!user ?
-                <SignUpStack.Navigator initialRouteName='Address'>
+            <Provider store={store}>{!userAdd ?
+                <SignUpStack.Navigator initialRouteName='Login'>
                     <SignUpStack.Screen name="Login" component={SignUpScreen}
                         options={{ headerShown: false }} />
                     <SignUpStack.Screen name="OTP" component={OTPScreen}

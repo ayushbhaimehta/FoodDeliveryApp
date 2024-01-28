@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 //hooks
 import { useGetLocation } from '../../features/hook/useGetLocation';
-import { useLoader } from '../../features/context/loaderContext';
+import { useLoader } from '../../features/context/LoaderContext';
 import { useAuth } from '../../features/context/AuthContext';
 //Components
 import Loader from '../../components/Global/Loader';
