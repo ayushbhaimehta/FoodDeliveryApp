@@ -18,6 +18,8 @@ const RestaurantScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
+
+
   return (
     <>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -40,7 +42,7 @@ const RestaurantScreen = () => {
             <View className='flex-row space-x-4 mt-1'>
               <View className='text-md flex-row space-x-2 items-center'>
                 <Icon2 name='star-rate' size={20} color='#e46c47' />
-                <Text className="text-[#e46c47] text-lg">{route.params.price}</Text>
+                <Text className="text-[#e46c47] text-lg">{route.params.rating}</Text>
                 <Text className="text-gray-500 text-lg">{route.params.cat}</Text>
               </View>
               <View className='text-md flex-row space-x-2 items-center'>
