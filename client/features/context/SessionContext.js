@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useLoader } from './LoaderContext';
 import { useAuth } from './AuthContext';
-
 // Save token to AsyncStorage
 const saveToken = async (token, phone) => {
     try {
@@ -35,7 +34,7 @@ const SessionProvider = ({ children }) => {
     const getUser = async (phoneNumber, auth) => {
         setLoader(true);
         try {
-            const res = await axios.get(`http://192.168.1.5:3000/user/getbyphone/${phoneNumber}`, {
+            const res = await axios.get(`${process.env.BASE_URL}/user/getbyphone/${phoneNumber}`, {
                 headers: {
                     auth: auth,
                     "Content-Type": 'application/json'
