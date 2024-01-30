@@ -19,7 +19,7 @@ const SignUpScreen = ({ navigation }) => {
     const handleSubmit = async () => {
         setLoader(true)
         try {
-            const response = await axios.post(`http://192.168.1.5:3000/user/sendotp`, {
+            const response = await axios.post(`${process.env.BASE_URL}/user/sendotp`, {
                 phoneNo: phone,
                 countryCode: countrycode,
             });

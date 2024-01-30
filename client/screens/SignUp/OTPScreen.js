@@ -17,7 +17,7 @@ const OTPScreen = ({ navigation }) => {
     const handleSubmit = async () => {
         setLoader(true)
         try {
-            const response = await axios.post(`http://192.168.1.5:3000/user/verifyotp`, {
+            const response = await axios.post(`${process.env.BASE_URL}/user/verifyotp`, {
                 phoneNo: phoneNumber,
                 countryCode: "+91",
                 otp: otp.join('')

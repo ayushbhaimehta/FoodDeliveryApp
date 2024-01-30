@@ -14,7 +14,7 @@ const NameEmailInput = ({ navigation }) => {
     const handleFormSubmit = async () => {
         setLoader(true)
         try {
-            const response = await axios.post(`http://192.168.1.5:3000/user/updateName`, {
+            const response = await axios.post(`${process.env.BASE_URL}/user/updateName`, {
                 name: name,
                 email: email
             }, {

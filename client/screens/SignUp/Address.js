@@ -37,7 +37,7 @@ const Address = ({ navigation }) => {
     const getAddress = async (lat, lon) => {
         setLoader(true)
         try {
-            const res = await axios.post(`http://192.168.1.5:3000/user/getUserLocation`, {
+            const res = await axios.post(`${process.env.BASE_URL}/user/getUserLocation`, {
                 lat: currentLocation.lat,
                 lon: currentLocation.lon
             });
@@ -77,7 +77,7 @@ const Address = ({ navigation }) => {
     const addAddress = async (apiData) => {
         setLoader(true)
         try {
-            const res = await axios.post(`http://192.168.1.5:3000/user/addaddress`, {
+            const res = await axios.post(`${process.env.BASE_URL}/user/addaddress`, {
                 address: apiData.address
             }, {
                 headers: {
