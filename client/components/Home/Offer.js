@@ -1,10 +1,37 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { Text, View, ScrollView } from 'react-native'
 import { data } from '../../data/Data'
 import OfferCard from './OfferCard'
 import Icon from 'react-native-vector-icons/Ionicons'
+import axios from 'axios'
+import Loader from '../Global/Loader'
+import { useLoader } from '../../features/context/LoaderContext'
 
 const Offer = () => {
+    const [restaurant, setRestaurant] = useState(null);
+    const [menu, setMenu] = useState([])
+    const { setLoader } = useLoader()
+
+    useEffect(() => {
+        const fetchRestaurant = async () => {
+            setLoader(true)
+            const res = await axios.get('http://192.168.6.50:3000/restaurant/getbyphone/8591941194', {
+                headers: {
+                    auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU5vIjoiODU5MTk0MTE5NCIsImlhdCI6MTcwNjUyNDg0NiwiZXhwIjoxNzA2NjExMjQ2fQ.Y7geCO8XXT2UG_bTMnyJaMSTQumcqtTbGMcnJYA5Was',
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (res.status === 200) {
+                setRestaurant(res.data.result);
+                setMenu(res.data.result['menu']);
+
+            }
+            setLoader(false);
+        }
+        fetchRestaurant();
+
+    }, [])
+    console.log(restaurant);
 
     return (
         <View className='mt-3'>
@@ -20,11 +47,12 @@ const Offer = () => {
                 paddingHorizontal: 7,
             }}>
                 {
-                    data.map((offer) => {
-                        return (
-                            <View key={offer.id}>
-                                <OfferCard id={offer.id} img={offer.image} name={offer.name} cat={offer.category} price={offer.price} location={offer.location} des={offer.desc} />
-                            </View>
+                    menu?.map((offer) => {
+                        return (restaurant ?
+                            <View key={offer.name}>
+                                <OfferCard id={offer.id} img={offer.image} name={offer.name} rating={offer.rating} cat={offer.category} price={offer.price} location={restaurant['address']['area']} des={offer.description} />
+                            </View> :
+                            <Loader />
                         )
                     })
                 }
