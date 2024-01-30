@@ -87,6 +87,14 @@ const validateSendOtpSchema = (OtpInfo) => {
 const validateVerifyOtpSchema = (OtpInfo) => {
     return validateVerifyOtpSchemaModel.validate(OtpInfo);
 }
+const validateGetAddressSchema = (addressInfo) => {
+    return validateGetAddressSchemaModel.validate(addressInfo);
+}
+
+
+const validateGetAddressSchemaModel = Joi.object({
+    city: Joi.string()
+});
 
 module.exports = {
     validateSendOtpSchema,
@@ -95,4 +103,5 @@ module.exports = {
     validateAddAddressSchema,
     validateUpdateAddressSchema,
     validateGetByPhoneNoSchema,
+    validateGetAddressSchema
 }

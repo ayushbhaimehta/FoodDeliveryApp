@@ -6,7 +6,8 @@ const {
     addAddressController,
     updateAddressController,
     getByPhoneController,
-    getUserLocationController
+    getUserLocationController,
+    getAllRestaurantsController
 } = require('../controllers/userService/user.controller');
 const userAuth = require('../middlewares/userAuth');
 
@@ -19,6 +20,9 @@ userRouter.post('/verifyOtp', verifyOtpController);
 userRouter.post('/updateName', userAuth, updateNameController);
 userRouter.post('/addaddress', userAuth, addAddressController);
 userRouter.post('/updateAddress', userAuth, updateAddressController);
+
+// get all restaurant
+userRouter.post('/getAllRestaurants', getAllRestaurantsController);
 
 // map
 userRouter.post('/getUserLocation', getUserLocationController);

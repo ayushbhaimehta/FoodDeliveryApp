@@ -27,6 +27,15 @@ async function addAddressController(req, res) {
     return result;
 }
 
+async function getAllRestaurantsController(req, res) {
+    let addressInfo = req.body;
+    let { error } = userValidator.validateAddAddressSchema(addressInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const result = await userDao.getAllRestaurantsDao(addressInfo, res);
+    return result;
+}
+
 async function getUserLocationController(req, res) {
     const lat = req.body.lat;
     const lon = req.body.lon;
@@ -186,5 +195,6 @@ module.exports = {
     addAddressController,
     updateAddressController,
     getByPhoneController,
-    getUserLocationController
+    getUserLocationController,
+    getAllRestaurantsController
 };

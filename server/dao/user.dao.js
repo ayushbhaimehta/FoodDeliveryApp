@@ -1,4 +1,5 @@
 const Logger = require('../logger/logger');
+const { RestaurantModel } = require('../models/restaurantSchema/restaurant.schemaModel');
 const log = new Logger('User_Dao');
 const { UserModel } = require('../models/userSchema/user.schemaModel');
 // const axios = require('axios');
@@ -17,6 +18,22 @@ async function getByPhoneDao(loginInfo, res) {
         log.error(`Error in finding an user with specified details ${error}`);
         res.status(404).send({
             message: 'Error in finding an user with specified details'
+        });
+    }
+}
+
+async function getAllRestaurantsDao(addressInfo, res) {
+    const address = addressInfo.city;
+    try {
+        const response = await RestaurantModel.find({ address: address });
+        return res.status(200).send({
+            message: 'Successfully fetched restaurant by locations',
+            result: response
+        })
+    } catch (error) {
+        log.error(`Error in fetching restaurants data in dao ${error}`);
+        return res.status(500).send({
+            message: 'Error in fetching restaurant details'
         });
     }
 }
@@ -140,5 +157,6 @@ module.exports = {
     updateNameDao,
     addAddressDao,
     updateAddressDao,
-    getByPhoneDao
+    getByPhoneDao,
+    getAllRestaurantsDao
 }
