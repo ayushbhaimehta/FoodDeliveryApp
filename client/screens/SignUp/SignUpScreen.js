@@ -8,7 +8,7 @@ import axios from 'axios'
 
 import { useAuth } from '../../features/context/AuthContext'
 import Loader from '../../components/Global/Loader'
-import { useLoader } from '../../features/context/loaderContext'
+import { useLoader } from '../../features/context/LoaderContext'
 import BackButton from '../../components/Global/BackButton'
 
 const SignUpScreen = ({ navigation }) => {
@@ -19,7 +19,7 @@ const SignUpScreen = ({ navigation }) => {
     const handleSubmit = async () => {
         setLoader(true)
         try {
-            const response = await axios.post(`http://192.168.1.5:3000/user/sendotp`, {
+            const response = await axios.post(`${process.env.BASE_URL}/user/sendotp`, {
                 phoneNo: phone,
                 countryCode: countrycode,
             });

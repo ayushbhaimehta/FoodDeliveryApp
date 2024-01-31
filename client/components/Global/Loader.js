@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { useLoader } from '../../features/context/loaderContext';
+import { useLoader } from '../../features/context/LoaderContext';
 
 const Loader = () => {
     const { loader } = useLoader()

@@ -17,12 +17,12 @@ const FeatureCard = (props) => {
                 <View className="pt-3 pl-2">
                     <Text className="font-bold text-xl text-gray-800">{props.name}</Text>
                     <View className='text-md flex-row space-x-3 items-center'>
-                        <Icon name='star-rate' size={20} color='#00CCBB' />
-                        <Text className="text-[#00CCBB] text-lg">{props.price}</Text>
+                        <Icon name='star-rate' size={20} color='#e46c47' />
+                        <Text className="text-[#e46c47] text-lg">{props.price}</Text>
                         <Text className="text-gray-500 text-lg">{props.cat}</Text>
                     </View>
                     <View className='text-md flex-row space-x-3 items-center'>
-                        <Icon name='location-on' size={20} color='#00CCBB' />
+                        <Icon name='location-on' size={20} color='#e46c47' />
                         <Text className="text-gray-500 text-lg">nearby</Text>
                         <Text className="text-gray-500 text-lg">{props.location}</Text>
                     </View>

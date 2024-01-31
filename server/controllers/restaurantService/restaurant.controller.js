@@ -9,7 +9,7 @@ require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
-const verifySid = process.env.verifySID;
+const verifySid = process.env.sendOTPSID;
 const { isNotValidSchema } = require('../../utils/notValid.js');
 const { userExistsByPhone, restaurantExistsByPhone } = require('../../utils/userHelp.js');
 const jwt = require('jsonwebtoken');

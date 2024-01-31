@@ -5,21 +5,21 @@ const AuthContext = createContext({
     setPhoneNumber: null,
     auth: null,
     setAuth: null,
-    user: false,
-    setUser: null
+    userAdd: false,
+    setUserAdd: null
 })
 
 export const AuthProvider = ({ children }) => {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [auth, setAuth] = useState("");
-    const [user, setUser] = useState(false);
+    const [userAdd, setUserAdd] = useState(false);
     const value = {
         phoneNumber,
         setPhoneNumber,
         auth,
         setAuth,
-        user,
-        setUser
+        userAdd,
+        setUserAdd
     }
     return (
         <AuthContext.Provider value={value}>

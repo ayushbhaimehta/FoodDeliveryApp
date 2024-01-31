@@ -1,12 +1,15 @@
-import { AuthProvider, useAuth } from "./features/context/AuthContext";
 import { Navigation } from "./Navigation";
-import { LoaderContextProvider } from "./features/context/loaderContext";
+import { AuthProvider } from "./features/context/AuthContext";
+import { SessionProvider } from "./features/context/SessionContext";
+import { LoaderContextProvider } from "./features/context/LoaderContext";
 
 export default function App() {
   return (
     <AuthProvider>
       <LoaderContextProvider>
-        <Navigation />
+        <SessionProvider>
+          <Navigation />
+        </SessionProvider>
       </LoaderContextProvider>
     </AuthProvider>
   );
