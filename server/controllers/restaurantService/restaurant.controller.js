@@ -9,7 +9,7 @@ require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
-const verifySid = process.env.sendOTPSID;
+const verifySid = process.env.verifySid;
 const { isNotValidSchema } = require('../../utils/notValid.js');
 const { userExistsByPhone, restaurantExistsByPhone } = require('../../utils/userHelp.js');
 const jwt = require('jsonwebtoken');
@@ -110,7 +110,7 @@ async function verifyOtpController(req, res) {
             log.info(existingUser);
             if (existingUser) {
                 // already exists login page redirect
-                if (!existingUser.name) {
+                if (!existingUser.restaurantName) {
                     return res.status(200).send({
                         message: 'add name and email',
                         exist: false

@@ -16,6 +16,7 @@ const validateUpdateAddressSchemaModel = Joi.object({
         houseNo: Joi.string(),
         area: Joi.string(),
         directions: Joi.string(),
+        city: Joi.string(),
         location: {
             coordinates: Joi.array().items(Joi.string())
         },
@@ -25,6 +26,7 @@ const validateUpdateAddressSchemaModel = Joi.object({
         houseNo: Joi.string().required(),
         area: Joi.string().required(),
         directions: Joi.string().required(),
+        city: Joi.string().required(),
         location: {
             coordinates: Joi.array().required().items(Joi.string())
         },

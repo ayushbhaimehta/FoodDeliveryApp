@@ -8,6 +8,7 @@ const mongoRestaurantSchema = new mongoose.Schema({
         houseNo: String,
         area: String,
         directions: String,
+        city: String,
         location: {
             coordinates: [String]
         },
