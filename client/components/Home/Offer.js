@@ -15,18 +15,25 @@ const Offer = () => {
     useEffect(() => {
         const fetchRestaurant = async () => {
             setLoader(true)
-            const res = await axios.get('http://192.168.6.50:3000/restaurant/getbyphone/8591941194', {
-                headers: {
-                    auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU5vIjoiODU5MTk0MTE5NCIsImlhdCI6MTcwNjUyNDg0NiwiZXhwIjoxNzA2NjExMjQ2fQ.Y7geCO8XXT2UG_bTMnyJaMSTQumcqtTbGMcnJYA5Was',
-                    'Content-Type': 'application/json'
-                }
-            });
-            if (res.status === 200) {
-                setRestaurant(res.data.result);
-                setMenu(res.data.result['menu']);
+            try {
+                const res = await axios.get('http://192.168.1.4:3000/restaurant/getbyphone/8591941194', {
+                    headers: {
+                        auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU5vIjoiODU5MTk0MTE5NCIsImlhdCI6MTcwNjcwNjEyOSwiZXhwIjoxNzA2NzkyNTI5fQ.xut002-U1mR5mnt9M8V17x0EFslhhmsP35zC7OGPA9I',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log(res.data);
+                if (res.status === 200) {
+                    setRestaurant(res.data.result);
+                    setMenu(res.data.result['menu']);
 
+                }
             }
-            setLoader(false);
+            catch (err) {
+                console.log(err);
+            } finally {
+                setLoader(false);
+            }
         }
         fetchRestaurant();
 
