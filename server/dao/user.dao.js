@@ -25,7 +25,7 @@ async function getByPhoneDao(loginInfo, res) {
 async function getAllRestaurantsDao(addressInfo, res) {
     const address = addressInfo.city;
     try {
-        const response = await RestaurantModel.find({ address: address });
+        const response = await RestaurantModel.find({ 'address.city': address });
         return res.status(200).send({
             message: 'Successfully fetched restaurant by locations',
             result: response

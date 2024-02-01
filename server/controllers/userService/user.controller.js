@@ -29,7 +29,7 @@ async function addAddressController(req, res) {
 
 async function getAllRestaurantsController(req, res) {
     let addressInfo = req.body;
-    let { error } = userValidator.validateAddAddressSchema(addressInfo);
+    let { error } = userValidator.validateGetAddressSchema(addressInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     const result = await userDao.getAllRestaurantsDao(addressInfo, res);
