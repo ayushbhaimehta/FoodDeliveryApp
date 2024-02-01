@@ -14,7 +14,18 @@ const mongoRestaurantSchema = new mongoose.Schema({
         },
         gstinNo: String
     },
-    menu: []
+    menu: [
+        {
+            img: {
+                data: Buffer,
+                contentType: String,
+            },
+            name: String,
+            price: String,
+            description: String,
+            rating: String
+        }
+    ]
 
 });
 
