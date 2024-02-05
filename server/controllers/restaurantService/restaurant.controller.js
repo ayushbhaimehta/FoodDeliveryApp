@@ -17,6 +17,44 @@ const storage = multer.memoryStorage();
 const Upload = multer({ storage: storage });
 const jwt = require('jsonwebtoken');
 const secretKey = "112233";
+const fs = require('fs');
+const FormData = require('form-data');
+const axios = require('axios');
+
+async function Testing(req, res) {
+    const url = 'http://localhost:3000/restaurant/tester'
+    // console.log();
+    try {
+        // console.log({ newFile });
+        console.log("checkpoint flag");
+        const form_data = new FormData();
+        form_data.append("file", fs.createReadStream('./ayushPic.png'));
+        console.log("Check 1");
+
+        const request_config = {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            data: form_data
+        };
+
+        return axios.post(url, form_data, request_config);
+    } catch (err) {
+        console.log({ err });
+        return res.status(400).send({
+            message: 'something went wrong'
+        })
+    }
+}
+
+async function tester(req, res) {
+    const payload = req.body;
+    console.log({ req });
+    return res.status(200).send({
+        message: 'testing phase'
+    })
+}
+
 
 async function updateNameController(req, res) {
     let loginInfo = req.body;
@@ -191,5 +229,7 @@ module.exports = {
     getByPhoneController,
     updateNameController,
     updateAddressController,
-    addMenuController
+    addMenuController,
+    Testing,
+    tester
 };

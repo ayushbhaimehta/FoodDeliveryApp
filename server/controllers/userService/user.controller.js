@@ -10,12 +10,13 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 const sendOTPSID = process.env.sendOTPSID;
-const verifyOTPSID = process.env.verifyOTPSID;
+// const verifyOTPSID = process.env.verifyOTPSID;
 const { isNotValidSchema } = require('../../utils/notValid.js');
 const { userExistsByPhone } = require('../../utils/userHelp.js');
 const jwt = require('jsonwebtoken');
 const secretKey = "112233";
 const axios = require('axios');
+
 
 async function addAddressController(req, res) {
     let loginInfo = req.body;
