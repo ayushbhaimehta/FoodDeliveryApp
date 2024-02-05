@@ -64,8 +64,8 @@ const SessionProvider = ({ children }) => {
             if (auth) {
                 setAuth(auth);
                 setPhoneNumber(phone);
-                setUserAdd(true)
                 await getUser(phone, auth);
+                setUserAdd(true)
             }
             setLoader(false)
         };

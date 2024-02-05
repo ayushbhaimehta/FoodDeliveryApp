@@ -15,7 +15,7 @@ const Offer = () => {
         const fetchRestaurant = async () => {
             setLoader(true)
             try {
-                const res = await axios.post('http://192.168.1.4:3000/user/getAllRestaurants', {
+                const res = await axios.post(`${process.env.BASE_URL}/user/getAllRestaurants`, {
                     city: 'chd'
                 });
                 console.log(res.data);
@@ -49,11 +49,10 @@ const Offer = () => {
             }}>
                 {
                     restaurant?.map((offer) => {
-                        return (restaurant ?
-                            <View key={offer.name}>
-                                <OfferCard id={offer.id} img={offer?.img} />
-                            </View> :
-                            <Loader />
+                        return (
+                            <View key={offer["_id"]}>
+                                <OfferCard id={offer.id} img={offer?.img} menu={offer["menu"]} address={offer["address"]} />
+                            </View>
                         )
                     })
                 }
