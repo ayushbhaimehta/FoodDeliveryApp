@@ -6,20 +6,25 @@ const AuthContext = createContext({
     auth: null,
     setAuth: null,
     userAdd: false,
-    setUserAdd: null
+    setUserAdd: null,
+    type: null,
+    setType: null,
 })
 
 export const AuthProvider = ({ children }) => {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [auth, setAuth] = useState("");
     const [userAdd, setUserAdd] = useState(false);
+    const [type, setType] = useState('driver')
     const value = {
         phoneNumber,
         setPhoneNumber,
         auth,
         setAuth,
         userAdd,
-        setUserAdd
+        setUserAdd,
+        type,
+        setType
     }
     return (
         <AuthContext.Provider value={value}>
