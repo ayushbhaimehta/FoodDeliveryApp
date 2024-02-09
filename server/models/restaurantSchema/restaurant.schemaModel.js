@@ -16,11 +16,8 @@ const mongoRestaurantSchema = new mongoose.Schema({
     },
     menu: [
         {
-            img: {
-                data: Buffer,
-                contentType: String,
-            },
             name: String,
+            img: String,
             price: String,
             description: String,
             rating: String

@@ -86,28 +86,28 @@ async function updateAddressController(req, res) {
 }
 
 async function addMenuController(req, res) {
-    let imageUploadObject;
-    console.log({ req });
-    if (!req.file) {
-        return res.json({
-            success: false,
-            message: "You must provide at least 1 file"
-        });
-    }
-    else {
-        imageUploadObject = {
-            file: {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            },
-        };
-    }
+    // let imageUploadObject;
+    // console.log({ req });
+    // if (!req.file) {
+    //     return res.json({
+    //         success: false,
+    //         message: "You must provide at least 1 file"
+    //     });
+    // }
+    // else {
+    //     imageUploadObject = {
+    //         file: {
+    //             data: req.file.buffer,
+    //             contentType: req.file.mimetype
+    //         },
+    //     };
+    // }
     let loginInfo = req.body;
     let { error } = restaurantValidator.validateAddMenuSchema(loginInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     loginInfo.phoneNo = req.phoneNo;
-    loginInfo.menu.img = imageUploadObject;
+    // loginInfo.menu.img = imageUploadObject;
     const result = await restaurantDao.addMenuDao(loginInfo, res);
     return result;
 }
