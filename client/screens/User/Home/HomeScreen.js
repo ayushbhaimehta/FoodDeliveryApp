@@ -8,12 +8,12 @@ import Icon2 from 'react-native-vector-icons/FontAwesome';
 import Icon3 from 'react-native-vector-icons/Entypo'
 import { ScrollView } from "react-native";
 
-import Category from "../../components/Home/Category";
-import Offer from "../../components/Home/Offer";
-import Feature from "../../components/Home/Feature";
-import Discount from "../../components/Home/Discount";
-import { useAuth } from "../../features/context/AuthContext";
-import { useSession } from "../../features/context/SessionContext";
+import Category from "../../../components/Home/Category";
+import Offer from "../../../components/Home/Offer";
+import Feature from "../../../components/Home/Feature";
+import Discount from "../../../components/Home/Discount";
+import { useAuth } from "../../../features/context/AuthContext";
+import { useSession } from "../../../features/context/SessionContext";
 
 const HomeScreen = () => {
     const { user } = useSession()

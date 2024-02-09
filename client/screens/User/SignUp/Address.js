@@ -3,14 +3,14 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 //hooks
-import { useGetLocation } from '../../features/hook/useGetLocation';
-import { useLoader } from '../../features/context/LoaderContext';
-import { useAuth } from '../../features/context/AuthContext';
+import { useGetLocation } from '../../../features/hook/useGetLocation';
+import { useLoader } from '../../../features/context/LoaderContext';
+import { useAuth } from '../../../features/context/AuthContext';
 //Components
-import Loader from '../../components/Global/Loader';
-import BackButton from '../../components/Global/BackButton';
-import Map from '../../components/Address/Map';
-import AddressForm from '../../components/Address/AddressForm';
+import Loader from '../../../components/Global/Loader';
+import BackButton from '../../../components/Global/BackButton';
+import Map from '../../../components/Address/Map';
+import AddressForm from '../../../components/Address/AddressForm';
 import { PaperProvider } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 

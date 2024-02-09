@@ -1,17 +1,14 @@
-import { Image, StyleSheet, Text, View, Animated, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Animated, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { TouchableOpacity } from 'react-native'
+import Loader from '../../../components/Global/Loader'
+import BackButton from '../../../components/Global/BackButton'
+import { useLoader } from '../../../features/context/LoaderContext'
+import { useAuth } from '../../../features/context/AuthContext'
 import { Divider } from 'react-native-elements'
-import axios from 'axios'
+import LoginPageOptions from '../../../components/Login/LoginPageOptions'
 
-
-import { useAuth } from '../../features/context/AuthContext'
-import Loader from '../../components/Global/Loader'
-import { useLoader } from '../../features/context/LoaderContext'
-import BackButton from '../../components/Global/BackButton'
-
-const SignUpScreen = ({ navigation }) => {
+const RestaurantLoginScreen = () => {
     const { setPhoneNumber } = useAuth();
     const { setLoader } = useLoader()
     const countrycode = '+91'
@@ -78,9 +75,7 @@ const SignUpScreen = ({ navigation }) => {
         <SafeAreaView className="bg-[#f3f4fc] flex-1">
             <Loader />
             <View className="h-[50%] mx-2">
-                <View className="h-[10%]">
-                    <BackButton navigateBack={slideDown} />
-                </View>
+                <BackButton navigateBack={slideDown} />
                 <View onTouchEnd={slideDown} className="flex-1 justify-end align-bottom">
                     <View className="h-[35%] absolute top-[260]">
                         <Text className=" font-black text-6xl opacity-10 absolute">
@@ -123,7 +118,7 @@ const SignUpScreen = ({ navigation }) => {
                 style={{
                     position: 'absolute',
                     left: 0,
-                    bottom: expanded ? 0 : 60,
+                    bottom: expanded ? 0 : 30,
                     right: 0,
                     backgroundColor: 'white',
                     padding: 16,
@@ -135,10 +130,10 @@ const SignUpScreen = ({ navigation }) => {
                 className="bg-white h-auto my-3 py-5 px-4 flex-1">
                 <View>
                     <Text className="font-bold text-lg">
-                        {expanded ? "LOGIN" : "ACCOUNT"}
+                        {expanded ? "LOGIN" : "RESTAURANT ACCOUNT"}
                     </Text>
                     <Text className="text-md text-gray-500">
-                        {expanded ? "Enter your phone number to proceed" : "Login/Create Account to manage orders"}
+                        {expanded ? "Enter your phone number to proceed" : "Login/Create Account to manage restaurant orders"}
                     </Text>
                 </View>
                 <View>
@@ -191,66 +186,34 @@ const SignUpScreen = ({ navigation }) => {
                 {!expanded && <>
                     <Divider style={{ backgroundColor: 'black', height: 1, marginVertical: 15 }} />
                     <View>
-                        <View className="flex-row items-center w-[100%] h-10">
-                            <Image
-                                source={{
-                                    uri: "https://img.icons8.com/ios/100/discount--v1.png"
-                                }}
-                                style={{
-                                    width: 25,
-                                    height: 25,
-                                }}
-                            />
-                            <Text className="text-md font-bold mx-3">
-                                Offers
-                            </Text>
-                            <Image
-                                source={{
-                                    uri: "https://img.icons8.com/ios-glyphs/30/000000/chevron-right.png"
-                                }}
-                                style={{
-                                    width: 20,
-                                    height: 20,
-                                    position: "absolute",
-                                    right: 10
-                                }}
-                            />
-                        </View>
+                        <LoginPageOptions
+                            logoUrl={"https://img.icons8.com/external-line-adri-ansyah/64/external-restaurant-restaurant-line-adri-ansyah-18.png"}
+                            text={"Partner Login"}
+                            desc={"Sign in with your partner account."}
+                            accType={"driver"}
+                        />
                         <Divider style={{ backgroundColor: 'black', height: 0.1, marginVertical: 10 }} />
-                        <View className="flex-row items-center w-[100%] h-10">
-                            <Image
-                                source={{
-                                    uri: "https://img.icons8.com/ios/100/new-post--v1.png"
-                                }}
-                                style={{
-                                    width: 25,
-                                    height: 25
-                                }}
-                            />
-                            <Text className="text-md font-bold mx-3">
-                                {"Send me feedback\n"}
-                                <Text className="text-xs font-light">
-                                    App version 1.0.0
-                                </Text>
-                            </Text>
-                            <Image
-                                source={{
-                                    uri: "https://img.icons8.com/ios-glyphs/30/000000/chevron-right.png"
-                                }}
-                                style={{
-                                    width: 20,
-                                    height: 20,
-                                    position: "absolute",
-                                    right: 10
-                                }}
-                            />
-                        </View>
+
+                        <LoginPageOptions
+                            logoUrl={"https://img.icons8.com/ios-filled/100/tableware.png"}
+                            text={"User Login"}
+                            desc={"Order your favorite food"}
+                            accType={"user"}
+                        />
+                        <Divider style={{ backgroundColor: 'black', height: 0.1, marginVertical: 10 }} />
+                        <LoginPageOptions
+                            logoUrl="https://img.icons8.com/ios/100/new-post--v1.png"
+                            text="Send me feedback"
+                            desc="App version 1.0.0"
+                        />
                     </View>
                 </>}
             </Animated.View>
         </SafeAreaView>
     )
 }
+
+export default RestaurantLoginScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -269,7 +232,4 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
     },
-});
-
-
-export default SignUpScreen
+})

@@ -9,8 +9,8 @@ import Icon2 from 'react-native-vector-icons/MaterialIcons'
 import Icon3 from 'react-native-vector-icons/AntDesign'
 import { TouchableOpacity } from 'react-native';
 
-import Menu from '../../components/ResturentMenu/Menu';
-import BasketCart from '../../components/ResturentMenu/BasketCart';
+import Menu from '../../../components/ResturentMenu/Menu';
+import BasketCart from '../../../components/ResturentMenu/BasketCart';
 
 
 const RestaurantScreen = () => {
