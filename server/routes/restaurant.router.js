@@ -5,7 +5,9 @@ const {
     getByPhoneController,
     updateNameController,
     updateAddressController,
-    addMenuController
+    addMenuController,
+    Testing,
+    tester
 } = require('../controllers/restaurantService/restaurant.controller');
 const restaurantAuth = require('../middlewares/restaurantAuth');
 
@@ -18,5 +20,7 @@ restaurantRouter.post('/verifyOtp', verifyOtpController);
 restaurantRouter.post('/updateName', restaurantAuth, updateNameController);
 restaurantRouter.post('/updateAddress', restaurantAuth, updateAddressController);
 restaurantRouter.post('/addMenu', restaurantAuth, addMenuController);
+restaurantRouter.post('/testing', Testing);
+restaurantRouter.post('/tester', tester);
 
 module.exports = restaurantRouter;
