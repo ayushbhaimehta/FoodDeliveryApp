@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native'
 import React, { useState, useRef, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useAuth } from '../../features/context/AuthContext'
-import { useLoader } from '../../features/context/LoaderContext'
+import { useAuth } from '../../../features/context/AuthContext'
+import { useLoader } from '../../../features/context/LoaderContext'
 import axios from 'axios'
 
 const NameEmailInput = ({ navigation }) => {

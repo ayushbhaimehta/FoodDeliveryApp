@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native'
 import React, { useState, useRef, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useAuth } from '../../features/context/AuthContext'
-import { useLoader } from '../../features/context/LoaderContext'
+import { useAuth } from '../../../features/context/AuthContext'
+import { useLoader } from '../../../features/context/LoaderContext'
 import axios from 'axios'
-import BackButton from '../../components/Global/BackButton'
-import { useSession } from '../../features/context/SessionContext'
+import BackButton from '../../../components/Global/BackButton'
+import { useSession } from '../../../features/context/SessionContext'
 
 const OTPScreen = ({ navigation }) => {
     const { login } = useSession()
@@ -81,7 +81,7 @@ const OTPScreen = ({ navigation }) => {
                     >
                         <Image
 
-                            source={require('../../assets/otpscreen.png')}
+                            source={require('../../../assets/otpscreen.png')}
                             style={{
                                 width: 100,
                                 height: 100,
