@@ -32,7 +32,6 @@ const SessionProvider = ({ children }) => {
 
     //Fetch user
     const getUser = async (phoneNumber, auth) => {
-        setLoader(true);
         try {
             const res = await axios.get(`${process.env.BASE_URL}/user/getbyphone/${phoneNumber}`, {
                 headers: {
@@ -48,9 +47,6 @@ const SessionProvider = ({ children }) => {
             }
         } catch (err) {
             console.log("Error:", err);
-        }
-        finally {
-            setLoader(false);
         }
     }
 
@@ -70,7 +66,7 @@ const SessionProvider = ({ children }) => {
             setLoader(false)
         };
 
-        checkToken();
+        // checkToken();
     }, []);
     const login = async (auth, phone) => {
         setLoader(true)
