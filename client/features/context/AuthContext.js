@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     const [phoneNumber, setPhoneNumber] = useState("")
     const [auth, setAuth] = useState("");
     const [userAdd, setUserAdd] = useState(false);
-    const [type, setType] = useState('driver')
+    const [type, setType] = useState('user')
     const value = {
         phoneNumber,
         setPhoneNumber,
