@@ -16,6 +16,7 @@ import Address from './screens/User/SignUp/Address';
 import { useAuth } from './features/context/AuthContext';
 import RestaurantLoginScreen from './screens/Restaurant/SignUp/RestaurantLoginScreen';
 import DriverSignUp from './screens/Driver/Signup/DriverSignUp';
+import AccountOptions from './components/Home/AccountOptions';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -40,7 +41,7 @@ export const Navigation = () => {
                             options={{ headerShown: false }} />
                     </SignUpStack.Navigator>
                     :
-                    <HomeStack.Navigator>
+                    <HomeStack.Navigator initialRouteName='Home'>
                         <HomeStack.Screen name="Home" component={HomeScreen}
                             options={{ headerShown: false }} />
                         <HomeStack.Screen name="Restaurant" component={RestaurantScreen}
@@ -50,6 +51,8 @@ export const Navigation = () => {
                         <HomeStack.Screen name="OrderPlacing" component={OrderPlacingScreen}
                             options={{ headerShown: false }} />
                         <HomeStack.Screen name="Delivery" component={DeliveryScreen}
+                            options={{ headerShown: false }} />
+                        <HomeStack.Screen name="AccountOptions" component={AccountOptions}
                             options={{ headerShown: false }} />
                     </HomeStack.Navigator>
                 }
