@@ -9,7 +9,7 @@ import { useSession } from '../../../features/context/SessionContext'
 
 const OTPScreen = ({ navigation }) => {
     const { login } = useSession()
-    const { phoneNumber, setAuth, setUserAdd } = useAuth()
+    const { phoneNumber, setAuth, setUserAdd, type } = useAuth()
     const { setLoader } = useLoader();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([...Array(6)].map(() => useRef(null)));
@@ -25,8 +25,8 @@ const OTPScreen = ({ navigation }) => {
 
 
             if (response.status === 200) {
-                setAuth(response.headers['auth'])
-                await login(response.headers['auth'], phoneNumber)
+                await setAuth(response.headers['auth'])
+                await login(response.headers['auth'], phoneNumber, type)
                 if (response.data["exist"]) {
                     setUserAdd(true)
                 } else {
