@@ -17,6 +17,9 @@ import { useAuth } from './features/context/AuthContext';
 import RestaurantLoginScreen from './screens/Restaurant/SignUp/RestaurantLoginScreen';
 import DriverSignUp from './screens/Driver/Signup/DriverSignUp';
 import AccountOptions from './components/Home/AccountOptions';
+import RestaurantOTPScreen from './screens/Restaurant/SignUp/RestaurantOTPScreen';
+import RestaurantNameEmailInput from './screens/Restaurant/SignUp/RestaurantNameEmailScreen';
+import RestrauntHomeScreen from './screens/Restaurant/Home/RestrauntHomeScreen';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -62,14 +65,36 @@ export const Navigation = () => {
     } else if (type === "restaurant") {
         return (
             <NavigationContainer>
-                <RestaurantStack.Navigator
-                    screenOptions={{
-                        headerShown: false
-                    }}
-                    initialRouteName='Login'>
-                    <RestaurantStack.Screen name="Login" component={RestaurantLoginScreen} />
+                {!userAdd ?
+                    <RestaurantSignUpStack.Navigator
+                        screenOptions={{
+                            headerShown: false
+                        }}
+                        initialRouteName='Login'>
 
-                </RestaurantStack.Navigator>
+                        <RestaurantSignUpStack.Screen name="Login" component={RestaurantLoginScreen} />
+                        <RestaurantSignUpStack.Screen name="OTP" component={RestaurantOTPScreen} />
+                        <RestaurantSignUpStack.Screen name="Input" component={RestaurantNameEmailInput} />
+
+                    </RestaurantSignUpStack.Navigator>
+
+                    :
+                    <RestaurantStack.Navigator>
+                        <RestaurantStack.Screen name="Home" component={RestrauntHomeScreen}
+                            options={{ headerShown: false }} />
+                        {/* <RestaurantStack.Screen name="Restaurant" component={RestaurantScreen}
+                            options={{ headerShown: false }} />
+                        <RestaurantStack.Screen name="Basket" component={BasketScreen}
+                            options={{ presentation: 'modal', headerShown: false }} />
+                        <RestaurantStack.Screen name="OrderPlacing" component={OrderPlacingScreen}
+                            options={{ headerShown: false }} />
+                        <RestaurantStack.Screen name="Delivery" component={DeliveryScreen}
+                            options={{ headerShown: false }} />
+                        <RestaurantStack.Screen name="AccountOptions" component={AccountOptions}
+                            options={{ headerShown: false }} /> */}
+                    </RestaurantStack.Navigator>
+
+                }
             </NavigationContainer>
         )
     } else if (type === "driver") {
