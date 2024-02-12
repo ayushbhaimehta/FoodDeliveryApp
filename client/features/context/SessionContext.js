@@ -31,57 +31,74 @@ const SessionContext = createContext();
 const SessionProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const { setLoader } = useLoader();
+    let userFetched = false;
 
     //Fetch user
     const getUser = async (phoneNumber, auth, type) => {
         setLoader(true)
-        try {
-            if (type === "user") {
+        if (type === "user") {
+            try {
                 const res = await axios.get(`${process.env.BASE_URL}/user/getbyphone/${phoneNumber}`, {
                     headers: {
                         auth: auth,
                         "Content-Type": 'application/json'
                     }
                 });
-                console.log(res.data.result);
+                // console.log(res.data.result);
                 if (res.status === 200) {
                     setUser(res.data.result);
+                    userFetched = true;
                 } else {
                     console.log("Non-200 status code:", res.status);
                 }
+            } catch (err) {
+                console.log("Error:", err);
+            } finally {
+                setLoader(false);
             }
-            else if (type === "restaurant") {
+        }
+        else if (type === "restaurant") {
+            try {
                 const res = await axios.get(`${process.env.BASE_URL}/restaurant/getbyphone/${phoneNumber}`, {
                     headers: {
                         auth: auth,
                         "Content-Type": 'application/json'
                     }
                 });
-                console.log(res.data.result);
+
+                // console.log(res.status);
                 if (res.status === 200) {
                     setUser(res.data.result);
+                    userFetched = true;
                 } else {
                     console.log("Non-200 status code:", res.status);
                 }
+            } catch (err) {
+                console.log("Error:", err);
+            } finally {
+                setLoader(false);
             }
-            else {
+        }
+        else {
+            try {
                 const res = await axios.get(`${process.env.BASE_URL}/driver/getbyphone/${phoneNumber}`, {
                     headers: {
                         auth: auth,
                         "Content-Type": 'application/json'
                     }
                 });
-                console.log(res.data.result);
+                // console.log(res.data.result);
                 if (res.status === 200) {
                     setUser(res.data.result);
+                    userFetched = true;
                 } else {
                     console.log("Non-200 status code:", res.status);
                 }
+            } catch (err) {
+                console.log("Error:", err);
+            } finally {
+                setLoader(false);
             }
-        } catch (err) {
-            console.log("Error:", err);
-        } finally {
-            setLoader(false);
         }
     }
 
@@ -93,11 +110,13 @@ const SessionProvider = ({ children }) => {
             setLoader(true)
             const [auth, phone, type] = await getToken();
             if (auth) {
-                setAuth(auth);
-                setPhoneNumber(phone);
-                setType(type);
                 await getUser(phone, auth, type);
-                setUserAdd(true)
+                if (userFetched) {
+                    setAuth(auth);
+                    setPhoneNumber(phone);
+                    setType(type);
+                    setUserAdd(true)
+                }
             }
             setLoader(false)
         };
