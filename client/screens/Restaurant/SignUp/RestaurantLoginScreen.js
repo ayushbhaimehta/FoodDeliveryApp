@@ -9,7 +9,7 @@ import { Divider } from 'react-native-elements'
 import LoginPageOptions from '../../../components/Login/LoginPageOptions'
 import axios from 'axios'
 
-const RestaurantLoginScreen = () => {
+const RestaurantLoginScreen = ({ navigation }) => {
     const { setPhoneNumber } = useAuth();
     const { setLoader } = useLoader()
     const countrycode = '+91'
