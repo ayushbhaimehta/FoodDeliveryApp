@@ -20,6 +20,11 @@ import AccountOptions from './components/Home/AccountOptions';
 import RestaurantOTPScreen from './screens/Restaurant/SignUp/RestaurantOTPScreen';
 import RestaurantNameEmailInput from './screens/Restaurant/SignUp/RestaurantNameEmailScreen';
 import RestrauntHomeScreen from './screens/Restaurant/Home/RestrauntHomeScreen';
+import RestaurantAddress from './screens/Restaurant/SignUp/RestaurantAddress';
+import LiveOrderPanel from './screens/Restaurant/Home/RestaurantLiveOrders';
+import RestaurantLiveOrders from './screens/Restaurant/Home/RestaurantLiveOrders';
+import RestaurantHome from './screens/Restaurant/Home/RestrauntHomeScreen';
+import RestaurantOptions from './screens/Restaurant/Home/RestaurantOptions';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -75,18 +80,18 @@ export const Navigation = () => {
                         <RestaurantSignUpStack.Screen name="Login" component={RestaurantLoginScreen} />
                         <RestaurantSignUpStack.Screen name="OTP" component={RestaurantOTPScreen} />
                         <RestaurantSignUpStack.Screen name="Input" component={RestaurantNameEmailInput} />
-
+                        <RestaurantSignUpStack.Screen name="Address" component={RestaurantAddress} />
                     </RestaurantSignUpStack.Navigator>
 
                     :
                     <RestaurantStack.Navigator>
-                        <RestaurantStack.Screen name="Home" component={RestrauntHomeScreen}
+                        <RestaurantStack.Screen name="Home" component={RestaurantHome}
                             options={{ headerShown: false }} />
-                        {/* <RestaurantStack.Screen name="Restaurant" component={RestaurantScreen}
+                        <RestaurantStack.Screen name="LiveOrders" component={RestaurantLiveOrders}
                             options={{ headerShown: false }} />
-                        <RestaurantStack.Screen name="Basket" component={BasketScreen}
-                            options={{ presentation: 'modal', headerShown: false }} />
-                        <RestaurantStack.Screen name="OrderPlacing" component={OrderPlacingScreen}
+                        <RestaurantStack.Screen name="RestaurantOptions" component={RestaurantOptions}
+                            options={{ headerShown: false }} />
+                        {/*<RestaurantStack.Screen name="OrderPlacing" component={OrderPlacingScreen}
                             options={{ headerShown: false }} />
                         <RestaurantStack.Screen name="Delivery" component={DeliveryScreen}
                             options={{ headerShown: false }} />
