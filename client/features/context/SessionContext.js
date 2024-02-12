@@ -33,20 +33,50 @@ const SessionProvider = ({ children }) => {
     const { setLoader } = useLoader();
 
     //Fetch user
-    const getUser = async (phoneNumber, auth) => {
+    const getUser = async (phoneNumber, auth, type) => {
         setLoader(true)
         try {
-            const res = await axios.get(`${process.env.BASE_URL}/user/getbyphone/${phoneNumber}`, {
-                headers: {
-                    auth: auth,
-                    "Content-Type": 'application/json'
+            if (type === "user") {
+                const res = await axios.get(`${process.env.BASE_URL}/user/getbyphone/${phoneNumber}`, {
+                    headers: {
+                        auth: auth,
+                        "Content-Type": 'application/json'
+                    }
+                });
+                console.log(res.data.result);
+                if (res.status === 200) {
+                    setUser(res.data.result);
+                } else {
+                    console.log("Non-200 status code:", res.status);
                 }
-            });
-            console.log(res.data.result);
-            if (res.status === 200) {
-                setUser(res.data.result);
-            } else {
-                console.log("Non-200 status code:", res.status);
+            }
+            else if (type === "restaurant") {
+                const res = await axios.get(`${process.env.BASE_URL}/restaurant/getbyphone/${phoneNumber}`, {
+                    headers: {
+                        auth: auth,
+                        "Content-Type": 'application/json'
+                    }
+                });
+                console.log(res.data.result);
+                if (res.status === 200) {
+                    setUser(res.data.result);
+                } else {
+                    console.log("Non-200 status code:", res.status);
+                }
+            }
+            else {
+                const res = await axios.get(`${process.env.BASE_URL}/driver/getbyphone/${phoneNumber}`, {
+                    headers: {
+                        auth: auth,
+                        "Content-Type": 'application/json'
+                    }
+                });
+                console.log(res.data.result);
+                if (res.status === 200) {
+                    setUser(res.data.result);
+                } else {
+                    console.log("Non-200 status code:", res.status);
+                }
             }
         } catch (err) {
             console.log("Error:", err);
@@ -66,7 +96,7 @@ const SessionProvider = ({ children }) => {
                 setAuth(auth);
                 setPhoneNumber(phone);
                 setType(type);
-                await getUser(phone, auth);
+                await getUser(phone, auth, type);
                 setUserAdd(true)
             }
             setLoader(false)
@@ -77,7 +107,7 @@ const SessionProvider = ({ children }) => {
     const login = async (auth, phone, type) => {
         setLoader(true)
         await saveToken(auth, phone, type);
-        await getUser(phone, auth);
+        await getUser(phone, auth, type);
         setLoader(false)
     };
 
