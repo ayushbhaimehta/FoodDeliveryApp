@@ -13,10 +13,12 @@ import Map from '../../../components/Address/Map';
 import AddressForm from '../../../components/Address/AddressForm';
 import { PaperProvider } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
+import { useSession } from '../../../features/context/SessionContext';
 
 const Address = ({ navigation }) => {
     const { setLoader } = useLoader();
-    const { setUserAdd, auth } = useAuth();
+    const { setUserAdd, auth, phoneNumber, type } = useAuth();
+    const { login } = useSession()
     const [currentLocation, setCurrentLocation] = useState({
         "lon": 76.7688417,
         "lat": 30.7285578
@@ -87,6 +89,7 @@ const Address = ({ navigation }) => {
             });
             if (res.status === 200) {
                 console.log("Address added successfully");
+                await login(auth, phoneNumber, type);
                 setUserAdd(true)
             }
         }
