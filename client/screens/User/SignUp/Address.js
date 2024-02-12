@@ -16,7 +16,7 @@ import * as Animatable from 'react-native-animatable';
 
 const Address = ({ navigation }) => {
     const { setLoader } = useLoader();
-    const { setUser, auth } = useAuth();
+    const { setUserAdd, auth } = useAuth();
     const [currentLocation, setCurrentLocation] = useState({
         "lon": 76.7688417,
         "lat": 30.7285578
@@ -87,11 +87,13 @@ const Address = ({ navigation }) => {
             });
             if (res.status === 200) {
                 console.log("Address added successfully");
-                setUser(true)
+                setUserAdd(true)
             }
         }
         catch (err) {
             console.log("ERROR: ", err);
+        } finally {
+            setLoader(false)
         }
 
     }
