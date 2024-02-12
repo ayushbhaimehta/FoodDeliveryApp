@@ -26,8 +26,8 @@ const RestaurantOTPScreen = ({ navigation }) => {
 
             if (response.status === 200) {
                 await setAuth(response.headers['auth'])
-                await login(response.headers['auth'], phoneNumber, type)
                 if (response.data["exist"]) {
+                    await login(response.headers['auth'], phoneNumber, type)
                     setUserAdd(true)
                 } else {
                     navigation.navigate('Input');
