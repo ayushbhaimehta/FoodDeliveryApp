@@ -15,7 +15,7 @@ const RestaurantNameEmailInput = ({ navigation }) => {
         setLoader(true)
         try {
             const response = await axios.post(`${process.env.BASE_URL}/restaurant/updateName`, {
-                name: name,
+                restaurantName: name,
                 email: email
             }, {
                 headers: {
@@ -52,19 +52,20 @@ const RestaurantNameEmailInput = ({ navigation }) => {
                     />
                 </TouchableOpacity> */}
                 <View className="mx-2 flex-1 justify-center items-center">
-                    <Text className="text-2xl font-black mt-4">ENTER USER DETAILS</Text>
-                    <Text className="text-gray-500 mt-1">Fill your name and email</Text>
+                    <Text className="text-2xl font-black mt-4">ENTER RESTAURANT DETAILS</Text>
+                    <Text className="text-gray-500 mt-1">Fill your restaurant name and email</Text>
                 </View>
             </View>
             <View>
                 <View className="mx-2 mt-10">
-                    <Text style={{ color: focused === "name" ? "#e46c47" : "#6B7280" }}>Name</Text>
+                    <Text style={{ color: focused === "name" ? "#e46c47" : "#6B7280" }}>Restaurant Name</Text>
                     <TextInput
                         keyboardType="default"
                         className="border-b-2"
                         style={{
                             borderColor: focused === "name" ? "#e46c47" : "#D1D5DB"
                         }}
+                        placeholder='Enter your restaurant name'
                         autoFocus
                         cursorColor={"#e46c47"}
                         onChangeText={(e) => setName(e)}
@@ -78,6 +79,7 @@ const RestaurantNameEmailInput = ({ navigation }) => {
                         autoCapitalize="none"
                         textContentType="emailAddress"
                         className="border-b-2"
+                        placeholder='Enter email you want to associated with restaurant'
                         onChangeText={(e) => setEmail(e)}
                         style={{
                             borderColor: focused === "email" ? "#e46c47" : "#D1D5DB"
