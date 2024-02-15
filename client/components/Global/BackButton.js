@@ -4,10 +4,6 @@ import React from 'react'
 const BackButton = ({ navigateBack }) => {
     return (
         <TouchableOpacity style={{
-            position: 'absolute',
-            top: 50,
-            left: 10,
-            zIndex: 999,
             backgroundColor: 'white',
             borderRadius: 100
         }} >

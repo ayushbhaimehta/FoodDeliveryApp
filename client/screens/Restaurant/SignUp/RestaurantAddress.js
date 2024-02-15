@@ -10,15 +10,15 @@ import { useAuth } from '../../../features/context/AuthContext';
 import Loader from '../../../components/Global/Loader';
 import BackButton from '../../../components/Global/BackButton';
 import Map from '../../../components/Address/Map';
-import AddressForm from '../../../components/Address/AddressForm';
 import { PaperProvider } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
+import RestaurantAddressForm from '../../../components/Address/RestaurantAddressForm';
 import { useSession } from '../../../features/context/SessionContext';
 
-const Address = ({ navigation }) => {
+const RestaurantAddress = ({ navigation }) => {
     const { setLoader } = useLoader();
-    const { setUserAdd, auth, phoneNumber, type } = useAuth();
     const { login } = useSession()
+    const { auth, setUserAdd, phoneNumber, type } = useAuth();
     const [currentLocation, setCurrentLocation] = useState({
         "lon": 76.7688417,
         "lat": 30.7285578
@@ -28,6 +28,7 @@ const Address = ({ navigation }) => {
     const [isFormVisible, setIsFormVisible] = useState(true);
     const [fullAddress, setFullAddress] = useState("");
     const [location, setLocation] = useState("")
+    const [city, setCity] = useState("");
 
     const [lat, lon, error] = useGetLocation();
 
@@ -46,6 +47,7 @@ const Address = ({ navigation }) => {
             if (res.status === 200) {
                 setFullAddress(res.data.result[0]["address_line2"])
                 setLocation(res.data.result[0]['suburb'])
+                setCity(res.data.result[0]['city'])
             }
         }
         catch (err) {
@@ -79,8 +81,8 @@ const Address = ({ navigation }) => {
     const addAddress = async (apiData) => {
         setLoader(true)
         try {
-            const res = await axios.post(`${process.env.BASE_URL}/user/addaddress`, {
-                address: apiData.address
+            const res = await axios.post(`${process.env.BASE_URL}/restaurant/updateAddress`, {
+                oldAddress: apiData.address
             }, {
                 headers: {
                     auth: auth,
@@ -95,8 +97,9 @@ const Address = ({ navigation }) => {
         }
         catch (err) {
             console.log("ERROR: ", err);
-        } finally {
-            setLoader(false)
+        }
+        finally {
+            setLoader(false);
         }
 
     }
@@ -151,13 +154,14 @@ const Address = ({ navigation }) => {
                                 style={styles.formContainer}
                                 animation={isFormVisible ? 'slideInUp' : 'slideOutDown'}
                             >
-                                <AddressForm
+                                <RestaurantAddressForm
                                     onSubmit={handleSubmit}
                                     isVisible={isFormVisible}
                                     onClose={toggleFormVisibility}
                                     setApiData={setApiData}
                                     currentLocation={currentLocation}
                                     fullAddress={fullAddress}
+                                    city={city}
                                 />
                             </Animatable.View>
                         </View>
@@ -199,4 +203,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Address;
+export default RestaurantAddress;

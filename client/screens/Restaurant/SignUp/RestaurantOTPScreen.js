@@ -7,7 +7,7 @@ import axios from 'axios'
 import BackButton from '../../../components/Global/BackButton'
 import { useSession } from '../../../features/context/SessionContext'
 
-const OTPScreen = ({ navigation }) => {
+const RestaurantOTPScreen = ({ navigation }) => {
     const { login } = useSession()
     const { phoneNumber, setAuth, setUserAdd, type } = useAuth()
     const { setLoader } = useLoader();
@@ -17,7 +17,7 @@ const OTPScreen = ({ navigation }) => {
     const handleSubmit = async () => {
         setLoader(true)
         try {
-            const response = await axios.post(`${process.env.BASE_URL}/user/verifyotp`, {
+            const response = await axios.post(`${process.env.BASE_URL}/restaurant/verifyotp`, {
                 phoneNo: phoneNumber,
                 countryCode: "+91",
                 otp: otp.join('')
@@ -36,7 +36,7 @@ const OTPScreen = ({ navigation }) => {
                 console.log('API request failed:', response.statusText);
             }
         } catch (err) {
-            console.error('Network error:', err);
+            console.error('Network error:', err.message);
         }
         setLoader(false)
     }
@@ -132,6 +132,6 @@ const OTPScreen = ({ navigation }) => {
     )
 }
 
-export default OTPScreen
+export default RestaurantOTPScreen
 
 const styles = StyleSheet.create({})

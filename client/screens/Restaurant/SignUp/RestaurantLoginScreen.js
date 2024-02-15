@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Animated, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Animated, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Loader from '../../../components/Global/Loader'
@@ -7,8 +7,9 @@ import { useLoader } from '../../../features/context/LoaderContext'
 import { useAuth } from '../../../features/context/AuthContext'
 import { Divider } from 'react-native-elements'
 import LoginPageOptions from '../../../components/Login/LoginPageOptions'
+import axios from 'axios'
 
-const RestaurantLoginScreen = () => {
+const RestaurantLoginScreen = ({ navigation }) => {
     const { setPhoneNumber } = useAuth();
     const { setLoader } = useLoader()
     const countrycode = '+91'
@@ -16,7 +17,7 @@ const RestaurantLoginScreen = () => {
     const handleSubmit = async () => {
         setLoader(true)
         try {
-            const response = await axios.post(`${process.env.BASE_URL}/user/sendotp`, {
+            const response = await axios.post(`${process.env.BASE_URL}/restaurant/sendotp`, {
                 phoneNo: phone,
                 countryCode: countrycode,
             });

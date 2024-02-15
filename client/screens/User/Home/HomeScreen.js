@@ -12,10 +12,9 @@ import Category from "../../../components/Home/Category";
 import Offer from "../../../components/Home/Offer";
 import Feature from "../../../components/Home/Feature";
 import Discount from "../../../components/Home/Discount";
-import { useAuth } from "../../../features/context/AuthContext";
 import { useSession } from "../../../features/context/SessionContext";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
     const { user } = useSession()
     const [fullAddressVisible, setFullAddressVisible] = useState(false);
     return (
@@ -33,7 +32,9 @@ const HomeScreen = () => {
                         <Text className=" font-bold text-xl">{user?.address[0]['name']} <Icon name="down" size={20} color="#e47c46" /></Text>
                     </View>
                 </View>
-                <Icon2 name="user-circle-o" size={33} color="#e46c47" />
+                <Icon2 name="user-circle-o"
+                    onPress={() => navigation.push('AccountOptions')}
+                    size={33} color="#e46c47" />
             </View>
             {fullAddressVisible &&
                 <View className="mx-3">
@@ -53,7 +54,6 @@ const HomeScreen = () => {
                 </View>
                 <Icon3 name="sound-mix" size={28} color="#e46c47" />
             </View>
-
             {/* Body */}
             <ScrollView showsVerticalScrollIndicator={false} className="bg-gray-100">
                 {/* categories */}

@@ -16,6 +16,15 @@ import Address from './screens/User/SignUp/Address';
 import { useAuth } from './features/context/AuthContext';
 import RestaurantLoginScreen from './screens/Restaurant/SignUp/RestaurantLoginScreen';
 import DriverSignUp from './screens/Driver/Signup/DriverSignUp';
+import AccountOptions from './components/Home/AccountOptions';
+import RestaurantOTPScreen from './screens/Restaurant/SignUp/RestaurantOTPScreen';
+import RestaurantNameEmailInput from './screens/Restaurant/SignUp/RestaurantNameEmailScreen';
+import RestrauntHomeScreen from './screens/Restaurant/Home/RestrauntHomeScreen';
+import RestaurantAddress from './screens/Restaurant/SignUp/RestaurantAddress';
+import LiveOrderPanel from './screens/Restaurant/Home/RestaurantLiveOrders';
+import RestaurantLiveOrders from './screens/Restaurant/Home/RestaurantLiveOrders';
+import RestaurantHome from './screens/Restaurant/Home/RestrauntHomeScreen';
+import RestaurantOptions from './screens/Restaurant/Home/RestaurantOptions';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -40,7 +49,7 @@ export const Navigation = () => {
                             options={{ headerShown: false }} />
                     </SignUpStack.Navigator>
                     :
-                    <HomeStack.Navigator>
+                    <HomeStack.Navigator initialRouteName='Home'>
                         <HomeStack.Screen name="Home" component={HomeScreen}
                             options={{ headerShown: false }} />
                         <HomeStack.Screen name="Restaurant" component={RestaurantScreen}
@@ -51,6 +60,8 @@ export const Navigation = () => {
                             options={{ headerShown: false }} />
                         <HomeStack.Screen name="Delivery" component={DeliveryScreen}
                             options={{ headerShown: false }} />
+                        <HomeStack.Screen name="AccountOptions" component={AccountOptions}
+                            options={{ headerShown: false }} />
                     </HomeStack.Navigator>
                 }
                 </Provider>
@@ -59,14 +70,36 @@ export const Navigation = () => {
     } else if (type === "restaurant") {
         return (
             <NavigationContainer>
-                <RestaurantStack.Navigator
-                    screenOptions={{
-                        headerShown: false
-                    }}
-                    initialRouteName='Login'>
-                    <RestaurantStack.Screen name="Login" component={RestaurantLoginScreen} />
+                {!userAdd ?
+                    <RestaurantSignUpStack.Navigator
+                        screenOptions={{
+                            headerShown: false
+                        }}
+                        initialRouteName='Login'>
 
-                </RestaurantStack.Navigator>
+                        <RestaurantSignUpStack.Screen name="Login" component={RestaurantLoginScreen} />
+                        <RestaurantSignUpStack.Screen name="OTP" component={RestaurantOTPScreen} />
+                        <RestaurantSignUpStack.Screen name="Input" component={RestaurantNameEmailInput} />
+                        <RestaurantSignUpStack.Screen name="Address" component={RestaurantAddress} />
+                    </RestaurantSignUpStack.Navigator>
+
+                    :
+                    <RestaurantStack.Navigator>
+                        <RestaurantStack.Screen name="Home" component={RestaurantHome}
+                            options={{ headerShown: false }} />
+                        <RestaurantStack.Screen name="LiveOrders" component={RestaurantLiveOrders}
+                            options={{ headerShown: false }} />
+                        <RestaurantStack.Screen name="RestaurantOptions" component={RestaurantOptions}
+                            options={{ headerShown: false }} />
+                        {/*<RestaurantStack.Screen name="OrderPlacing" component={OrderPlacingScreen}
+                            options={{ headerShown: false }} />
+                        <RestaurantStack.Screen name="Delivery" component={DeliveryScreen}
+                            options={{ headerShown: false }} />
+                        <RestaurantStack.Screen name="AccountOptions" component={AccountOptions}
+                            options={{ headerShown: false }} /> */}
+                    </RestaurantStack.Navigator>
+
+                }
             </NavigationContainer>
         )
     } else if (type === "driver") {
