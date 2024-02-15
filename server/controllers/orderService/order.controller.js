@@ -96,6 +96,15 @@ async function getByUserIdController(req, res) {
     return result;
 }
 
+async function getForRestaurantController(req, res) {
+    let orderInfo = req.params;
+    let { error } = orderValidator.validategetForRestaurantSchema(orderInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const result = await orderDao.getOrdersByRestaurantDao(orderInfo, res);
+    return result;
+}
+
 async function deleteOrderController(req, res) {
     let orderInfo = req.body;
     let { error } = orderValidator.validateDeleteOrderSchema(orderInfo);
@@ -112,5 +121,6 @@ module.exports = {
     getByUserIdController,
     assignOrdersController,
     paymentController,
-    paymentVerifyController
+    paymentVerifyController,
+    getForRestaurantController
 };

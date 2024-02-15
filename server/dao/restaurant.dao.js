@@ -111,7 +111,9 @@ async function addMenuDao(loginInfo, res) {
         }
         else {
             let menuArray = result.menu;
-            menuArray.push(menu);
+            for (let i = 0; i < menu.length; i++) {
+                menuArray.push(menu[i]);
+            }
             log.info(menuArray);
             log.info(menu);
             try {

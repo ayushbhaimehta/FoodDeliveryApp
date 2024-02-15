@@ -44,13 +44,15 @@ const validateGetByPhoneNoSchemaModel = Joi.object({
 })
 
 const validateAddMenuSchemaModel = Joi.object({
-    menu: Joi.object({
-        name: Joi.string().required(),
-        img: Joi.string().required(),
-        price: Joi.string().required(),
-        description: Joi.string().required(),
-        rating: Joi.string().required()
-    }).required()
+    menu: Joi.array().items(
+        Joi.object({
+            name: Joi.string().required(),
+            img: Joi.string().required(),
+            price: Joi.string().required(),
+            description: Joi.string().required(),
+            rating: Joi.string().required()
+        }).required()
+    )
 })
 
 const validateAddMenuSchema = (loginInfo) => {

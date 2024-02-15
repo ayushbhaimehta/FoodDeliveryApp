@@ -24,6 +24,23 @@ async function getOrderDao(orderInfo, res) {
     }
 }
 
+async function getOrdersByRestaurantDao(orderInfo, res) {
+    const restaurantId = orderInfo.restaurantId;
+    try {
+        const response = await OrderModel.find({ 'orderDetails.restaurantId': restaurantId });
+        console.log({ response });
+        return res.status(200).send({
+            message: 'details found by restaurantId!',
+            result: response
+        })
+    } catch (error) {
+        log.error(`Error in finding orders for this restaurant ${error}`);
+        res.status(404).send({
+            message: 'Error in finding orders for this restaurant'
+        });
+    }
+}
+
 async function deleteOrderDao(orderInfo, res) {
     const phoneNo = orderInfo.phoneNo;
     const orderId = orderInfo.orderId;
@@ -199,5 +216,6 @@ module.exports = {
     addOrderDao,
     getOrderDao,
     deleteOrderDao,
-    assignOrderDao
+    assignOrderDao,
+    getOrdersByRestaurantDao
 }

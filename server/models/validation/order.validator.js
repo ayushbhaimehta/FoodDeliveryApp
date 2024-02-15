@@ -32,6 +32,10 @@ const validateGetOrderSchemaModel = Joi.object({
     phoneNo: Joi.string().required()
 });
 
+const validategetForRestaurantSchemaModel = Joi.object({
+    restaurantId: Joi.string().required()
+});
+
 const validateAssignOrderSchemaModel = Joi.object({
     _id: Joi.string().required(),
     assignedTo: Joi.string(),
@@ -56,9 +60,14 @@ const validateAssignOrderSchema = (orderInfo) => {
     return validateAssignOrderSchemaModel.validate(orderInfo);
 };
 
+const validategetForRestaurantSchema = (orderInfo) => {
+    return validategetForRestaurantSchemaModel.validate(orderInfo);
+}
+
 module.exports = {
     validateAddOrderSchema,
     validateDeleteOrderSchema,
     validateGetOrderSchema,
-    validateAssignOrderSchema
+    validateAssignOrderSchema,
+    validategetForRestaurantSchema
 }
