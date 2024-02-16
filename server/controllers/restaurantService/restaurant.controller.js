@@ -112,9 +112,20 @@ async function addMenuController(req, res) {
     return result;
 }
 
+async function addImgController(req, res) {
+    let loginInfo = req.body;
+    let { error } = restaurantValidator.validateAddImgSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    loginInfo.phoneNo = req.phoneNo;
+    // loginInfo.menu.img = imageUploadObject;
+    const result = await restaurantDao.addImgDao(loginInfo, res);
+    return result;
+}
+
 async function sendOtpController(req, res) {
-    const OtpInfo = req.body;
-    let { error } = restaurantValidator.validateSendOtpSchema(OtpInfo);
+    const loginInfo = req.body;
+    let { error } = restaurantValidator.validateSendOtpSchema(loginInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     try {
@@ -123,18 +134,18 @@ async function sendOtpController(req, res) {
         const otpResponse = await client.verify.v2
             .services(verifySid)
             .verifications.create({
-                to: `+${OtpInfo.countryCode}${OtpInfo.phoneNo}`,
+                to: `+${loginInfo.countryCode}${loginInfo.phoneNo}`,
                 channel: 'sms',
             })
         console.log(otpResponse);
-        log.success(`Sucessfully sent the otp to phoneNo ${OtpInfo.phoneNo}`);
+        log.success(`Sucessfully sent the otp to phoneNo ${loginInfo.phoneNo}`);
         res.status(200).send({
-            message: 'Otp Sent to phoneNo' + OtpInfo.phoneNo,
+            message: 'Otp Sent to phoneNo' + loginInfo.phoneNo,
             result: otpResponse
         })
     } catch (error) {
         // error in sending the otp using twilio
-        log.error(`Error in sending the otp using twilio for phone No ${OtpInfo.phoneNo}`)
+        log.error(`Error in sending the otp using twilio for phone No ${loginInfo.phoneNo}`)
         return res.status(400).send({
             message: 'Error in sending otp!'
         })
@@ -142,29 +153,29 @@ async function sendOtpController(req, res) {
 }
 
 async function verifyOtpController(req, res) {
-    const OtpInfo = req.body;
-    const otp = OtpInfo.otp;
-    let { error } = restaurantValidator.validateVerifyOtpSchema(OtpInfo);
+    const loginInfo = req.body;
+    const otp = loginInfo.otp;
+    let { error } = restaurantValidator.validateVerifyOtpSchema(loginInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     try {
         const verifiedResponse = await client.verify.v2.services(verifySid)
             .verificationChecks
-            .create({ to: `${OtpInfo.countryCode}${OtpInfo.phoneNo}`, code: otp });
+            .create({ to: `${loginInfo.countryCode}${loginInfo.phoneNo}`, code: otp });
 
         if (verifiedResponse.status === 'approved') {
             log.info(`Successfully verified`);
             const jwtToken = jwt.sign(
                 {
-                    "phoneNo": OtpInfo.phoneNo,
+                    "phoneNo": loginInfo.phoneNo,
                     // "role": 'restaurant'
                 },
                 secretKey,
-                { expiresIn: "1d" }
+                // { expiresIn: "1d" }
             );
             res.header('auth', jwtToken);
 
-            const existingUser = await restaurantExistsByPhone(OtpInfo.phoneNo);
+            const existingUser = await restaurantExistsByPhone(loginInfo.phoneNo);
             log.info(existingUser);
             if (existingUser) {
                 // already exists login page redirect
@@ -187,9 +198,10 @@ async function verifyOtpController(req, res) {
                     let newUser = new RestaurantModel({
                         restaurantName: '',
                         email: '',
-                        phoneNo: OtpInfo.phoneNo,
+                        phoneNo: loginInfo.phoneNo,
                         address: {},
-                        menu: []
+                        menu: [],
+                        img: ""
                     });
                     await newUser.save();
 
@@ -231,5 +243,6 @@ module.exports = {
     updateAddressController,
     addMenuController,
     Testing,
-    tester
+    tester,
+    addImgController
 };

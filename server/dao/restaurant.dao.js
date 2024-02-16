@@ -98,6 +98,25 @@ async function updateNameDao(loginInfo, res) {
     }
 }
 
+async function addImgDao(loginInfo, res) {
+    const imgUrl = loginInfo.img;
+    const phoneNo = loginInfo.phoneNo;
+    try {
+        await RestaurantModel.findOneAndUpdate(
+            { phoneNo: phoneNo },
+            { img: imgUrl });
+        log.success(`Successfully added img url into the db`);
+        return res.status(200).send({
+            message: 'Successfully added img url to the db'
+        })
+    } catch (error) {
+        log.error(`Error in updating img url ${error}`);
+        return res.status(400).send({
+            message: 'Error in adding imgUrl fo the restaurant'
+        });
+    }
+}
+
 async function addMenuDao(loginInfo, res) {
     const phoneNo = loginInfo.phoneNo;
     const menu = loginInfo.menu;
@@ -141,5 +160,6 @@ module.exports = {
     updateNameDao,
     updateAddressDao,
     getByPhoneDao,
-    addMenuDao
+    addMenuDao,
+    addImgDao
 }

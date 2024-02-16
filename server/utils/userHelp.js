@@ -57,6 +57,10 @@ async function getRestaurantById(restaurantId) {
     }
 }
 
+async function getOrderDetailsById(orderId) {
+
+}
+
 module.exports = {
     userExistsByPhone,
     restaurantExistsByPhone,

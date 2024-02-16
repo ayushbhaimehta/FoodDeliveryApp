@@ -32,7 +32,10 @@ async function registerDriverDao(driverInfo, res) {
                 email: email,
                 name: name,
                 password: hashedPassword,
-                assignedOrders: []
+                assignedOrders: [],
+                aadharId: driverInfo.aadharId,
+                panCard: driverInfo.panCard,
+                bankDetails: driverInfo.bankDetails,
             });
             try {
                 await newDriver.save();

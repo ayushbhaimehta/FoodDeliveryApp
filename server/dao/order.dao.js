@@ -162,6 +162,15 @@ async function addOrderDao(orderInfo, res) {
     }
 }
 
+async function assignAlgoRequestDao(orderInfo, res) {
+    let availableDrivers = orderInfo.driverInfo.length;
+    const orderId = orderInfo.orderId;
+    for (let i = 0; i < availableDrivers; i++) {
+        const driverId = orderInfo.driverInfo[i].driverId;
+        const driverLoc = orderInfo.driverInfo[i].driverLoc;
+    }
+}
+
 async function assignOrderDao(orderInfo, res) {
     const _id = orderInfo._id;
     var today = new Date();
@@ -217,5 +226,6 @@ module.exports = {
     getOrderDao,
     deleteOrderDao,
     assignOrderDao,
-    getOrdersByRestaurantDao
+    getOrdersByRestaurantDao,
+    assignAlgoRequestDao
 }

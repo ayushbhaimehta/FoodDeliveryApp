@@ -5,6 +5,9 @@ const mongoDriverSchema = new mongoose.Schema({
     email: String,
     phoneNo: String,
     password: String,
+    aadharId: String,
+    panCard: String,
+    bankDetails: String,
     assignedOrders: [
         {
             address: {
@@ -37,8 +40,14 @@ const mongoDriverSchema = new mongoose.Schema({
     ]
 });
 
+const mongoDriverEmailSchema = new mongoose.Schema({
+    email: String,
+    emailOtp: String
+})
+const UserEmailModel = mongoose.model('Email', mongoDriverEmailSchema);
 const DriverModel = mongoose.model('driver', mongoDriverSchema);
 
 module.exports = {
     DriverModel,
+    UserEmailModel
 }

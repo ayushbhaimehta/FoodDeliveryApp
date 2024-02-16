@@ -22,7 +22,8 @@ const mongoRestaurantSchema = new mongoose.Schema({
             description: String,
             rating: String
         }
-    ]
+    ],
+    img: String
 
 });
 

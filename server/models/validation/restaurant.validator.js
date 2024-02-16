@@ -39,6 +39,10 @@ const validateUpdateNameSchemaModel = Joi.object({
     email: Joi.string().email()
 })
 
+const validateAddImgSchemaModel = Joi.object({
+    img: Joi.string().required()
+})
+
 const validateGetByPhoneNoSchemaModel = Joi.object({
     phoneNo: Joi.string().required()
 })
@@ -71,12 +75,16 @@ const validateUpdateNameSchema = (loginInfo) => {
     return validateUpdateNameSchemaModel.validate(loginInfo);
 }
 
-const validateSendOtpSchema = (OtpInfo) => {
-    return validateSendOtpSchemaModel.validate(OtpInfo);
+const validateSendOtpSchema = (loginInfo) => {
+    return validateSendOtpSchemaModel.validate(loginInfo);
 }
 
-const validateVerifyOtpSchema = (OtpInfo) => {
-    return validateVerifyOtpSchemaModel.validate(OtpInfo);
+const validateVerifyOtpSchema = (loginInfo) => {
+    return validateVerifyOtpSchemaModel.validate(loginInfo);
+}
+
+const validateAddImgSchema = (loginInfo) => {
+    return validateAddImgSchemaModel.validate(loginInfo);
 }
 
 module.exports = {
@@ -85,5 +93,6 @@ module.exports = {
     validateUpdateNameSchema,
     validateGetByPhoneNoSchema,
     validateUpdateAddressSchema,
-    validateAddMenuSchema
+    validateAddMenuSchema,
+    validateAddImgSchema
 }

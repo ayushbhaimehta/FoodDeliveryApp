@@ -5,6 +5,9 @@ const validateRegisterDriverSchemaModel = Joi.object({
     email: Joi.string().required(),
     name: Joi.string().required(),
     password: Joi.string().required(),
+    aadharId: Joi.string().required(),
+    panCard: Joi.string().required(),
+    bankDetails: Joi.string().required()
 });
 
 const validateLoginDriverSchemaModel = Joi.object({
@@ -23,6 +26,15 @@ const validateupdateDriverInfoSchemaModel = Joi.object({
     password: Joi.string()
 });
 
+const validateSendEmailOtpSchemaModel = Joi.object({
+    email: Joi.string().required()
+});
+
+const validateVerifyEmailOtpSchemaModel = Joi.object({
+    email: Joi.string().required(),
+    emailOtp: Joi.string().required().max(6).min(6)
+});
+
 const validateRegisterDriverSchema = (driverInfo) => {
     return validateRegisterDriverSchemaModel.validate(driverInfo);
 };
@@ -39,9 +51,19 @@ const validateupdateDriverInfoSchema = (driverInfo) => {
     return validateupdateDriverInfoSchemaModel.validate(driverInfo);
 };
 
+const validateVerifyEmailOtpSchema = (driverInfo) => {
+    return validateVerifyEmailOtpSchemaModel.validate(driverInfo);
+}
+
+const validateSendEmailOtpSchema = (driverInfo) => {
+    return validateSendEmailOtpSchemaModel.validate(driverInfo);
+}
+
 module.exports = {
     validateRegisterDriverSchema,
     validateLoginDriverSchema,
     validateUpdateOrderStatusSchema,
-    validateupdateDriverInfoSchema
+    validateupdateDriverInfoSchema,
+    validateSendEmailOtpSchema,
+    validateVerifyEmailOtpSchema
 }
