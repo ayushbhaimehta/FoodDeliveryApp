@@ -88,10 +88,10 @@ const RestaurantOptions = ({ navigation }) => {
                 </View>
                 {expanded && (
                     <View style={styles.optionsContainer}>
-                        <TouchableOpacity style={styles.option}>
+                        <TouchableOpacity style={styles.option} onPress={() => navigation.push('MenuPage')}>
                             <Text style={styles.optionText}>Menu</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.option}>
+                        <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('Home')}>
                             <Text style={styles.optionText}>Dashboard</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.option}>
