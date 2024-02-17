@@ -36,6 +36,7 @@ const SessionProvider = ({ children }) => {
     //Fetch user
     const getUser = async (phoneNumber, auth, type) => {
         setLoader(true)
+        console.log("User Loading...", type);
         if (type === "user") {
             try {
                 const res = await axios.get(`${process.env.BASE_URL}/user/getbyphone/${phoneNumber}`, {
@@ -107,18 +108,18 @@ const SessionProvider = ({ children }) => {
     //Fetch user on Load
     useEffect(() => {
         const checkToken = async () => {
-            setLoader(true)
             const [auth, phone, type] = await getToken();
             if (auth) {
+                console.log("Token Found!");
                 await getUser(phone, auth, type);
                 if (userFetched) {
+                    console.log("User Fetched!");
                     setAuth(auth);
                     setPhoneNumber(phone);
                     setType(type);
                     setUserAdd(true)
                 }
             }
-            setLoader(false)
         };
 
         checkToken();
@@ -129,7 +130,14 @@ const SessionProvider = ({ children }) => {
         await getUser(phone, auth, type);
         setLoader(false)
     };
-
+    const reloadUser = async (auth, phone, type) => {
+        if (auth) {
+            setLoader(true);
+            console.log("Token Found!");
+            await getUser(phone, auth, type);
+            setLoader(false);
+        }
+    }
     const logout = async () => {
         // Remove token from storage
         await AsyncStorage.removeItem('authToken');
@@ -141,7 +149,7 @@ const SessionProvider = ({ children }) => {
     };
 
     return (
-        <SessionContext.Provider value={{ user, login, logout }}>
+        <SessionContext.Provider value={{ user, login, logout, reloadUser }}>
             {children}
         </SessionContext.Provider>
     );
