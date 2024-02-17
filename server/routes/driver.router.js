@@ -10,7 +10,8 @@ const {
     sendEmailOtpController,
     verifyEmailOtpController,
     sendPhoneOtpController,
-    verifyPhoneOtpController
+    verifyPhoneOtpController,
+    arrayOfAvailableDrivers
 } = require('../controllers/driverService/driver.controller');
 const driverAuth = require('../middlewares/driverAuth');
 
@@ -29,7 +30,8 @@ driverRouter.post('/updateDriverInfo', driverAuth, updateDriverInfoController);
 driverRouter.post('/updateOrderStatus', driverAuth, updateOrderStatusController);
 
 // chat feature through socket.io
-driverRouter.post('/getLiveLoc', driverAuth, getLiveLocController)
+driverRouter.post('/getLiveLoc', driverAuth, getLiveLocController);
+driverRouter.get('/arrayOfAvailableDrivers', arrayOfAvailableDrivers);// get availableDriverLocation
 
 driverRouter.post('/addAssignorder', addAssignOrderController); // admin only
 

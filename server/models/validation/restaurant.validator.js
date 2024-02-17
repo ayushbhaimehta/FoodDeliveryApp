@@ -37,15 +37,30 @@ const validateUpdateAddressSchemaModel = Joi.object({
 const validateUpdateNameSchemaModel = Joi.object({
     restaurantName: Joi.string().required().min(1),
     email: Joi.string().email()
-})
+});
 
 const validateAddImgSchemaModel = Joi.object({
     img: Joi.string().required()
-})
+});
 
 const validateGetByPhoneNoSchemaModel = Joi.object({
     phoneNo: Joi.string().required()
-})
+});
+
+const validateUpdateMenuSchemaModel = Joi.object({
+    menuId: Joi.string().required(),
+    menu: Joi.object({
+        name: Joi.string().required(),
+        img: Joi.string().required(),
+        price: Joi.string().required(),
+        description: Joi.string().required(),
+        rating: Joi.string().required()
+    }).required()
+});
+
+const validateDeleteMenuSchemaModel = Joi.object({
+    menuId: Joi.string().required()
+});
 
 const validateAddMenuSchemaModel = Joi.object({
     menu: Joi.array().items(
@@ -57,7 +72,7 @@ const validateAddMenuSchemaModel = Joi.object({
             rating: Joi.string().required()
         }).required()
     )
-})
+});
 
 const validateAddMenuSchema = (loginInfo) => {
     return validateAddMenuSchemaModel.validate(loginInfo);
@@ -87,6 +102,14 @@ const validateAddImgSchema = (loginInfo) => {
     return validateAddImgSchemaModel.validate(loginInfo);
 }
 
+const validateUpdateMenuSchema = (loginInfo) => {
+    return validateUpdateMenuSchemaModel.validate(loginInfo);
+}
+
+const validateDeleteMenuSchema = (loginInfo) => {
+    return validateDeleteMenuSchemaModel.validate(loginInfo);
+}
+
 module.exports = {
     validateSendOtpSchema,
     validateVerifyOtpSchema,
@@ -94,5 +117,7 @@ module.exports = {
     validateGetByPhoneNoSchema,
     validateUpdateAddressSchema,
     validateAddMenuSchema,
-    validateAddImgSchema
+    validateAddImgSchema,
+    validateUpdateMenuSchema,
+    validateDeleteMenuSchema
 }

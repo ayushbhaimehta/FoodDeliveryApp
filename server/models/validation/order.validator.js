@@ -37,12 +37,6 @@ const validategetForRestaurantSchemaModel = Joi.object({
 });
 
 const validateAssignAlgoRequestSchemaModel = Joi.object({
-    driversInfo: Joi.array().required().items(
-        Joi.object({
-            driverId: Joi.string().required(),
-            driverLoc: Joi.string().required()
-        })
-    ),
     orderId: Joi.string().required()
 })
 

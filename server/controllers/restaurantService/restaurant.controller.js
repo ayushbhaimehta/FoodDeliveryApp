@@ -123,6 +123,24 @@ async function addImgController(req, res) {
     return result;
 }
 
+async function updateMenuController(req, res) {
+    const loginInfo = req.body;
+    let { error } = restaurantValidator.validateUpdateMenuSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const result = await restaurantDao.updateMenuDao(loginInfo, res);
+    return result;
+}
+
+async function deleteMenuController(req, res) {
+    const loginInfo = req.body;
+    let { error } = restaurantValidator.validateDeleteMenuSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const result = await restaurantDao.deleteMenuDao(loginInfo, res);
+    return result;
+}
+
 async function sendOtpController(req, res) {
     const loginInfo = req.body;
     let { error } = restaurantValidator.validateSendOtpSchema(loginInfo);
@@ -244,5 +262,7 @@ module.exports = {
     addMenuController,
     Testing,
     tester,
-    addImgController
+    addImgController,
+    updateMenuController,
+    deleteMenuController
 };

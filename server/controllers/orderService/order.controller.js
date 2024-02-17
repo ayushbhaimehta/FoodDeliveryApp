@@ -6,6 +6,7 @@ const { isNotValidSchema } = require('../../utils/notValid.js');
 const { UserModel } = require('../../models/userSchema/user.schemaModel.js');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+const axios = require('axios');
 
 async function addOrderController(req, res) {
     let orderInfo = req.body;
@@ -32,7 +33,6 @@ async function assignAlgoRequestController(req, res) {
     let { error } = orderValidator.validateAssignAlgoRequestSchema(orderInfo);
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
-    orderInfo.phoneNo = req.phoneNo;
     const result = await orderDao.assignAlgoRequestDao(orderInfo, res);
     return result;
 }

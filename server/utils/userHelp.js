@@ -1,6 +1,7 @@
 const { UserModel } = require('../models/userSchema/user.schemaModel');
 const { RestaurantModel } = require('../models/restaurantSchema/restaurant.schemaModel');
 const { DriverModel, DriverLocationModel } = require('../models/driverSchema/driver.schemaModel');
+const { OrderModel } = require('../models/orderSchema/order.schemaModel');
 
 async function userExistsByPhone(phoneNo) {
     try {
@@ -69,11 +70,24 @@ async function driverLocationExists(_id) {
     }
 }
 
+async function getOrderDetailsById(orderId) {
+    try {
+        const result = await OrderModel.findById(orderId);
+        return result;
+    } catch (error) {
+        log.error(`Something went wrong while getting order details ${error}`);
+        return res.status(404).send({
+            message: 'soemthing went wrong while retrieving order details'
+        });
+    }
+}
+
 module.exports = {
     userExistsByPhone,
     restaurantExistsByPhone,
     getRestaurantById,
     driverExistsByPhone,
     driverExistsOnlyByPhone,
-    driverLocationExists
+    driverLocationExists,
+    getOrderDetailsById
 };

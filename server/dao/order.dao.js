@@ -1,8 +1,12 @@
 const Logger = require('../logger/logger');
 const log = new Logger('Order_Dao');
 const { OrderModel } = require('../models/orderSchema/order.schemaModel');
-// const axios = require('axios');
-const { userExistsByPhone, getRestaurantById } = require('../utils/userHelp');
+const {
+    userExistsByPhone,
+    getRestaurantById,
+    getOrderDetailsById,
+} = require('../utils/userHelp');
+const { getDistanceFromLatLonInKm } = require('../utils/distanceAlgo');
 const axios = require('axios');
 
 async function getOrderDao(orderInfo, res) {
@@ -163,11 +167,42 @@ async function addOrderDao(orderInfo, res) {
 }
 
 async function assignAlgoRequestDao(orderInfo, res) {
-    let availableDrivers = orderInfo.driverInfo.length;
-    const orderId = orderInfo.orderId;
-    for (let i = 0; i < availableDrivers; i++) {
-        const driverId = orderInfo.driverInfo[i].driverId;
-        const driverLoc = orderInfo.driverInfo[i].driverLoc;
+    const baseUrl = 'http://localhost:3000/driver'
+    try {
+        const response = await axios({
+            method: 'GET',
+            mode: 'no-cors',
+            url: `${baseUrl}/arrayOfAvailableDrivers`
+        });
+        console.log(response.data.response);
+        let driversArray = response.data.response;
+        let availableDrivers = response.data.response.length;
+        const orderId = orderInfo.orderId;
+        const orderDetails = await getOrderDetailsById(orderId);
+        const restaurantId = orderDetails.restaurantId;
+        const restaurantDetails = await getRestaurantById(restaurantId);
+        const restaurantLat = restaurantDetails.address.location.coordinates[0];
+        const restaurantLong = restaurantDetails.address.location.coordinates[1];
+
+        for (let i = 0; i < availableDrivers; i++) {
+            const driverId = driversArray[i].driverId;
+            const driverLat = driversArray[i].loc.lat;
+            const driverLong = driversArray[i].loc.long;
+            const distance = getDistanceFromLatLonInKm(
+                driverLat,
+                driverLong,
+                restaurantLat,
+                restaurantLong
+            );
+            if (distance < 5) {
+
+            }
+        }
+    } catch (error) {
+        log.error(`Something went wrong while fetching available driver ${error}`);
+        return res.status(400).send({
+            message: 'Something went wrong while fetching available driver'
+        })
     }
 }
 

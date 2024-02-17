@@ -11,7 +11,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 const verifySid = process.env.verifySid;
 const sendOTPSID = process.env.verifySID;
-const { UserEmailModel } = require('../../models/driverSchema/driver.schemaModel.js')
+const { UserEmailModel, DriverLocationModel } = require('../../models/driverSchema/driver.schemaModel.js')
 
 var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -40,6 +40,21 @@ async function loginDriverController(req, res) {
     log.success('Schema Validation done');
     const result = await driverDao.loginDriverDao(driverInfo, res);
     return result;
+}
+
+async function arrayOfAvailableDrivers(req, res) {
+    try {
+        const result = await DriverLocationModel.find();
+        return res.status(200).send({
+            message: 'Get all available Driverlocations',
+            response: result
+        })
+    } catch (error) {
+        log.error(`Something went wrong while getting available drivers ${error}`);
+        return res.status(400).send({
+            message: 'Something went wrong while getting available drivers'
+        })
+    }
 }
 
 async function addAssignOrderController(req, res) {
@@ -275,5 +290,6 @@ module.exports = {
     sendEmailOtpController,
     verifyEmailOtpController,
     sendPhoneOtpController,
-    verifyPhoneOtpController
+    verifyPhoneOtpController,
+    arrayOfAvailableDrivers
 };
