@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useSession } from '../../features/context/SessionContext';
+import { useSession } from '../../../features/context/SessionContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Divider } from 'react-native-elements';
 

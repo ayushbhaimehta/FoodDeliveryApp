@@ -1,12 +1,10 @@
 // AddressForm.js
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { TextInput, Button, Text } from 'react-native-paper';
-import SaveAsScreen from './SaveAs';
-import { useAuth } from '../../features/context/AuthContext';
-import axios from 'axios';
+import { useAuth } from '../../../features/context/AuthContext';
 
-const AddressForm = ({ onSubmit, setApiData, currentLocation, fullAddress }) => {
+const RestaurantAddressForm = ({ onSubmit, setApiData, currentLocation, fullAddress, city }) => {
     const [houseNo, setHouseNo] = useState('');
     const [area, setArea] = useState('');
     const [directions, setDirections] = useState('');
@@ -14,52 +12,25 @@ const AddressForm = ({ onSubmit, setApiData, currentLocation, fullAddress }) => 
     const [name, setName] = useState('');
     const [saveAs, setSaveAs] = useState('');
     const [myself, setMyself] = useState(true);
+    const [gstinNo, setGstinNo] = useState('');
     const { phoneNumber, auth } = useAuth()
-
-    const getUser = async (phoneNumber) => {
-        try {
-            const res = await axios.get(`http://192.168.1.5:3000/user/getbyphone/${phoneNumber}`, {
-                headers: {
-                    auth: auth,
-                    "Content-Type": 'application/json'
-                }
-            });
-            if (res.status === 200) {
-                setName(res.data.result["name"]);
-            } else {
-                console.log("Non-200 status code:", res.status);
-            }
-        } catch (err) {
-            console.log("Error:", err);
-        }
-    }
-
-    useEffect(() => {
-        // console.log(saveAs, name, myself, houseNo, area, phoneNo, directions);
-
-        if (myself) {
-            if (saveAs !== 'Other') {
-                getUser(phoneNumber);
-            }
-            setPhoneNo(phoneNumber)
-        }
+    const setData = async () => {
         setApiData({
             "address": {
-                "name": name,
-                "phoneNo": phoneNo,
-                "myself": myself,
-                "saveAs": saveAs,
                 "houseNo": houseNo,
                 "area": area + ", " + fullAddress,
+                "city": city,
                 "directions": directions,
                 "location": {
                     "coordinates": [currentLocation.lat.toString(), currentLocation.lon.toString()]
-                }
+                },
+                "gstinNo": gstinNo
             }
         })
-    }, [saveAs, name, phoneNo])
+    }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        await setData()
         onSubmit()
     };
     return (
@@ -91,6 +62,14 @@ const AddressForm = ({ onSubmit, setApiData, currentLocation, fullAddress }) => 
                     underlineColorAndroid={' rgb(107 114 128 )'}
                     activeUnderlineColor='#c46e47'
                 />
+                <TextInput
+                    label="Enter your GSTIN No."
+                    value={gstinNo}
+                    className="bg-white my-2"
+                    onChangeText={(text) => setGstinNo(text)}
+                    underlineColorAndroid={' rgb(107 114 128 )'}
+                    activeUnderlineColor='#c46e47'
+                />
                 <Text className=" text-sm text-gray-600 my-2 left-4">
                     DIRECTION TO REACH{' '}
                     <Text className="text-gray-400">
@@ -105,14 +84,6 @@ const AddressForm = ({ onSubmit, setApiData, currentLocation, fullAddress }) => 
                     className="bg-gray-200 h-[80] justify-start align-top rounded-md"
                     underlineColorAndroid={' rgb(107 114 128 )'}
                     activeUnderlineColor='#c46e47'
-                />
-                <SaveAsScreen
-                    setMyself={setMyself}
-                    setSaveAs={setSaveAs}
-                    setName={setName}
-                    name={name}
-                    phoneNo={phoneNo}
-                    setPhoneNo={setPhoneNo}
                 />
                 <Button mode='elevated' onPress={handleSubmit} style={styles.Button} >
                     <Text className="text-white text-lg">
@@ -150,4 +121,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AddressForm;
+export default RestaurantAddressForm;
