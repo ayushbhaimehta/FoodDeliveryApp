@@ -1,0 +1,141 @@
+export const DummyMenu = [{
+    "id": 1,
+    "name": "Renell",
+    "description": "1'; DROP TABLE users--",
+    "price": "172.27",
+    "rating": 2.8,
+    "img": "http://dummyimage.com/279x297.png/cc0000/ffffff"
+}, {
+    "id": 2,
+    "name": "Bernice",
+    "description": "1/2",
+    "price": "282.94",
+    "rating": 0.2,
+    "img": "http://dummyimage.com/234x283.png/cc0000/ffffff"
+}, {
+    "id": 3,
+    "name": "Isidoro",
+    "description": "・(￣∀￣)・:*:",
+    "price": "78.32",
+    "rating": 0.1,
+    "img": "http://dummyimage.com/252x295.png/cc0000/ffffff"
+}, {
+    "id": 4,
+    "name": "Nancy",
+    "description": ",。・:*:・゜’( ☻ ω ☻ )。・:*:・゜’",
+    "price": "244.54",
+    "rating": 0.5,
+    "img": "http://dummyimage.com/216x202.png/cc0000/ffffff"
+}, {
+    "id": 5,
+    "name": "Riccardo",
+    "description": "👩🏽",
+    "price": "284.39",
+    "rating": 0.8,
+    "img": "http://dummyimage.com/250x261.png/cc0000/ffffff"
+}, {
+    "id": 6,
+    "name": "Arlana",
+    "description": "1.00",
+    "price": "122.30",
+    "rating": 0.1,
+    "img": "http://dummyimage.com/202x289.png/cc0000/ffffff"
+}, {
+    "id": 7,
+    "name": "Bird",
+    "description": "0️⃣ 1️⃣ 2️⃣ 3️⃣ 4️⃣ 5️⃣ 6️⃣ 7️⃣ 8️⃣ 9️⃣ 🔟",
+    "price": "218.24",
+    "rating": 2.5,
+    "img": "http://dummyimage.com/278x260.png/dddddd/000000"
+}, {
+    "id": 8,
+    "name": "Aubrette",
+    "description": "''",
+    "price": "164.65",
+    "rating": 2.1,
+    "img": "http://dummyimage.com/216x212.png/5fa2dd/ffffff"
+}, {
+    "id": 9,
+    "name": "Rurik",
+    "description": "../../../../../../../../../../../etc/passwd%00",
+    "price": "280.62",
+    "rating": 3.1,
+    "img": "http://dummyimage.com/267x205.png/dddddd/000000"
+}, {
+    "id": 10,
+    "name": "Darrick",
+    "description": "הָיְתָהtestالصفحات التّحول",
+    "price": "50.69",
+    "rating": 0.0,
+    "img": "http://dummyimage.com/266x234.png/cc0000/ffffff"
+}, {
+    "id": 11,
+    "name": "Kerianne",
+    "description": "NULL",
+    "price": "15.92",
+    "rating": 4.9,
+    "img": "http://dummyimage.com/279x298.png/dddddd/000000"
+}, {
+    "id": 12,
+    "name": "Lionello",
+    "description": ",。・:*:・゜’( ☻ ω ☻ )。・:*:・゜’",
+    "price": "92.74",
+    "rating": 1.0,
+    "img": "http://dummyimage.com/275x200.png/cc0000/ffffff"
+}, {
+    "id": 13,
+    "name": "Darelle",
+    "description": "1/0",
+    "price": "183.43",
+    "rating": 4.5,
+    "img": "http://dummyimage.com/282x265.png/dddddd/000000"
+}, {
+    "id": 14,
+    "name": "Kylynn",
+    "description": "\"",
+    "price": "50.98",
+    "rating": 2.7,
+    "img": "http://dummyimage.com/253x212.png/dddddd/000000"
+}, {
+    "id": 15,
+    "name": "Emily",
+    "description": "-1.00",
+    "price": "28.27",
+    "rating": 1.2,
+    "img": "http://dummyimage.com/233x218.png/cc0000/ffffff"
+}, {
+    "id": 16,
+    "name": "Cara",
+    "description": "<svg><script>0<1>alert('XSS')</script>",
+    "price": "215.35",
+    "rating": 4.4,
+    "img": "http://dummyimage.com/247x279.png/dddddd/000000"
+}, {
+    "id": 17,
+    "name": "Gwyneth",
+    "description": "田中さんにあげて下さい",
+    "price": "74.59",
+    "rating": 3.7,
+    "img": "http://dummyimage.com/251x211.png/5fa2dd/ffffff"
+}, {
+    "id": 18,
+    "name": "Chaddie",
+    "description": "åß∂ƒ©˙∆˚¬…æ",
+    "price": "273.98",
+    "rating": 4.2,
+    "img": "http://dummyimage.com/209x298.png/5fa2dd/ffffff"
+}, {
+    "id": 19,
+    "name": "Grier",
+    "description": "-1.00",
+    "price": "168.25",
+    "rating": 0.6,
+    "img": "http://dummyimage.com/265x290.png/cc0000/ffffff"
+}, {
+    "id": 20,
+    "name": "Juditha",
+    "description": "𠜎𠜱𠝹𠱓𠱸𠲖𠳏",
+    "price": "97.05",
+    "rating": 0.2,
+    "img": "http://dummyimage.com/237x230.png/5fa2dd/ffffff"
+}]
