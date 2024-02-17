@@ -8,14 +8,15 @@ import Icon2 from 'react-native-vector-icons/FontAwesome';
 import Icon3 from 'react-native-vector-icons/Entypo'
 import { ScrollView } from "react-native";
 
-import Category from "../../../components/Home/Category";
-import Offer from "../../../components/Home/Offer";
-import Feature from "../../../components/Home/Feature";
-import Discount from "../../../components/Home/Discount";
+import Category from "../../../components/User/Home/Category";
+import Offer from "../../../components/User/Home/Offer";
+import Feature from "../../../components/User/Home/Feature";
+import Discount from "../../../components/User/Home/Discount";
 import { useSession } from "../../../features/context/SessionContext";
 
 const HomeScreen = ({ navigation }) => {
     const { user } = useSession()
+    console.log(user);
     const [fullAddressVisible, setFullAddressVisible] = useState(false);
     return (
         <SafeAreaView className=" bg-white">

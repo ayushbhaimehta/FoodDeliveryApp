@@ -9,8 +9,8 @@ import { useAuth } from '../../../features/context/AuthContext';
 //Components
 import Loader from '../../../components/Global/Loader';
 import BackButton from '../../../components/Global/BackButton';
-import Map from '../../../components/Address/Map';
-import AddressForm from '../../../components/Address/AddressForm';
+import Map from '../../../components/User/Address/Map';
+import AddressForm from '../../../components/User/Address/AddressForm';
 import { PaperProvider } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import { useSession } from '../../../features/context/SessionContext';

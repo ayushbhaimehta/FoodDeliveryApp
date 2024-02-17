@@ -9,10 +9,10 @@ import { useAuth } from '../../../features/context/AuthContext';
 //Components
 import Loader from '../../../components/Global/Loader';
 import BackButton from '../../../components/Global/BackButton';
-import Map from '../../../components/Address/Map';
+import Map from '../../../components/User/Address/Map';
 import { PaperProvider } from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
-import RestaurantAddressForm from '../../../components/Address/RestaurantAddressForm';
+import RestaurantAddressForm from '../../../components/User/Address/RestaurantAddressForm';
 import { useSession } from '../../../features/context/SessionContext';
 
 const RestaurantAddress = ({ navigation }) => {

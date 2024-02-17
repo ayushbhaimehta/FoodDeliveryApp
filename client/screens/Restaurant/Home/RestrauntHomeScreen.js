@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import RestaurantInfo from '../../../components/RestaurantHome/RestaurantInfo';
+import RestaurantInfo from '../../../components/Restaurant/RestaurantHome/RestaurantInfo';
 import RestaurantLiveOrders from './RestaurantLiveOrders';
+import { useSession } from '../../../features/context/SessionContext';
 
 const RestaurantHome = ({ navigation }) => {
-
+    const { user } = useSession();
+    console.log(user);
     return (
         <SafeAreaView style={styles.container}>
             <RestaurantInfo navigation={navigation} />
