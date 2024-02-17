@@ -1,6 +1,6 @@
 const { UserModel } = require('../models/userSchema/user.schemaModel');
 const { RestaurantModel } = require('../models/restaurantSchema/restaurant.schemaModel');
-const { DriverModel } = require('../models/driverSchema/driver.schemaModel');
+const { DriverModel, DriverLocationModel } = require('../models/driverSchema/driver.schemaModel');
 
 async function userExistsByPhone(phoneNo) {
     try {
@@ -57,8 +57,16 @@ async function getRestaurantById(restaurantId) {
     }
 }
 
-async function getOrderDetailsById(orderId) {
-
+async function driverLocationExists(_id) {
+    try {
+        const result = await DriverLocationModel.findOne({ driverId: _id });
+        return result;
+    } catch (error) {
+        log.error('Something went wrong while fetching driverexisting location' + error);
+        return res.status(400).send({
+            message: 'Existing location retrieval error'
+        });
+    }
 }
 
 module.exports = {
@@ -66,5 +74,6 @@ module.exports = {
     restaurantExistsByPhone,
     getRestaurantById,
     driverExistsByPhone,
-    driverExistsOnlyByPhone
+    driverExistsOnlyByPhone,
+    driverLocationExists
 };

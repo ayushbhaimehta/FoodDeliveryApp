@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const validateRegisterDriverSchemaModel = Joi.object({
-    phoneNo: Joi.string().required(),
+    phoneNo: Joi.string().required().max(10).min(10),
     email: Joi.string().required(),
     name: Joi.string().required(),
     password: Joi.string().required(),
@@ -46,6 +46,13 @@ const validateVerifyOtpSchemaModel = Joi.object({
     otp: Joi.string().required()
 });
 
+const validateGetLiveLocSchemaModel = Joi.object({
+    loc: Joi.object({
+        lat: Joi.string().required(),
+        long: Joi.string().required()
+    })
+});
+
 const validateRegisterDriverSchema = (driverInfo) => {
     return validateRegisterDriverSchemaModel.validate(driverInfo);
 };
@@ -78,6 +85,10 @@ const validateVerifyOtpSchema = (driverInfo) => {
     return validateVerifyOtpSchemaModel.validate(driverInfo);
 }
 
+const validateGetLiveLocSchema = (driverInfo) => {
+    return validateGetLiveLocSchemaModel.validate(driverInfo);
+}
+
 module.exports = {
     validateRegisterDriverSchema,
     validateLoginDriverSchema,
@@ -86,5 +97,6 @@ module.exports = {
     validateSendEmailOtpSchema,
     validateVerifyEmailOtpSchema,
     validateSendOtpSchema,
-    validateVerifyOtpSchema
+    validateVerifyOtpSchema,
+    validateGetLiveLocSchema
 }

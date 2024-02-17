@@ -74,7 +74,8 @@ async function getLiveLocController(req, res) {
     if (isNotValidSchema(error, res)) return;
     log.success('Schema Validation done');
     driverInfo.phoneNo = req.phoneNo;
-    const result = await driverDao.updateOrderStatusDao(driverInfo, res);
+    console.log(driverInfo.phoneNo);
+    const result = await driverDao.getLiveLocDao(driverInfo, res);
     return result;
 }
 
