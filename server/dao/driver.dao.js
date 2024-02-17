@@ -1,11 +1,12 @@
 const Logger = require('../logger/logger');
 const log = new Logger('DriverDao');
-const { DriverModel } = require('../models/driverSchema/driver.schemaModel');
+const { DriverModel, DriverLocationModel } = require('../models/driverSchema/driver.schemaModel');
 const { OrderModel } = require('../models/orderSchema/order.schemaModel');
 const bcrypt = require('bcrypt');
 const {
     driverExistsByPhone,
-    driverExistsOnlyByPhone
+    driverExistsOnlyByPhone,
+    driverLocationExists
 } = require('../utils/userHelp');
 const saltRounds = 12;
 const jwt = require('jsonwebtoken');
@@ -32,7 +33,10 @@ async function registerDriverDao(driverInfo, res) {
                 email: email,
                 name: name,
                 password: hashedPassword,
-                assignedOrders: []
+                assignedOrders: [],
+                aadharId: driverInfo.aadharId,
+                panCard: driverInfo.panCard,
+                bankDetails: driverInfo.bankDetails,
             });
             try {
                 await newDriver.save();
@@ -254,11 +258,55 @@ async function updateOrderStatusDao(driverInfo, res) {
     }
 }
 
+async function getLiveLocDao(driverInfo, res) {
+    const phoneNo = driverInfo.phoneNo;
+    const loc = driverInfo.loc;
+    const driverDetails = await driverExistsOnlyByPhone(phoneNo);
+    const _id = driverDetails._id.toString();
+    // const _id = driverDetails._id;
+
+    console.log(_id);
+    try {
+        const driverLocation = await driverLocationExists(_id);
+        console.log({ driverLocation });
+        if (!driverLocation) {
+            const newDriverLocation = new DriverLocationModel({
+                driverId: _id,
+                loc: loc
+            });
+            await newDriverLocation.save();
+            log.success(`Successfully added new driver loc to the db`);
+            return res.status(200).send({
+                message: 'Successfully added new driver location'
+            })
+        }
+        else {
+            try {
+                await DriverLocationModel.findOneAndUpdate({ driverId: _id }, { loc: loc });
+                return res.status(200).send({
+                    message: 'Successfully updated the driver location'
+                })
+            } catch (error) {
+                log.error(`Something went wrong with updating driver loc ${error}`);
+                return res.status(400).send({
+                    message: 'Something went wrong with updating driver loc'
+                });
+            }
+        }
+    } catch (error) {
+        log.error('Error while saving new driver locations ' + error);
+        return res.status(400).send({
+            message: 'Something went wrong while saving loc in db!'
+        });
+    }
+}
+
 module.exports = {
     registerDriverDao,
     loginDriverDao,
     updateOrderStatusDao,
     getAllOrdersDao,
     updateDriverInfoDao,
-    addAssignOrderDao
+    addAssignOrderDao,
+    getLiveLocDao
 }

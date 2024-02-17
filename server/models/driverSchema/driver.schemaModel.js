@@ -5,6 +5,9 @@ const mongoDriverSchema = new mongoose.Schema({
     email: String,
     phoneNo: String,
     password: String,
+    aadharId: String,
+    panCard: String,
+    bankDetails: String,
     assignedOrders: [
         {
             address: {
@@ -37,8 +40,25 @@ const mongoDriverSchema = new mongoose.Schema({
     ]
 });
 
+const mongoDriverEmailSchema = new mongoose.Schema({
+    email: String,
+    emailOtp: String
+});
+
+const mongoDriverLocationSchema = new mongoose.Schema({
+    loc: {
+        lat: String,
+        long: String
+    },
+    driverId: String
+});
+
+const UserEmailModel = mongoose.model('Email', mongoDriverEmailSchema);
 const DriverModel = mongoose.model('driver', mongoDriverSchema);
+const DriverLocationModel = mongoose.model('Location', mongoDriverLocationSchema);
 
 module.exports = {
     DriverModel,
+    UserEmailModel,
+    DriverLocationModel
 }

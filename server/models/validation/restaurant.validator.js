@@ -37,11 +37,30 @@ const validateUpdateAddressSchemaModel = Joi.object({
 const validateUpdateNameSchemaModel = Joi.object({
     restaurantName: Joi.string().required().min(1),
     email: Joi.string().email()
-})
+});
+
+const validateAddImgSchemaModel = Joi.object({
+    img: Joi.string().required()
+});
 
 const validateGetByPhoneNoSchemaModel = Joi.object({
     phoneNo: Joi.string().required()
-})
+});
+
+const validateUpdateMenuSchemaModel = Joi.object({
+    menuId: Joi.string().required(),
+    menu: Joi.object({
+        name: Joi.string().required(),
+        img: Joi.string().required(),
+        price: Joi.string().required(),
+        description: Joi.string().required(),
+        rating: Joi.string().required()
+    }).required()
+});
+
+const validateDeleteMenuSchemaModel = Joi.object({
+    menuId: Joi.string().required()
+});
 
 const validateAddMenuSchemaModel = Joi.object({
     menu: Joi.array().items(
@@ -53,7 +72,7 @@ const validateAddMenuSchemaModel = Joi.object({
             rating: Joi.string().required()
         }).required()
     )
-})
+});
 
 const validateAddMenuSchema = (loginInfo) => {
     return validateAddMenuSchemaModel.validate(loginInfo);
@@ -71,12 +90,24 @@ const validateUpdateNameSchema = (loginInfo) => {
     return validateUpdateNameSchemaModel.validate(loginInfo);
 }
 
-const validateSendOtpSchema = (OtpInfo) => {
-    return validateSendOtpSchemaModel.validate(OtpInfo);
+const validateSendOtpSchema = (loginInfo) => {
+    return validateSendOtpSchemaModel.validate(loginInfo);
 }
 
-const validateVerifyOtpSchema = (OtpInfo) => {
-    return validateVerifyOtpSchemaModel.validate(OtpInfo);
+const validateVerifyOtpSchema = (loginInfo) => {
+    return validateVerifyOtpSchemaModel.validate(loginInfo);
+}
+
+const validateAddImgSchema = (loginInfo) => {
+    return validateAddImgSchemaModel.validate(loginInfo);
+}
+
+const validateUpdateMenuSchema = (loginInfo) => {
+    return validateUpdateMenuSchemaModel.validate(loginInfo);
+}
+
+const validateDeleteMenuSchema = (loginInfo) => {
+    return validateDeleteMenuSchemaModel.validate(loginInfo);
 }
 
 module.exports = {
@@ -85,5 +116,8 @@ module.exports = {
     validateUpdateNameSchema,
     validateGetByPhoneNoSchema,
     validateUpdateAddressSchema,
-    validateAddMenuSchema
+    validateAddMenuSchema,
+    validateAddImgSchema,
+    validateUpdateMenuSchema,
+    validateDeleteMenuSchema
 }

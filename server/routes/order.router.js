@@ -6,7 +6,8 @@ const {
     assignOrdersController,
     paymentController,
     paymentVerifyController,
-    getForRestaurantController
+    getForRestaurantController,
+    assignAlgoRequestController
 } = require('../controllers/orderService/order.controller');
 const userAuth = require('../middlewares/userAuth');
 
@@ -24,6 +25,7 @@ orderRouter.post('/paymentCreateOrder', userAuth, paymentController);
 orderRouter.post('/paymentVerify', userAuth, paymentVerifyController);
 
 // admin allocation
-orderRouter.post('/assignOrders', assignOrdersController)
+orderRouter.post('/assignOrders', assignOrdersController);
+orderRouter.post('/assignAlgoRequest', assignAlgoRequestController);
 
 module.exports = orderRouter;

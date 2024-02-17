@@ -67,6 +67,56 @@ async function updateAddressDao(loginInfo, res) {
     }
 }
 
+async function deleteMenuDao(loginInfo, res) {
+    const menuId = loginInfo.menuId;
+    try {
+        const response = await RestaurantModel.findOneAndUpdate(
+            { 'menu._id': menuId },
+            { $pull: { menu: { _id: menuId } } },
+            { new: true }
+        );
+        console.log({ response });
+        if (response) {
+            return res.status(200).send({
+                message: 'Successfully deleted'
+            });
+        }
+        else {
+            return res.status(404).send({
+                message: 'Menu item not found'
+            });
+        }
+    } catch (error) {
+        console.error(`Error in deleting menu item: ${error}`);
+        return res.status(500).send({
+            message: 'Internal Server Error'
+        });
+    }
+}
+
+async function updateMenuDao(loginInfo, res) {
+    const menuId = loginInfo.menuId;
+    const menu = loginInfo.menu;
+
+    try {
+        const response = await RestaurantModel.findOneAndUpdate(
+            { 'menu._id': menuId },
+            { $set: { 'menu.$': menu } }, // Use $set to update the matched array element
+            { new: true } // Set new: true to return the modified document
+        )
+        console.log({ response });
+        log.success(`Successfully updated the menu`);
+        return res.status(200).send({
+            message: 'successfully updated'
+        })
+    } catch (error) {
+        log.error(`Error in updating menu ${error}`);
+        return res.status(400).send({
+            message: 'Error in updating menu'
+        })
+    }
+}
+
 async function updateNameDao(loginInfo, res) {
     const restaurantName = loginInfo.restaurantName;
     const email = loginInfo.email;
@@ -94,6 +144,25 @@ async function updateNameDao(loginInfo, res) {
         // log.error('Error updating user:', err);
         return res.status(500).send({
             message: 'Internal Server Error'
+        });
+    }
+}
+
+async function addImgDao(loginInfo, res) {
+    const imgUrl = loginInfo.img;
+    const phoneNo = loginInfo.phoneNo;
+    try {
+        await RestaurantModel.findOneAndUpdate(
+            { phoneNo: phoneNo },
+            { img: imgUrl });
+        log.success(`Successfully added img url into the db`);
+        return res.status(200).send({
+            message: 'Successfully added img url to the db'
+        })
+    } catch (error) {
+        log.error(`Error in updating img url ${error}`);
+        return res.status(400).send({
+            message: 'Error in adding imgUrl fo the restaurant'
         });
     }
 }
@@ -141,5 +210,8 @@ module.exports = {
     updateNameDao,
     updateAddressDao,
     getByPhoneDao,
-    addMenuDao
+    addMenuDao,
+    addImgDao,
+    updateMenuDao,
+    deleteMenuDao
 }
