@@ -16,7 +16,7 @@ import Address from './screens/User/SignUp/Address';
 import { useAuth } from './features/context/AuthContext';
 import RestaurantLoginScreen from './screens/Restaurant/SignUp/RestaurantLoginScreen';
 import DriverSignUp from './screens/Driver/Signup/DriverSignUp';
-import AccountOptions from './components/Home/AccountOptions';
+import AccountOptions from "./components/User/Home/AccountOptions"
 import RestaurantOTPScreen from './screens/Restaurant/SignUp/RestaurantOTPScreen';
 import RestaurantNameEmailInput from './screens/Restaurant/SignUp/RestaurantNameEmailScreen';
 import RestrauntHomeScreen from './screens/Restaurant/Home/RestrauntHomeScreen';
@@ -25,6 +25,8 @@ import LiveOrderPanel from './screens/Restaurant/Home/RestaurantLiveOrders';
 import RestaurantLiveOrders from './screens/Restaurant/Home/RestaurantLiveOrders';
 import RestaurantHome from './screens/Restaurant/Home/RestrauntHomeScreen';
 import RestaurantOptions from './screens/Restaurant/Home/RestaurantOptions';
+import MenuScreen from './screens/Restaurant/Home/MenuScreen';
+import AddNewItemPage from './components/Restaurant/Menu/AddNewItem';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -84,18 +86,18 @@ export const Navigation = () => {
                     </RestaurantSignUpStack.Navigator>
 
                     :
-                    <RestaurantStack.Navigator>
+                    <RestaurantStack.Navigator initialRouteName='MenuPage'>
                         <RestaurantStack.Screen name="Home" component={RestaurantHome}
                             options={{ headerShown: false }} />
                         <RestaurantStack.Screen name="LiveOrders" component={RestaurantLiveOrders}
                             options={{ headerShown: false }} />
                         <RestaurantStack.Screen name="RestaurantOptions" component={RestaurantOptions}
                             options={{ headerShown: false }} />
-                        {/*<RestaurantStack.Screen name="OrderPlacing" component={OrderPlacingScreen}
+                        <RestaurantStack.Screen name="MenuPage" component={MenuScreen}
                             options={{ headerShown: false }} />
-                        <RestaurantStack.Screen name="Delivery" component={DeliveryScreen}
+                        <RestaurantStack.Screen name="AddNew" component={AddNewItemPage}
                             options={{ headerShown: false }} />
-                        <RestaurantStack.Screen name="AccountOptions" component={AccountOptions}
+                        {/*<RestaurantStack.Screen name="AccountOptions" component={AccountOptions}
                             options={{ headerShown: false }} /> */}
                     </RestaurantStack.Navigator>
 
