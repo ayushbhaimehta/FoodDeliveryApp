@@ -3,9 +3,14 @@ const driverDao = require('../../dao/driver.dao.js');
 const Logger = require('../../logger/logger.js');
 const log = new Logger('driverController');
 const { isNotValidSchema } = require('../../utils/notValid.js');
+const { driverExistsOnlyByPhone } = require('../../utils/userHelp.js');
 const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator');
-
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+const verifySid = process.env.verifySid;
+const sendOTPSID = process.env.verifySID;
 const { UserEmailModel } = require('../../models/driverSchema/driver.schemaModel.js')
 
 var transporter = nodemailer.createTransport({
@@ -17,7 +22,7 @@ var transporter = nodemailer.createTransport({
         pass: process.env.EMAILPASS
     },
 });
-console.log({ transporter });
+// console.log({ transporter });
 
 async function registerDriverController(req, res) {
     let driverInfo = req.body;
@@ -80,6 +85,77 @@ async function getAllOrdersController(req, res) {
     return result;
 }
 
+async function sendPhoneOtpController(req, res) {
+    const driverInfo = req.body;
+    let { error } = driverValidator.validateSendOtpSchema(driverInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    try {
+        // send otp service
+        log.info(client)
+        const otpResponse = await client.verify.v2
+            .services(verifySid)
+            .verifications.create({
+                to: `+${driverInfo.countryCode}${driverInfo.phoneNo}`,
+                channel: 'sms',
+            })
+        console.log(otpResponse);
+        log.success(`Sucessfully sent the otp to phoneNo ${driverInfo.phoneNo}`);
+        res.status(200).send({
+            message: 'Otp Sent to phoneNo' + driverInfo.phoneNo,
+            result: otpResponse
+        })
+    } catch (error) {
+        // error in sending the otp using twilio
+        log.error(`Error in sending the otp using twilio for phone No ${loginInfo.phoneNo}`)
+        return res.status(400).send({
+            message: 'Error in sending otp!'
+        })
+    }
+}
+
+async function verifyPhoneOtpController(req, res) {
+    const driverInfo = req.body;
+    const otp = driverInfo.otp;
+    let { error } = driverValidator.validateVerifyOtpSchema(driverInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    try {
+        const verifiedResponse = await client.verify.v2.services(sendOTPSID)
+            .verificationChecks
+            .create({ to: `${driverInfo.countryCode}${driverInfo.phoneNo}`, code: otp });
+
+        if (verifiedResponse.status === 'approved') {
+            log.info(`Successfully verified`);
+
+            const existingDriver = await driverExistsOnlyByPhone(driverInfo.phoneNo);
+            log.info(existingDriver);
+            if (existingDriver) {
+                // already exists login page redirect
+                return res.status(401).send({
+                    message: 'An account already exists with this phone!',
+                    exist: true
+                });
+            }
+            else {
+                return res.status(200).send({
+                    message: 'Otp verified'
+                });
+            }
+        }
+        else {
+            res.status(400).send({
+                message: 'Wrong otp entered'
+            })
+        }
+    } catch (error) {
+        log.error(`Error in verifing the otp` + error);
+        res.status(404).send({
+            message: 'Wrong otp'
+        })
+    }
+}
+
 async function sendEmailOtpController(req, res) {
     let driverInfo = req.body;
     let { error } = driverValidator.validateSendEmailOtpSchema(driverInfo);
@@ -93,7 +169,7 @@ async function sendEmailOtpController(req, res) {
         var mailOptions = {
             from: 'ayushbhaimehta20002@gmail.com',
             to: email,
-            subject: 'Verification that Ayush is officially anuj awasthis daddy',
+            subject: 'Ayush Officially papa hai Anuj Awasthi ka!',
             text: emailOtp
         };
         console.log("checkpoint 11");
@@ -196,5 +272,7 @@ module.exports = {
     addAssignOrderController,
     getLiveLocController,
     sendEmailOtpController,
-    verifyEmailOtpController
+    verifyEmailOtpController,
+    sendPhoneOtpController,
+    verifyPhoneOtpController
 };

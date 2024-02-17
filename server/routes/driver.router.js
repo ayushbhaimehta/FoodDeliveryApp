@@ -8,7 +8,9 @@ const {
     addAssignOrderController,
     getLiveLocController,
     sendEmailOtpController,
-    verifyEmailOtpController
+    verifyEmailOtpController,
+    sendPhoneOtpController,
+    verifyPhoneOtpController
 } = require('../controllers/driverService/driver.controller');
 const driverAuth = require('../middlewares/driverAuth');
 
@@ -19,8 +21,8 @@ driverRouter.post('/loginDriver', loginDriverController);
 
 driverRouter.post('/sendEmailOtp', sendEmailOtpController);
 driverRouter.post('/verifyEmailOtp', verifyEmailOtpController);
-driverRouter.post('/sendPhoneOtp', loginDriverController);
-driverRouter.post('/verifyPhoneOtp', loginDriverController);
+driverRouter.post('/sendPhoneOtp', sendPhoneOtpController);
+driverRouter.post('/verifyPhoneOtp', verifyPhoneOtpController);
 
 driverRouter.get('/getAllOrders', driverAuth, getAllOrdersController);
 driverRouter.post('/updateDriverInfo', driverAuth, updateDriverInfoController);
