@@ -1,6 +1,6 @@
 // AddressForm.js
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
 import { TextInput, Button, Text } from 'react-native-paper';
 import SaveAsScreen from './SaveAs';
 import { useAuth } from '../../../features/context/AuthContext';
@@ -114,11 +114,11 @@ const AddressForm = ({ onSubmit, setApiData, currentLocation, fullAddress }) => 
                     phoneNo={phoneNo}
                     setPhoneNo={setPhoneNo}
                 />
-                <Button mode='elevated' onPress={handleSubmit} style={styles.Button} >
+                <TouchableOpacity onPress={handleSubmit} style={styles.Button} >
                     <Text className="text-white text-lg">
                         Submit
                     </Text>
-                </Button>
+                </TouchableOpacity>
                 <View className="h-[30]">
 
                 </View>
@@ -139,9 +139,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
         backgroundColor: '#e46c47',
         padding: 4,
-        borderRadius: 5,
+        borderRadius: 10,
+        height: 50,
         color: 'white',
-        alignItems: 'center'
+        elevation: 3,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     optionContainer: {
         flexDirection: 'row',
