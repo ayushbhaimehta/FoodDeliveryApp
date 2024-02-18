@@ -135,7 +135,7 @@ const AccountOptions = ({ navigation }) => {
                     />
                 </View>
                 <Divider style={{ backgroundColor: 'black', height: 1, marginVertical: 5 }} />
-                <View className="flex-row justify-between items-center my-2">
+                <View className="flex-row justify-between items-center my-2" onTouchEnd={() => navigation.push('Addresses')}>
                     <View>
                         <Text className="text-lg text-black font-semibold">
                             Addresses
