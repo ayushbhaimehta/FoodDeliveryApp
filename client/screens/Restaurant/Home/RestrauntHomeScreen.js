@@ -7,7 +7,6 @@ import { useSession } from '../../../features/context/SessionContext';
 
 const RestaurantHome = ({ navigation }) => {
     const { user } = useSession();
-    console.log(user);
     return (
         <SafeAreaView style={styles.container}>
             <RestaurantInfo navigation={navigation} />

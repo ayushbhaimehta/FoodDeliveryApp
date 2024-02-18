@@ -16,7 +16,6 @@ import { useSession } from "../../../features/context/SessionContext";
 
 const HomeScreen = ({ navigation }) => {
     const { user } = useSession()
-    console.log(user);
     const [fullAddressVisible, setFullAddressVisible] = useState(false);
     return (
         <SafeAreaView className=" bg-white">

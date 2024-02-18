@@ -18,7 +18,6 @@ const Offer = () => {
                 const res = await axios.post(`${process.env.BASE_URL}/user/getAllRestaurants`, {
                     city: 'Chandigarh'
                 });
-                console.log(res.data.result);
                 if (res.status === 200) {
                     setRestaurant(res.data.result);
                 }
@@ -32,10 +31,10 @@ const Offer = () => {
         fetchRestaurant();
 
     }, [])
-    console.log(restaurant);
 
     return (
         <View className='mt-3'>
+            <Loader />
             <View className='px-3 pt-3 pb-2'>
                 <View className='flex-row justify-between align-center'>
                     <Text className="font-bold text-2xl text-gray-800">Offers near you!</Text>
