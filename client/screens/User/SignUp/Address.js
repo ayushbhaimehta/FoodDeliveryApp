@@ -25,7 +25,7 @@ const Address = ({ navigation }) => {
     });
     const [apiData, setApiData] = useState({})
 
-    const [isFormVisible, setIsFormVisible] = useState(true);
+    const [isFormVisible, setIsFormVisible] = useState(false);
     const [fullAddress, setFullAddress] = useState("");
     const [location, setLocation] = useState("")
 
