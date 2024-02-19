@@ -6,11 +6,15 @@ const bcrypt = require('bcrypt');
 const {
     driverExistsByPhone,
     driverExistsOnlyByPhone,
-    driverLocationExists
+    driverLocationExists,
+    getAllOrders,
+    getRestaurantById
 } = require('../utils/userHelp');
+const { getDistanceFromLatLonInKm } = require('../utils/distanceAlgo');
 const saltRounds = 12;
 const jwt = require('jsonwebtoken');
 const secretKey = "112233";
+const axios = require('axios');
 
 async function registerDriverDao(driverInfo, res) {
     const phoneNo = driverInfo.phoneNo;
@@ -41,6 +45,15 @@ async function registerDriverDao(driverInfo, res) {
             try {
                 await newDriver.save();
                 log.success(`Successfully registered enw driver`);
+                const jwtToken = jwt.sign(
+                    {
+                        "phoneNo": phoneNo
+                    },
+                    secretKey,
+                    // { expiresIn: "1d" }
+                );
+                res.header('auth', jwtToken);
+
                 return res.status(200).send({
                     message: 'Successfully registered'
                 })
@@ -258,6 +271,94 @@ async function updateOrderStatusDao(driverInfo, res) {
     }
 }
 
+async function assignAlgoRequestDao(driverInfo, res) {
+    try {
+        const allOrders = await getAllOrders();
+        console.log({ allOrders });
+
+        const driverPhone = driverInfo.phoneNo;
+        const driverDetails = await driverExistsOnlyByPhone(driverPhone);
+
+        const driverLat = driverInfo.loc.lat;
+        const driverLong = driverInfo.loc.long;
+
+        for (let i = 0; i < allOrders.length; i++) {
+            const orderId = allOrders[i]._id;
+            if (allOrders[i].status !== 'pending') {
+                continue;
+            }
+            const restaurantId = allOrders[i].orderDetails.restaurantId;
+            const restaurantDetails = await getRestaurantById(restaurantId);
+            const restaurantLat = restaurantDetails.address.location.coordinates[0];
+            const restaurantLong = restaurantDetails.address.location.coordinates[1];
+
+            const distance = getDistanceFromLatLonInKm(restaurantLat, restaurantLong, driverLat, driverLong);
+            if (distance < 5) {
+                try {
+                    const departure_time = new Date().toISOString()
+                    const app_id = process.env.APP_ID;
+                    const timeApiKey = process.env.API_KEY_TIME;
+                    console.log(departure_time);
+                    try {
+                        console.log("AAbb");
+                        const payload = await axios({
+                            method: 'get',
+                            url: `https://api.traveltimeapp.com/v4/time-filter?type=driving&departure_time=${departure_time}&search_lat=${driverLat}&search_lng=${driverLong}&locations=${restaurantLat}_${restaurantLong}&app_id=${app_id}&api_key=${timeApiKey}`,
+                        });
+                        console.log({ payload });
+                        // const expectedTime = payload.data.result[0].locations.properties[0].travel_time;
+                        const expectedTime = payload.data.results[0].locations[0].properties[0].travel_time;
+
+                        const secToMin = expectedTime / 60
+                        console.log(expectedTime);
+                        try {
+                            await axios({
+                                method: 'post',
+                                url: 'http://localhost:3000/order/assignOrders',
+                                data: {
+                                    _id: orderId,
+                                    assignedTo: driverDetails._id,
+                                    status: 'assigned',
+                                    expectedTime: secToMin + 'miniutes'
+                                }
+                            });
+                            return res.status(200).send({
+                                message: 'Successfully Assigned an order'
+                            })
+                        } catch (error) {
+                            log.error(`Something went wrong with assignorders APi ${error}`);
+                            return res.status(500).send({
+                                message: 'Internal server Error 2'
+                            })
+                        }
+
+                    } catch (error) {
+                        log.error(`Error while calling time distance api ${error}`);
+                        return res.status(500).send({
+                            message: 'Internal Server problem'
+                        })
+                    }
+
+                } catch (error) {
+                    log.error(`Error while posting things via axios ${error}`);
+                    return res.status(400).send({
+                        message: 'Something went wrong in assigning orders '
+                    });
+                }
+
+            }
+        }
+        return res.status(200).send({
+            message: 'No orders found nearby'
+        });
+    } catch (error) {
+        log.error(`Something went wrong while fetching available driver ${error}`);
+        return res.status(400).send({
+            message: 'Something went wrong while fetching available driver'
+        })
+    }
+}
+
 async function getLiveLocDao(driverInfo, res) {
     const phoneNo = driverInfo.phoneNo;
     const loc = driverInfo.loc;
@@ -308,5 +409,6 @@ module.exports = {
     getAllOrdersDao,
     updateDriverInfoDao,
     addAssignOrderDao,
-    getLiveLocDao
+    getLiveLocDao,
+    assignAlgoRequestDao
 }

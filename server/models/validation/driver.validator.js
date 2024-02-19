@@ -89,6 +89,18 @@ const validateGetLiveLocSchema = (driverInfo) => {
     return validateGetLiveLocSchemaModel.validate(driverInfo);
 }
 
+const validateAssignAlgoRequestSchemaModel = Joi.object({
+    bool: Joi.boolean().required(),
+    loc: Joi.object({
+        lat: Joi.string().required(),
+        long: Joi.string().required()
+    })
+});
+
+const validateAssignAlgoRequestSchema = (driverInfo) => {
+    return validateAssignAlgoRequestSchemaModel.validate(driverInfo);
+};
+
 module.exports = {
     validateRegisterDriverSchema,
     validateLoginDriverSchema,
@@ -98,5 +110,6 @@ module.exports = {
     validateVerifyEmailOtpSchema,
     validateSendOtpSchema,
     validateVerifyOtpSchema,
-    validateGetLiveLocSchema
+    validateGetLiveLocSchema,
+    validateAssignAlgoRequestSchema,
 }

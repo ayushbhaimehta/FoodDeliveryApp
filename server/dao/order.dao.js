@@ -166,46 +166,6 @@ async function addOrderDao(orderInfo, res) {
     }
 }
 
-async function assignAlgoRequestDao(orderInfo, res) {
-    const baseUrl = 'http://localhost:3000/driver'
-    try {
-        const response = await axios({
-            method: 'GET',
-            mode: 'no-cors',
-            url: `${baseUrl}/arrayOfAvailableDrivers`
-        });
-        console.log(response.data.response);
-        let driversArray = response.data.response;
-        let availableDrivers = response.data.response.length;
-        const orderId = orderInfo.orderId;
-        const orderDetails = await getOrderDetailsById(orderId);
-        const restaurantId = orderDetails.restaurantId;
-        const restaurantDetails = await getRestaurantById(restaurantId);
-        const restaurantLat = restaurantDetails.address.location.coordinates[0];
-        const restaurantLong = restaurantDetails.address.location.coordinates[1];
-
-        for (let i = 0; i < availableDrivers; i++) {
-            const driverId = driversArray[i].driverId;
-            const driverLat = driversArray[i].loc.lat;
-            const driverLong = driversArray[i].loc.long;
-            const distance = getDistanceFromLatLonInKm(
-                driverLat,
-                driverLong,
-                restaurantLat,
-                restaurantLong
-            );
-            if (distance < 5) {
-
-            }
-        }
-    } catch (error) {
-        log.error(`Something went wrong while fetching available driver ${error}`);
-        return res.status(400).send({
-            message: 'Something went wrong while fetching available driver'
-        })
-    }
-}
-
 async function assignOrderDao(orderInfo, res) {
     const _id = orderInfo._id;
     var today = new Date();
@@ -214,14 +174,28 @@ async function assignOrderDao(orderInfo, res) {
     var dateTime = date + ' ' + time;
     console.log({ dateTime });
     try {
-        const response = await OrderModel.findByIdAndUpdate(_id,
-            {
-                assignedTo: orderInfo.assignedTo,
-                assignedTime: dateTime.toString(),
-                status: orderInfo.status,
-                expectedTime: orderInfo.expectedTime,
-                deliveredTime: orderInfo.deliveredTime
-            }, { new: true, useFindAndModify: false });
+        let response;
+        if (orderInfo.deliveredTime) {
+            response = await OrderModel.findByIdAndUpdate(_id,
+                {
+                    assignedTo: orderInfo.assignedTo,
+                    assignedTime: dateTime.toString(),
+                    status: orderInfo.status,
+                    expectedTime: orderInfo.expectedTime,
+                    deliveredTime: orderInfo.deliveredTime
+                },
+                { new: true, useFindAndModify: false });
+        }
+        else {
+            response = await OrderModel.findByIdAndUpdate(_id,
+                {
+                    assignedTo: orderInfo.assignedTo,
+                    assignedTime: dateTime.toString(),
+                    status: orderInfo.status,
+                    expectedTime: orderInfo.expectedTime,
+                },
+                { new: true, useFindAndModify: false });
+        }
         console.log({ response });
         log.success(`Successfully updated orderInfo`);
         const address = response.address;
@@ -261,6 +235,5 @@ module.exports = {
     getOrderDao,
     deleteOrderDao,
     assignOrderDao,
-    getOrdersByRestaurantDao,
-    assignAlgoRequestDao
+    getOrdersByRestaurantDao
 }

@@ -28,15 +28,6 @@ async function assignOrdersController(req, res) {
     return result;
 }
 
-async function assignAlgoRequestController(req, res) {
-    const orderInfo = req.body;
-    let { error } = orderValidator.validateAssignAlgoRequestSchema(orderInfo);
-    if (isNotValidSchema(error, res)) return;
-    log.success('Schema Validation done');
-    const result = await orderDao.assignAlgoRequestDao(orderInfo, res);
-    return result;
-}
-
 async function paymentController(req, res) {
     let orderInfo = req.body;
     // let { error } = orderValidator.validateAddOrderSchema(orderInfo);
@@ -132,5 +123,4 @@ module.exports = {
     paymentController,
     paymentVerifyController,
     getForRestaurantController,
-    assignAlgoRequestController
 };

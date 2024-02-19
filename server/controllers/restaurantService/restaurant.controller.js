@@ -12,6 +12,7 @@ const client = require('twilio')(accountSid, authToken);
 const verifySid = process.env.verifySid;
 const { isNotValidSchema } = require('../../utils/notValid.js');
 const { userExistsByPhone, restaurantExistsByPhone } = require('../../utils/userHelp.js');
+const { getDistanceFromLatLonInKm } = require('../../utils/distanceAlgo.js');
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const Upload = multer({ storage: storage });
@@ -22,23 +23,17 @@ const FormData = require('form-data');
 const axios = require('axios');
 
 async function Testing(req, res) {
-    const url = 'http://localhost:3000/restaurant/tester'
-    // console.log();
+    const lat1 = '30.7540247';
+    const long1 = '76.7689172';
+    const lat2 = '30.7662891';
+    const long2 = '76.7861754';
+
     try {
-        // console.log({ newFile });
-        console.log("checkpoint flag");
-        const form_data = new FormData();
-        form_data.append("file", fs.createReadStream('./ayushPic.png'));
-        console.log("Check 1");
-
-        const request_config = {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            data: form_data
-        };
-
-        return axios.post(url, form_data, request_config);
+        const data = getDistanceFromLatLonInKm(lat1, long1, lat2, long2);
+        console.log({ data });
+        return res.status(200).send({
+            message: 'Testing endpoint'
+        })
     } catch (err) {
         console.log({ err });
         return res.status(400).send({

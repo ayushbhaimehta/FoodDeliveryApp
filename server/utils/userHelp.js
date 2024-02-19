@@ -64,9 +64,8 @@ async function driverLocationExists(_id) {
         return result;
     } catch (error) {
         log.error('Something went wrong while fetching driverexisting location' + error);
-        return res.status(400).send({
-            message: 'Existing location retrieval error'
-        });
+        throw error; // Rethrow the error if needed
+
     }
 }
 
@@ -76,9 +75,17 @@ async function getOrderDetailsById(orderId) {
         return result;
     } catch (error) {
         log.error(`Something went wrong while getting order details ${error}`);
-        return res.status(404).send({
-            message: 'soemthing went wrong while retrieving order details'
-        });
+        throw error; // Rethrow the error if needed
+    }
+}
+
+async function getAllOrders() {
+    try {
+        const result = await OrderModel.find();
+        return result;
+    } catch (error) {
+        log.error(`Something went wrong while fetching all orders ${error}`);
+        throw error; // Rethrow the error if needed
     }
 }
 
@@ -89,5 +96,6 @@ module.exports = {
     driverExistsByPhone,
     driverExistsOnlyByPhone,
     driverLocationExists,
-    getOrderDetailsById
+    getOrderDetailsById,
+    getAllOrders
 };

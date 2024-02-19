@@ -11,7 +11,8 @@ const {
     verifyEmailOtpController,
     sendPhoneOtpController,
     verifyPhoneOtpController,
-    arrayOfAvailableDrivers
+    arrayOfAvailableDrivers,
+    assignAlgoRequestController,
 } = require('../controllers/driverService/driver.controller');
 const driverAuth = require('../middlewares/driverAuth');
 
@@ -34,6 +35,9 @@ driverRouter.post('/getLiveLoc', driverAuth, getLiveLocController);
 driverRouter.get('/arrayOfAvailableDrivers', arrayOfAvailableDrivers);// get availableDriverLocation
 
 driverRouter.post('/addAssignorder', addAssignOrderController); // admin only
+
+driverRouter.post('/assignAlgoRequest', driverAuth, assignAlgoRequestController);
+// driverRouter.post('/assignAlgoBool', driverAuth, assignAlgoBoolController);
 
 module.exports = driverRouter;
 
