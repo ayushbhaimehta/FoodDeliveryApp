@@ -9,8 +9,8 @@ import Icon2 from 'react-native-vector-icons/MaterialIcons'
 import Icon3 from 'react-native-vector-icons/AntDesign'
 import { TouchableOpacity } from 'react-native';
 
-import Menu from '../../../components/ResturentMenu/Menu';
-import BasketCart from '../../../components/ResturentMenu/BasketCart';
+import Menu from '../../../components/User/ResturentMenu/Menu';
+import BasketCart from '../../../components/User/ResturentMenu/BasketCart';
 
 
 const RestaurantScreen = () => {
@@ -45,10 +45,9 @@ const RestaurantScreen = () => {
                 <Text className="text-[#e46c47] text-lg">{route.params.rating}</Text>
                 <Text className="text-gray-500 text-lg">{route.params.cat}</Text>
               </View>
-              <View className='text-md flex-row space-x-2 items-center'>
+              <View className='text-md flex-row space-x-2 items-center flex-1'>
                 <Icon2 name='location-on' size={20} color='#e46c47' />
-                <Text className="text-gray-500 text-lg">nearby</Text>
-                <Text className="text-gray-500 text-lg">{route.params.location}</Text>
+                <Text className="text-gray-500 text-lg mr-4" numberOfLines={1}>{route.params.location}</Text>
               </View>
             </View>
             <Text className='text-md text-gray-500 mt-1'>{route.params.des}</Text>
@@ -65,14 +64,14 @@ const RestaurantScreen = () => {
         {/* Food Menu */}
         <Text className='text-2xl font-bold pt-6 pb-4 pl-4'>Menu</Text>
         <View className=' pb-[71px]'>
-          <Menu category={route.params.cat} />
+          <Menu menu={route.params.menu} resID={route.params.resID} />
         </View>
-      </ScrollView>
+      </ScrollView >
 
       {/* View Basket Button */}
-      <View className='absolute bottom-2 left-2 right-2'>
+      < View className='absolute bottom-2 left-2 right-2' >
         <BasketCart />
-      </View>
+      </View >
     </>
   )
 

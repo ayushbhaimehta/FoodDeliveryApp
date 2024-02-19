@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import { Text, View, ScrollView } from 'react-native'
-import { data } from '../../data/Data'
-import FeatureCard from './FeatureCard'
+import { data } from '../../../data/Data'
+import DiscountCard from './DiscountCard'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-const Feature = () => {
+const Discount = () => {
 
     return (
         <View className='mt-3'>
             <View className='px-3 pt-3 pb-2'>
                 <View className='flex-row justify-between align-center'>
-                    <Text className="font-bold text-2xl text-gray-800">Featured</Text>
+                    <Text className="font-bold text-2xl text-gray-800">Tasty Discount</Text>
                     <Icon name='md-arrow-forward-sharp' size={25} color='#e46c47' />
                 </View>
                 <Text className='text-gray-600'>Why not support your local resturant tonight</Text>
@@ -22,8 +22,8 @@ const Feature = () => {
                 {
                     data.map((offer) => {
                         return (
-                            <View key={offer.id}>
-                                <FeatureCard id={offer.id} img={offer.image} name={offer.name} cat={offer.category} price={offer.price} location={offer.location} des={offer.desc} />
+                            <View className='pb-36' key={offer.id}>
+                                <DiscountCard id={offer.id} img={offer.image} name={offer.name} cat={offer.category} price={offer.price} location={offer.location} des={offer.desc} />
                             </View>
                         )
                     })
@@ -34,4 +34,4 @@ const Feature = () => {
 
 }
 
-export default Feature
+export default Discount

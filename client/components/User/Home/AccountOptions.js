@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { useSession } from '../../features/context/SessionContext';
+import { useSession } from '../../../features/context/SessionContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Divider } from 'react-native-elements';
 
@@ -135,7 +135,7 @@ const AccountOptions = ({ navigation }) => {
                     />
                 </View>
                 <Divider style={{ backgroundColor: 'black', height: 1, marginVertical: 5 }} />
-                <View className="flex-row justify-between items-center my-2">
+                <View className="flex-row justify-between items-center my-2" onTouchEnd={() => navigation.push('Addresses')}>
                     <View>
                         <Text className="text-lg text-black font-semibold">
                             Addresses

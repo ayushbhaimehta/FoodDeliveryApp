@@ -1,11 +1,11 @@
 import React, { Component, useEffect, useState } from 'react'
 import { Text, View, ScrollView } from 'react-native'
-import { data } from '../../data/Data'
+import { data } from '../../../data/Data'
 import OfferCard from './OfferCard'
 import Icon from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
-import Loader from '../Global/Loader'
-import { useLoader } from '../../features/context/LoaderContext'
+import Loader from '../../Global/Loader'
+import { useLoader } from '../../../features/context/LoaderContext'
 
 const Offer = () => {
     const [restaurant, setRestaurant] = useState([]);
@@ -16,9 +16,8 @@ const Offer = () => {
             setLoader(true)
             try {
                 const res = await axios.post(`${process.env.BASE_URL}/user/getAllRestaurants`, {
-                    city: 'chd'
+                    city: 'Chandigarh'
                 });
-                console.log(res.data);
                 if (res.status === 200) {
                     setRestaurant(res.data.result);
                 }
@@ -32,10 +31,10 @@ const Offer = () => {
         fetchRestaurant();
 
     }, [])
-    console.log(restaurant);
 
     return (
         <View className='mt-3'>
+            <Loader />
             <View className='px-3 pt-3 pb-2'>
                 <View className='flex-row justify-between align-center'>
                     <Text className="font-bold text-2xl text-gray-800">Offers near you!</Text>
@@ -51,7 +50,14 @@ const Offer = () => {
                     restaurant?.map((offer) => {
                         return (
                             <View key={offer["_id"]}>
-                                <OfferCard id={offer.id} img={offer?.img} menu={offer["menu"]} address={offer["address"]} />
+                                <OfferCard
+                                    name={offer.restaurantName}
+                                    rating="5.0"
+                                    img={offer.img}
+                                    resID={offer["_id"]}
+                                    menu={offer.menu}
+                                    location={offer['address'].area}
+                                />
                             </View>
                         )
                     })

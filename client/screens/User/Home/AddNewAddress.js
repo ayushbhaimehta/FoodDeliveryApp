@@ -2,23 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
+import { PaperProvider } from 'react-native-paper';
+import * as Animatable from 'react-native-animatable';
 //hooks
 import { useGetLocation } from '../../../features/hook/useGetLocation';
 import { useLoader } from '../../../features/context/LoaderContext';
 import { useAuth } from '../../../features/context/AuthContext';
+import { useSession } from '../../../features/context/SessionContext';
 //Components
 import Loader from '../../../components/Global/Loader';
 import BackButton from '../../../components/Global/BackButton';
 import Map from '../../../components/User/Address/Map';
 import AddressForm from '../../../components/User/Address/AddressForm';
-import { PaperProvider } from 'react-native-paper';
-import * as Animatable from 'react-native-animatable';
-import { useSession } from '../../../features/context/SessionContext';
+import { useRoute } from '@react-navigation/native';
 
-const Address = ({ navigation }) => {
+const AddNewAddress = ({ navigation }) => {
+    const routes = useRoute();
+
     const { setLoader } = useLoader();
-    const { setUserAdd, auth, phoneNumber, type } = useAuth();
-    const { login } = useSession()
+    const { auth, phoneNumber, type } = useAuth();
+    const { reloadUser, user } = useSession()
     const [currentLocation, setCurrentLocation] = useState({
         "lon": 76.7688417,
         "lat": 30.7285578
@@ -73,7 +76,7 @@ const Address = ({ navigation }) => {
             setIsFormVisible(false)
         }
         else {
-            navigation.navigate('Input')
+            navigation.goBack()
         }
     }
     const addAddress = async (apiData) => {
@@ -89,8 +92,9 @@ const Address = ({ navigation }) => {
             });
             if (res.status === 200) {
                 console.log("Address added successfully");
-                await login(auth, phoneNumber, type);
-                setUserAdd(true)
+                await reloadUser(auth, phoneNumber, type);
+                setLoader(false)
+                navigation.navigate('Addresses')
             }
         }
         catch (err) {
@@ -101,8 +105,42 @@ const Address = ({ navigation }) => {
 
     }
 
+    const editAddress = async (apiData, index) => {
+        setLoader(true)
+        try {
+            const oldAdd = user?.address[index]
+            delete oldAdd._id;
+            const res = await axios.post(`${process.env.BASE_URL}/user/updateAddress`, {
+                newAddress: apiData.address,
+                oldAddress: oldAdd
+            }, {
+                headers: {
+                    auth: auth,
+                    "Content-Type": 'application/json'
+                }
+            });
+            if (res.status === 200) {
+                console.log("Address edited successfully");
+                await reloadUser(auth, phoneNumber, type);
+                setLoader(false)
+                navigation.navigate('Addresses')
+            } else {
+                console.log("Non-200 status code:", res.status);
+            }
+        }
+        catch (err) {
+            console.log("ERROR: ", err);
+        } finally {
+            setLoader(false)
+        }
+    }
+
     const handleSubmit = () => {
-        addAddress(apiData);
+        if (routes.params?.edit) {
+            editAddress(apiData, routes.params.index);
+        } else {
+            addAddress(apiData);
+        }
     }
     return (
 
@@ -199,4 +237,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Address;
+export default AddNewAddress;

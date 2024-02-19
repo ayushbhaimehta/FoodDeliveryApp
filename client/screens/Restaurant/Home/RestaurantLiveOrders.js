@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import RestaurantMenuIcon from '../../../components/RestaurantHome/RestaurantMenuIcon';
+import RestaurantMenuIcon from '../../../components/Restaurant/RestaurantHome/RestaurantMenuIcon';
 
 // Custom Header component
 const Header = ({ title, navigation }) => (

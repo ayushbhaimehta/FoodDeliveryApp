@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { useSession } from '../../features/context/SessionContext';
+import { useSession } from '../../../features/context/SessionContext';
 import RestaurantMenuIcon from './RestaurantMenuIcon';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -42,15 +42,13 @@ const RestaurantInfo = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 10,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
     image: {
-        width: Dimensions.get('window').width - 40,
+        width: Dimensions.get('window').width,
         height: 200,
-        marginRight: 20,
     },
     name: {
         fontSize: 18,

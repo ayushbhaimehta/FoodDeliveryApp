@@ -75,8 +75,8 @@ const RestaurantLoginScreen = ({ navigation }) => {
     return (
         <SafeAreaView className="bg-[#f3f4fc] flex-1">
             <Loader />
+            <BackButton navigateBack={slideDown} />
             <View className="h-[50%] mx-2">
-                <BackButton navigateBack={slideDown} />
                 <View onTouchEnd={slideDown} className="flex-1 justify-end align-bottom">
                     <View className="h-[35%] absolute top-[260]">
                         <Text className=" font-black text-6xl opacity-10 absolute">

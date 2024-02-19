@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   items: [],
+  restaurantID: "",
 }
 
 
@@ -15,11 +16,22 @@ export const basketSlice = createSlice({
     addToBasket: (state, action) => {
       // state.items = array of items (objects) in the basket
       // action.payload = item (object) which we are adding to the basket
-      state.items = [...state.items, action.payload]
+      const payload = action.payload
+      if (state.restaurantID === "" || state.restaurantID === action.payload.resID) {
+        state.restaurantID = action.payload.resID
+        delete payload.resID
+        state.items = [...state.items, payload]
+      } else {
+        alert("Are you sure you want to add items from another restaurant? Your current basket will be cleared.", "Yes", "No")
+        state.restaurantID = action.payload.resID
+        state.items = []
+        delete payload.resID
+        state.items = [...state.items, payload]
+      }
     },
     removeFromBasket: (state, action) => {
-      const newBasket = [...state.items];
-      const index = state.items.findIndex((item) => item.id === action.payload.id);
+      const newBasket = [...state['items']];
+      const index = state['items'].findIndex((item) => item['id'] === action.payload.id);
       if (index >= 0) {
         newBasket.splice(index, 1);
       }
@@ -34,9 +46,10 @@ export const { addToBasket, removeFromBasket } = basketSlice.actions;
 
 
 export const selectBasketItemsWithId = (state, id) => {
-  return (state.basket.items.filter((item) => {
+  const arr = (state.basket.items.filter((item) => {
     return (item.id === id)
   }))
+  return arr
 };
 
 export const selectBasketItems = (state) => {
@@ -48,7 +61,7 @@ export const BasketTotal = (state) => {
 };
 
 const calculate = (total, item) => {
-  return (total + item.price)
+  return (total + Number(item.price))
 };
 // console.log( "This is " + selectBasketItems)
 

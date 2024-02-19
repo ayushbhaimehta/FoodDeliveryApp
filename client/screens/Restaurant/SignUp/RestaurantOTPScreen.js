@@ -69,7 +69,22 @@ const RestaurantOTPScreen = ({ navigation }) => {
             <View className="mx-2 ">
                 <View className="bg-[#f3f4fc] flex-row h-[150]">
                     <View>
-                        <BackButton navigateBack={navigateBack} />
+                        <TouchableOpacity style={{
+                            backgroundColor: 'white',
+                            borderRadius: 100,
+                            width: 40,
+                            height: 40,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }} >
+                            <Image source={{ uri: "https://img.icons8.com/windows/96/long-arrow-left.png" }}
+                                style={{
+                                    width: 32,
+                                    height: 32,
+                                }}
+                                onTouchEnd={navigateBack}
+                            />
+                        </TouchableOpacity>
                         <View className="mx-2">
                             <Text className="text-xl font-black mt-4">VERIFY DETAILS</Text>
                             <Text className="text-gray-500 mt-1">OTP sent to {phoneNumber}</Text>

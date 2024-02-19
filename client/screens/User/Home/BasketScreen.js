@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 
 
 const BasketScreen = () => {
-
+    const altImage = "https://firebasestorage.googleapis.com/v0/b/food-delivery-app-2a7d6.appspot.com/o/menuImage%2Ffood-modified.jpg?alt=media&token=9f7c3e47-dd70-4dec-ae20-5f1e3b7705d7"
     const items = useSelector(selectBasketItems);
     const subtotal = useSelector(BasketTotal);
     const [groupedItems, setGroupedItems] = useState([]);
@@ -31,7 +31,7 @@ const BasketScreen = () => {
         setGroupedItems(basketItems);
     }, [items])
 
-    console.log(groupedItems);
+    console.log(items);
 
     const handleOrder = () => {
         navigation.navigate("OrderPlacing")
@@ -68,7 +68,7 @@ const BasketScreen = () => {
                                     <View className='flex-row justify-between items-center px-4 py-4 border-b border-gray-200 bg-white' key={key}>
                                         <View className='flex-row justify-between items-center space-x-3'>
                                             <Text className='text-[#e46c47] font-bold'>{value.length} x </Text>
-                                            <Image source={{ uri: value[0].img }} className='h-12 w-12 rounded-full' />
+                                            <Image source={{ uri: value[0].img || altImage }} className='h-12 w-12 rounded-full' />
                                             <Text className=''>{value[0].name}</Text>
                                         </View>
                                         <View className='flex-row justify-between items-center space-x-3'>
