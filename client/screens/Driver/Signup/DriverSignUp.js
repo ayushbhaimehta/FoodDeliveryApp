@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, Animated, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, Animated, TouchableOpacity } from 'react-native'
+import { TextInput } from 'react-native-paper'
+import React, { useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Loader from '../../../components/Global/Loader'
 import BackButton from '../../../components/Global/BackButton'
@@ -8,23 +9,21 @@ import { useAuth } from '../../../features/context/AuthContext'
 import { Divider } from 'react-native-elements'
 import LoginPageOptions from '../../../components/Login/LoginPageOptions'
 import Slider from '../../../components/Login/DriverLoginSlider'
+import axios from 'axios'
 
-const DriverSignUp = () => {
+
+const DriverSignUp = ({ navigation }) => {
     const { setPhoneNumber } = useAuth();
     const { setLoader } = useLoader()
     const countrycode = '+91'
-    const sliderImages = [
-        'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?cs=srgb&dl=pexels-james-wheeler-414612.jpg&fm=jpg',
-        'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfZIG7rVkxZNSk9ahTmjKCe1jfRPqRS0NyFtQy8BoLjw&s'
-    ]
+    const inputRef = useRef(null);
 
     const handleSubmit = async () => {
         setLoader(true)
         try {
-            const response = await axios.post(`${process.env.BASE_URL}/user/sendotp`, {
+            const response = await axios.post(`${process.env.BASE_URL}/driver/sendPhoneOtp`, {
                 phoneNo: phone,
-                countryCode: countrycode,
+                countryCode: "+91",
             });
 
             if (response.status === 200) {
@@ -75,14 +74,17 @@ const DriverSignUp = () => {
             duration: 500,
             useNativeDriver: true,
         }).start();
+        if (inputRef.current) {
+            inputRef.current.blur(); // Blur the input if it is in focus
+        }
         setExpanded(false)
     };
     return (
         <SafeAreaView className="bg-[#f3f4fc] flex-1">
             <Loader />
-            <BackButton navigateBack={slideDown} />
+            {expanded && <BackButton navigateBack={slideDown} />}
             {!expanded &&
-                <View className="h-[65%]">
+                <View className="h-[600]">
                     <Slider />
                 </View>
             }
@@ -90,101 +92,93 @@ const DriverSignUp = () => {
                 style={{
                     position: 'absolute',
                     left: 0,
-                    top: expanded ? 75 : 560,
+                    top: expanded ? 100 : 650,
                     right: 0,
                     backgroundColor: 'white',
                     padding: 16,
-                    borderTopWidth: 0.2,
+                    borderTopWidth: !expanded ? 0.2 : 0,
                     borderTopColor: 'black',
                     transform: [{ translateY: slideAnim }],
                     flex: 1
                 }}
                 className="bg-white h-auto my-3 py-5 px-4 flex-1">
                 <View>
-                    <Text className="font-bold text-lg">
-                        {expanded ? "LOGIN" : "PARTNER ACCOUNT"}
-                    </Text>
-                    <Text className="text-md text-gray-500">
-                        {expanded ? "Enter your phone number to proceed" : "Login/Create Account to manage your deliever"}
-                    </Text>
-                </View>
-                <View>
-
-                    {expanded && <>
-                        <Text
-                            className="text-gray-400 text-xs mt-5"
-                        >
-                            10 digit mobile number
-                        </Text>
-                        <View style={styles.container}>
-                            <Text style={styles.countryCode}>{countrycode}</Text>
-                            <TextInput
-                                style={styles.phoneNumberInput}
-                                keyboardType="phone-pad"
-                                autoFocus={true}
-                                value={phone}
-                                onChangeText={handleInputChange}
-                                maxLength={10}
-                            />
+                    {
+                        expanded &&
+                        <View>
+                            <Text style={{ fontSize: 20, fontWeight: '600' }} className="text-gray-600">Enter your phone number to get started</Text>
+                            <Divider style={{ marginVertical: 10 }} />
                         </View>
-                    </>
                     }
+
+                    <View style={styles.Inputcontainer}>
+                        <TextInput
+                            ref={inputRef}
+                            style={{
+                                backgroundColor: 'white',
+                                borderRadius: 10,
+                                borderColor: 'black',
+                                borderWidth: 1,
+                                justifyContent: 'center',
+                                marginVertical: 10,
+                                elevation: 5,
+                                shadowColor: '#000',
+                                shadowOffset: { width: 0, height: 2 },
+
+                            }}
+                            keyboardType="phone-pad"
+                            value={phone}
+                            onChangeText={handleInputChange}
+                            maxLength={10}
+                            onFocus={slideUp}
+                            label={"Phone Number"}
+                            placeholder='Enter your 10 digit phone number'
+                            underlineColor='white'
+                            activeUnderlineColor='black'
+                            left={<TextInput.Affix text={`${countrycode} | `} />}
+                        />
+                    </View>
                     <TouchableOpacity
                         onPress={submitEnable ? handleSubmit : slideUp}
                         disabled={xor(expanded, submitEnable)}
                         style={{
                             backgroundColor: !xor(expanded, submitEnable) ? '#e46c47' : '#b55738',
-                            height: 45,
+                            height: 50,
                             padding: 10,
                             justifyContent: 'center',
-                            marginVertical: 15
+                            marginVertical: 15,
+                            borderRadius: 10
                         }} >
                         <Text style={{ color: !xor(expanded, submitEnable) ? 'white' : "#ccc", textAlign: 'center', fontSize: 14, fontWeight: '600' }}>
-                            {expanded ? "CONTINUE" : "LOGIN"}
+                            {expanded ? "CONTINUE" : "Get Started"}
                         </Text>
                     </TouchableOpacity>
-                    <Text className="text-xs text-center">
-                        By clicking, I accept the <Text className="font-bold">Terms & Condions</Text> and <Text className="font-bold">Privacy Policy</Text>
-                    </Text>
+                    {
+                        expanded &&
+                        <View>
+                            <Divider style={{ marginVertical: 10 }} width={1} />
+                            <LoginPageOptions
+                                text={"Already have an account?"}
+                                desc={"Login to your account"}
+                                logoUrl={"https://img.icons8.com/ios-filled/100/000000/login-rounded-right.png"}
+                                accType={"driver"}
+                            />
+                        </View>
+                    }
                 </View>
-                {expanded &&
-                    <View style={{
-                        height: 80
-                    }}>
 
-                    </View>
-                }
-
-                {!expanded && <>
-                    <Divider style={{ backgroundColor: 'black', height: 1, marginVertical: 15 }} />
-                    <View>
-                        {/* <LoginPageOptions
-                            logoUrl={"https://img.icons8.com/external-line-adri-ansyah/64/external-restaurant-restaurant-line-adri-ansyah-18.png"}
-                            text={"Partner Login"}
-                            desc={"Sign in with your partner account."}
-                            accType={"driver"}
-                        />
-                        <Divider style={{ backgroundColor: 'black', height: 0.1, marginVertical: 10 }} />
-
-                        <LoginPageOptions
-                            logoUrl={"https://img.icons8.com/ios-filled/100/tableware.png"}
-                            text={"User Login"}
-                            desc={"Order your favorite food"}
-                            accType={"user"}
-                        /> 
-                        <Divider style={{ backgroundColor: 'black', height: 0.1, marginVertical: 10 }} /> */}
-                        <LoginPageOptions
-                            logoUrl="https://img.icons8.com/ios/100/new-post--v1.png"
-                            text="Send me feedback"
-                            desc="App version 1.0.0"
-                        />
-                    </View>
-                </>}
             </Animated.View>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
 export default DriverSignUp
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    Inputcontainer: {
+        borderRadius: 10,
+        padding: 10,
+
+    },
+
+})
