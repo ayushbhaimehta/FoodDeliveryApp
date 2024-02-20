@@ -83,6 +83,7 @@ const AddNewItemPage = ({ navigation }) => {
                     navigation={navigation}
                     setImgUrl={setImageUrl}
                     setUploadPage={setUploadPage}
+                    bucket={'menuImage'}
                 />
                 :
                 <View style={styles.container}>
