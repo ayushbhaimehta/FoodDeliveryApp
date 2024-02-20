@@ -7,7 +7,8 @@ const {
     updateAddressController,
     getByPhoneController,
     getUserLocationController,
-    getAllRestaurantsController
+    getAllRestaurantsController,
+    getNearbyRestaurantsController
 } = require('../controllers/userService/user.controller');
 const userAuth = require('../middlewares/userAuth');
 
@@ -23,8 +24,9 @@ userRouter.post('/updateAddress', userAuth, updateAddressController);
 
 // get all restaurant
 userRouter.post('/getAllRestaurants', getAllRestaurantsController);
+userRouter.post('/getNearbyRestaurants', getNearbyRestaurantsController);
 
 // map
-userRouter.post('/getUserLocation', getUserLocationController);
+// userRouter.post('/getUserLocation', getUserLocationController);
 
 module.exports = userRouter;

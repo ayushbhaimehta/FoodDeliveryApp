@@ -38,6 +38,41 @@ async function getAllRestaurantsDao(addressInfo, res) {
     }
 }
 
+async function getNearbyRestaurantsDao(loginInfo, res) {
+    const lat = loginInfo.loc.lat;
+    const long = loginInfo.loc.long;
+    const maxDistanceInMeters = 10000000; // Set your desired radius in kilometers
+
+    try {
+        const nearbyRestaurants = await RestaurantModel.find({
+            'address.location.coordinates': {
+                $geoWithin: {
+                    $centerSphere: [[long, lat], maxDistanceInMeters / 6371] // 6371 is the Earth's radius in kilometers
+                }
+            }
+        })
+            .sort({ score: -1 });
+
+        console.log({ nearbyRestaurants });
+
+        if (nearbyRestaurants.length === 0) {
+            return res.status(200).send({
+                message: 'No nearby restaurants found'
+            });
+        }
+
+        return res.status(200).send({
+            message: 'Found some restaurants!',
+            response: nearbyRestaurants
+        });
+    } catch (error) {
+        console.error('Error fetching nearby restaurants:', error);
+        return res.status(500).send({
+            message: 'Internal Server Error'
+        });
+    }
+}
+
 async function addAddressDao(loginInfo, res) {
     const phoneNo = loginInfo.phoneNo;
     const requestAddress = loginInfo.address;
@@ -158,5 +193,6 @@ module.exports = {
     addAddressDao,
     updateAddressDao,
     getByPhoneDao,
-    getAllRestaurantsDao
+    getAllRestaurantsDao,
+    getNearbyRestaurantsDao
 }

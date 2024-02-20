@@ -89,6 +89,16 @@ async function getAllOrders() {
     }
 }
 
+async function checkPendingOrdersBool() {
+    try {
+        const result = await OrderModel.find({ status: 'pending' });
+        return result;
+    } catch (error) {
+        log.error(`Somethine went wrong while fetching pending orders ${error}`);
+        throw error; // Rethrow the error if needed
+    }
+}
+
 module.exports = {
     userExistsByPhone,
     restaurantExistsByPhone,
@@ -97,5 +107,6 @@ module.exports = {
     driverExistsOnlyByPhone,
     driverLocationExists,
     getOrderDetailsById,
-    getAllOrders
+    getAllOrders,
+    checkPendingOrdersBool
 };

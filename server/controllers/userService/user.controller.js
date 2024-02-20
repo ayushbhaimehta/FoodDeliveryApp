@@ -37,6 +37,15 @@ async function getAllRestaurantsController(req, res) {
     return result;
 }
 
+async function getNearbyRestaurantsController(req, res) {
+    let loginInfo = req.body;
+    let { error } = userValidator.validateGetNearbyRestaurantsSchema(loginInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const result = await userDao.getNearbyRestaurantsDao(loginInfo, res);
+    return result;
+}
+
 async function getUserLocationController(req, res) {
     const lat = req.body.lat;
     const lon = req.body.lon;
@@ -197,5 +206,6 @@ module.exports = {
     updateAddressController,
     getByPhoneController,
     getUserLocationController,
-    getAllRestaurantsController
+    getAllRestaurantsController,
+    getNearbyRestaurantsController
 };

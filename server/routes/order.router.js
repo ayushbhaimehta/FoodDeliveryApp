@@ -7,8 +7,10 @@ const {
     paymentController,
     paymentVerifyController,
     getForRestaurantController,
+    checkPendingOrdersController
 } = require('../controllers/orderService/order.controller');
 const userAuth = require('../middlewares/userAuth');
+const driverAuth = require('../middlewares/driverAuth');
 
 const orderRouter = express.Router();
 
@@ -25,5 +27,8 @@ orderRouter.post('/paymentVerify', userAuth, paymentVerifyController);
 
 // admin allocation
 orderRouter.post('/assignOrders', assignOrdersController);
+
+// driver only
+orderRouter.get('/checkPendingOrders/:city', driverAuth, checkPendingOrdersController);
 
 module.exports = orderRouter;

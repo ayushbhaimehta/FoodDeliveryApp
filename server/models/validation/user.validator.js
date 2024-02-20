@@ -91,6 +91,16 @@ const validateGetAddressSchema = (addressInfo) => {
     return validateGetAddressSchemaModel.validate(addressInfo);
 }
 
+const validateGetNearbyRestaurantsSchema = (loginInfo) => {
+    return validateGetNearbyRestaurantsSchemaModel.validate(loginInfo);
+}
+
+const validateGetNearbyRestaurantsSchemaModel = Joi.object({
+    loc: Joi.object({
+        lat: Joi.string().required(),
+        long: Joi.string().required()
+    })
+});
 
 const validateGetAddressSchemaModel = Joi.object({
     city: Joi.string()
@@ -103,5 +113,6 @@ module.exports = {
     validateAddAddressSchema,
     validateUpdateAddressSchema,
     validateGetByPhoneNoSchema,
-    validateGetAddressSchema
+    validateGetAddressSchema,
+    validateGetNearbyRestaurantsSchema
 }

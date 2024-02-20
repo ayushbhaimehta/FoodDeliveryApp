@@ -5,8 +5,8 @@ const {
     userExistsByPhone,
     getRestaurantById,
     getOrderDetailsById,
+    checkPendingOrdersBool
 } = require('../utils/userHelp');
-const { getDistanceFromLatLonInKm } = require('../utils/distanceAlgo');
 const axios = require('axios');
 
 async function getOrderDao(orderInfo, res) {
@@ -166,6 +166,43 @@ async function addOrderDao(orderInfo, res) {
     }
 }
 
+async function checkPendingOrdersDao(orderInfo, res) {
+    const phoneNo = orderInfo.phoneNo;
+    const city = orderInfo.city;
+    let pendingOrderFlag = false;
+    try {
+        const pendingOrdersArray = await checkPendingOrdersBool();
+        for (let i = 0; i < pendingOrdersArray.length; i++) {
+            const restaurantId = pendingOrdersArray[i].orderDetails.restaurantId;
+            const restaurantDetails = await getRestaurantById(restaurantId);
+            if (restaurantDetails.address.city === city) {
+                pendingOrderFlag = true;
+                log.success('Pending order found in same city')
+                break;
+            }
+        }
+    } catch (error) {
+        log.error(`Something went wrong while getting pending orders ${error}`);
+        return res.status(500).send({
+            message: 'Internal Server Error'
+        })
+    }
+
+    if (pendingOrderFlag === true) {
+        return res.status(200).send({
+            message: 'Pending Order Found!',
+            flag: true
+        })
+    }
+    else {
+        log.info('No pending order this city');
+        return res.status(200).send({
+            message: 'No pending orders found!',
+            flag: false
+        })
+    }
+}
+
 async function assignOrderDao(orderInfo, res) {
     const _id = orderInfo._id;
     var today = new Date();
@@ -235,5 +272,6 @@ module.exports = {
     getOrderDao,
     deleteOrderDao,
     assignOrderDao,
-    getOrdersByRestaurantDao
+    getOrdersByRestaurantDao,
+    checkPendingOrdersDao
 }

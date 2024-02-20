@@ -105,6 +105,15 @@ async function getForRestaurantController(req, res) {
     return result;
 }
 
+async function checkPendingOrdersController(req, res) {
+    let orderInfo = req.params;
+    let { error } = orderValidator.validateCheckPendingOrdersSchema(orderInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    const result = await orderDao.checkPendingOrdersDao(orderInfo, res);
+    return result;
+}
+
 async function deleteOrderController(req, res) {
     let orderInfo = req.body;
     let { error } = orderValidator.validateDeleteOrderSchema(orderInfo);
@@ -123,4 +132,5 @@ module.exports = {
     paymentController,
     paymentVerifyController,
     getForRestaurantController,
+    checkPendingOrdersController
 };
