@@ -6,8 +6,9 @@ import { useAuth } from '../../../features/context/AuthContext';
 import axios from 'axios';
 import Loader from '../../../components/Global/Loader';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '../../../components/Global/BackButton';
 
-const EmailVerificationScreen = () => {
+const EmailVerificationScreen = ({ navigation }) => {
     const [emailID, setEmailID] = useState('');
     const [otp, setOTP] = useState('');
     const [otpSent, setOTPSent] = useState(false);
@@ -22,7 +23,6 @@ const EmailVerificationScreen = () => {
             });
 
             if (response.status === 200) {
-                setEmail(emailID)
                 setOTPSent(true)
                 console.log('OTP sent to:', emailID);
             } else {
@@ -36,18 +36,40 @@ const EmailVerificationScreen = () => {
         }
     };
 
-    const handleVerifyOTP = () => {
-        // Here you would verify the OTP
-        // For demonstration purposes, we will just log it to the console
-        console.log('OTP verified:', otp);
-        // Reset the OTP input field after verification
+    const handleVerifyOTP = async () => {
+        try {
+            const response = await axios.post(`${process.env.BASE_URL}/driver/verifyEmailOtp`, {
+                "email": emailID,
+                "emailOtp": otp
+            });
+
+            if (response.status === 200) {
+                setEmail(emailID)
+                navigation.navigate('registerDriver')
+            } else {
+                console.log('API request failed:', response.statusText);
+            }
+        }
+        catch (err) {
+            console.error('Network error:', err);
+        } finally {
+            setLoader(false)
+        }
+
         setOTP('');
     };
+
+    const handleback = () => {
+        setOTPSent(false);
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Loader />
-            <View>
+            <BackButton
+                navigateBack={handleback}
+            />
+            <View className="mt-8">
                 {!otpSent && <Image source={require('../../../assets/Gemini_Generated_Image.jpg')}
                     style={{ width: Dimensions.get('screen').width, height: 300, alignSelf: 'center' }} />}
                 <View className="my-5">
@@ -68,8 +90,8 @@ const EmailVerificationScreen = () => {
                             }}
                             keyboardType='email-address'
                             value={emailID}
+                            disabled={otpSent}
                             onChangeText={(text) => setEmailID(text)}
-                            maxLength={10}
                             label={"Email"}
                             placeholder='Enter Email Address'
                             underlineColor='white'
@@ -79,6 +101,7 @@ const EmailVerificationScreen = () => {
                     {!otpSent ? (
                         <TouchableOpacity
                             onPress={handleSendOTP}
+                            onFocus={() => setOTPSent(false)}
                             style={{
                                 backgroundColor: '#e46c47',
                                 height: 50,
