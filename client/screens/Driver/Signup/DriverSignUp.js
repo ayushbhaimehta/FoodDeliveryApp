@@ -79,6 +79,10 @@ const DriverSignUp = ({ navigation }) => {
         }
         setExpanded(false)
     };
+    const navigateToLogin = () => {
+        navigation.navigate('DriverLogin')
+    }
+
     return (
         <SafeAreaView className="bg-[#f3f4fc] flex-1">
             <Loader />
@@ -155,7 +159,7 @@ const DriverSignUp = ({ navigation }) => {
                     </TouchableOpacity>
                     {
                         expanded &&
-                        <View>
+                        <TouchableOpacity onPress={navigateToLogin}>
                             <Divider style={{ marginVertical: 10 }} width={1} />
                             <LoginPageOptions
                                 text={"Already have an account?"}
@@ -163,7 +167,7 @@ const DriverSignUp = ({ navigation }) => {
                                 logoUrl={"https://img.icons8.com/ios-filled/100/000000/login-rounded-right.png"}
                                 accType={"driver"}
                             />
-                        </View>
+                        </TouchableOpacity>
                     }
                 </View>
 
