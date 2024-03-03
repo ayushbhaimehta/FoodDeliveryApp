@@ -97,9 +97,17 @@ const validateAssignAlgoRequestSchemaModel = Joi.object({
     })
 });
 
+const validateFinishOrderSchemaModel = Joi.object({
+    orderId: Joi.string().required()
+})
+
 const validateAssignAlgoRequestSchema = (driverInfo) => {
     return validateAssignAlgoRequestSchemaModel.validate(driverInfo);
 };
+
+const validateFinishOrderSchema = (driverInfo) => {
+    return validateFinishOrderSchemaModel.validate(driverInfo);
+}
 
 module.exports = {
     validateRegisterDriverSchema,
@@ -112,4 +120,5 @@ module.exports = {
     validateVerifyOtpSchema,
     validateGetLiveLocSchema,
     validateAssignAlgoRequestSchema,
+    validateFinishOrderSchema
 }
