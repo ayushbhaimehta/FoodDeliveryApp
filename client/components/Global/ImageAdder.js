@@ -15,7 +15,7 @@ import useUploadMedia from '../../features/hook/useUploadMedia';
 import Loader from './Loader';
 import { useLoader } from '../../features/context/LoaderContext';
 
-const UploadScreen = ({ navigation, setImgUrl, setUploadPage }) => {
+const UploadScreen = ({ navigation, setImgUrl, setUploadPage, bucket }) => {
     const [cameraSide, setCameraSide] = useState(Camera.Constants.Type.back);
     const [camera, setCamera] = useState(null);
     const [selectedImage, setSelectedImage] = useState("");
@@ -90,7 +90,7 @@ const UploadScreen = ({ navigation, setImgUrl, setUploadPage }) => {
     useEffect(() => {
         setLoader(true);
         requestPermissions();
-        uploadImage(selectedImage, 'menuImage');
+        uploadImage(selectedImage, bucket);
         setLoader(false)
     }, [selectedImage])
 
@@ -128,11 +128,10 @@ const UploadScreen = ({ navigation, setImgUrl, setUploadPage }) => {
                     <TouchableOpacity style={styles.button} onPress={pickImage}>
                         <Text style={styles.buttonText}>Gallery</Text>
                     </TouchableOpacity>
-
-
                     <TouchableOpacity style={styles.button} onPress={takePhoto}>
                         <Text style={styles.buttonText}>Take a Photo</Text>
                     </TouchableOpacity>
+
                 </View>
                 <FetchRecent setSelectedImage={setSelectedImage} />
             </View>

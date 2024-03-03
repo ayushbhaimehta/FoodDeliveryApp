@@ -27,6 +27,6 @@ userRouter.post('/getAllRestaurants', getAllRestaurantsController);
 userRouter.post('/getNearbyRestaurants', getNearbyRestaurantsController);
 
 // map
-// userRouter.post('/getUserLocation', getUserLocationController);
+userRouter.post('/getUserLocation', getUserLocationController);
 
 module.exports = userRouter;

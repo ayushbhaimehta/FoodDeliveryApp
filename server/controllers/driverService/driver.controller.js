@@ -18,7 +18,7 @@ var transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: 'ayushbhaimehta20002@gmail.com',
+        user: process.env.GMAIL,
         pass: process.env.EMAILPASS
     },
 });
@@ -213,9 +213,9 @@ async function sendEmailOtpController(req, res) {
         const emailOtp = otpGenerator.generate(6,
             { digits: true, lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false });
         var mailOptions = {
-            from: 'ayushbhaimehta20002@gmail.com',
+            from: process.env.GMAIL,
             to: email,
-            subject: 'Ayush Officially papa hai Anuj Awasthi ka!',
+            subject: 'Food Delivery Email Verification',
             text: emailOtp
         };
         console.log("checkpoint 11");

@@ -28,12 +28,18 @@ import MenuScreen from './screens/Restaurant/Home/MenuScreen';
 import AddNewItemPage from './components/Restaurant/Menu/AddNewItem';
 import AddressScreen from './screens/User/Home/AddressesScreen';
 import AddNewAddress from './screens/User/Home/AddNewAddress';
+import DriverOTPScreen from './screens/Driver/Signup/DriverOTPScreen';
+import EmailVerificationScreen from './screens/Driver/Signup/DriverVerifyEmail';
+import RegisterDriver from './screens/Driver/Signup/RegisterDriver';
+import DeliveryHomeScreen from './screens/Driver/Home/DeliveryHomeScreen';
+import DriverLogin from './screens/Driver/Signup/DriverLogin';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
 const RestaurantStack = createNativeStackNavigator();
 const RestaurantSignUpStack = createNativeStackNavigator();
-const DeliveryStack = createNativeStackNavigator()
+const DeliveryStack = createNativeStackNavigator();
+const DeliverySignUpStack = createNativeStackNavigator()
 
 export const Navigation = () => {
     const { userAdd, type } = useAuth();
@@ -113,13 +119,27 @@ export const Navigation = () => {
         return (
 
             <NavigationContainer>
-                <DeliveryStack.Navigator
-                    screenOptions={{ headerShown: false }}
-                    initialRouteName='Login'
-                >
-                    <DeliveryStack.Screen name='Login' component={DriverSignUp}
-                    />
-                </DeliveryStack.Navigator>
+                {
+                    !userAdd ?
+                        <DeliverySignUpStack.Navigator initialRouteName='Login'>
+                            <DeliverySignUpStack.Screen name="Login" component={DriverSignUp}
+                                options={{ headerShown: false }} />
+                            <DeliverySignUpStack.Screen name="OTP" component={DriverOTPScreen}
+                                options={{ headerShown: false }} />
+                            <DeliverySignUpStack.Screen name="emailVerify" component={EmailVerificationScreen}
+                                options={{ headerShown: false }} />
+                            <DeliverySignUpStack.Screen name="registerDriver" component={RegisterDriver}
+                                options={{ headerShown: false }} />
+                            <DeliverySignUpStack.Screen name="DriverLogin" component={DriverLogin}
+                                options={{ headerShown: false }} />
+                        </DeliverySignUpStack.Navigator>
+                        :
+                        <DeliveryStack.Navigator initialRouteName='Home'>
+                            <DeliveryStack.Screen name="Home" component={DeliveryHomeScreen}
+                                options={{ headerShown: false }} />
+                        </DeliveryStack.Navigator>
+
+                }
             </NavigationContainer>
         )
     }

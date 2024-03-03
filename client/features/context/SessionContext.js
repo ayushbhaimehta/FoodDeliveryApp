@@ -82,7 +82,7 @@ const SessionProvider = ({ children }) => {
         }
         else {
             try {
-                const res = await axios.get(`${process.env.BASE_URL}/driver/getbyphone/${phoneNumber}`, {
+                const res = await axios.get(`${process.env.BASE_URL}/driver/getAllOrders`, {
                     headers: {
                         auth: auth,
                         "Content-Type": 'application/json'
