@@ -1,17 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
+import CurrentOrderBox from './CurrentOrderBox'
 
 const Orders = () => {
     return (
         <>
-            <View style={styles.orderStatusContainer}>
-                <Text style={styles.orderStatusTitle}>Current Order</Text>
-                {/* Display order information */}
-                <Text style={styles.orderInfo}>Restaurant: XYZ Restaurant</Text>
-                <Text style={styles.orderInfo}>Customer: John Doe</Text>
-                <Text style={styles.orderInfo}>Items: 2</Text>
-                <Text style={styles.orderInfo}>Status: In Transit</Text>
-            </View>
+            <CurrentOrderBox />
             <View style={styles.upcomingOrdersContainer}>
                 <Text style={styles.upcomingOrdersTitle}>Recent Orders</Text>
                 {/* Display list of upcoming orders */}
@@ -33,18 +27,6 @@ const Orders = () => {
 export default Orders
 
 const styles = StyleSheet.create({
-    orderStatusContainer: {
-        marginBottom: 20,
-    },
-    orderStatusTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    orderInfo: {
-        fontSize: 16,
-        marginBottom: 5,
-    },
     upcomingOrdersContainer: {
         marginBottom: 20,
     },

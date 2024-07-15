@@ -33,6 +33,7 @@ import EmailVerificationScreen from './screens/Driver/Signup/DriverVerifyEmail';
 import RegisterDriver from './screens/Driver/Signup/RegisterDriver';
 import DeliveryHomeScreen from './screens/Driver/Home/DeliveryHomeScreen';
 import DriverLogin from './screens/Driver/Signup/DriverLogin';
+import DriverDeliveryScreen from './screens/Driver/Home/DeliverFoodScreen';
 
 const HomeStack = createNativeStackNavigator();
 const SignUpStack = createNativeStackNavigator();
@@ -120,7 +121,7 @@ export const Navigation = () => {
 
             <NavigationContainer>
                 {
-                    !userAdd ?
+                    userAdd ?
                         <DeliverySignUpStack.Navigator initialRouteName='Login'>
                             <DeliverySignUpStack.Screen name="Login" component={DriverSignUp}
                                 options={{ headerShown: false }} />
@@ -136,6 +137,8 @@ export const Navigation = () => {
                         :
                         <DeliveryStack.Navigator initialRouteName='Home'>
                             <DeliveryStack.Screen name="Home" component={DeliveryHomeScreen}
+                                options={{ headerShown: false }} />
+                            <DeliveryStack.Screen name="Deliver" component={DriverDeliveryScreen}
                                 options={{ headerShown: false }} />
                         </DeliveryStack.Navigator>
 
