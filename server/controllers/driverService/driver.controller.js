@@ -130,6 +130,21 @@ async function sendPhoneOtpController(req, res) {
     }
 }
 
+async function finishOrderController(req, res) {
+    const driverInfo = req.body;
+    let { error } = driverValidator.validateFinishOrderSchema(driverInfo);
+    if (isNotValidSchema(error, res)) return;
+    log.success('Schema Validation done');
+    driverInfo.phoneNo = req.phoneNo;
+    // if (driverInfo.bool !== true) {
+    //     return res.status(200).send({
+    //         message: 'Rejected Order'
+    //     })
+    // }
+    const result = await driverDao.finishOrderDao(driverInfo, res);
+    return result;
+}
+
 async function assignAlgoRequestController(req, res) {
     const driverInfo = req.body;
     let { error } = driverValidator.validateAssignAlgoRequestSchema(driverInfo);
@@ -308,4 +323,5 @@ module.exports = {
     verifyPhoneOtpController,
     arrayOfAvailableDrivers,
     assignAlgoRequestController,
+    finishOrderController
 };

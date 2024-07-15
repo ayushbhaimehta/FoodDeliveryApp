@@ -8,7 +8,8 @@ const {
     driverExistsOnlyByPhone,
     driverLocationExists,
     getAllOrders,
-    getRestaurantById
+    getRestaurantById,
+    getOrderDetailsById
 } = require('../utils/userHelp');
 const { getDistanceFromLatLonInKm } = require('../utils/distanceAlgo');
 const saltRounds = 12;
@@ -271,6 +272,55 @@ async function updateOrderStatusDao(driverInfo, res) {
     }
 }
 
+async function finishOrderDao(driverInfo, res) {
+    const orderId = driverInfo.orderId;
+    const phoneNo = driverInfo.phoneNo;
+    console.log({ phoneNo });
+    try {
+        // get order details from orderID
+        const orderDetails = await getOrderDetailsById(orderId);
+        // check if driver is assigned to correct order
+        const driverDetails = await driverExistsOnlyByPhone(phoneNo);
+        console.log({ orderDetails });
+        if (driverDetails._id !== orderDetails.assignedTo &&
+            orderDetails.status !== 'assigned') {
+            log.info('Trying to finish order which is not asssigned to you');
+            return res.status(403).send({
+                message: 'You are not authorized to finish this order'
+            })
+        }
+        else {
+            const departure_time = new Date().toISOString();
+            try {
+                await axios({
+                    method: 'post',
+                    url: 'http://localhost:3000/order/assignOrders',
+                    data: {
+                        _id: orderId,
+                        assignedTo: driverDetails._id,
+                        status: 'finished',
+                        expectedTime: orderDetails.expectedTime,
+                        deliveredTime: departure_time
+                    }
+                });
+                return res.status(200).send({
+                    message: 'Successfully updates status to finished'
+                })
+            } catch (error) {
+                log.error(`Error in the axios post ${error}`);
+                return res.status(400).send({
+                    message: 'SOmething went wriong with the axios request'
+                })
+            }
+        }
+    } catch (error) {
+        log.error(`Error in getting orderdetails and driverdetails ${error}`);
+        return res.status(500).send({
+            message: 'Internal Server Error'
+        })
+    }
+}
+
 async function assignAlgoRequestDao(driverInfo, res) {
     try {
         const allOrders = await getAllOrders();
@@ -410,5 +460,6 @@ module.exports = {
     updateDriverInfoDao,
     addAssignOrderDao,
     getLiveLocDao,
-    assignAlgoRequestDao
+    assignAlgoRequestDao,
+    finishOrderDao
 }

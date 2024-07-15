@@ -13,6 +13,7 @@ const {
     verifyPhoneOtpController,
     arrayOfAvailableDrivers,
     assignAlgoRequestController,
+    finishOrderController
 } = require('../controllers/driverService/driver.controller');
 const driverAuth = require('../middlewares/driverAuth');
 
@@ -38,6 +39,7 @@ driverRouter.post('/addAssignorder', addAssignOrderController); // admin only
 
 driverRouter.post('/assignAlgoRequest', driverAuth, assignAlgoRequestController);
 // driverRouter.post('/assignAlgoBool', driverAuth, assignAlgoBoolController);
+driverRouter.post('/finishOrder', driverAuth, finishOrderController);
 
 module.exports = driverRouter;
 
